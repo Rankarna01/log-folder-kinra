@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --color-canvas: #F6F7F9;
+    --color-charcoal: #18181B;
+    --color-pastel-lavender: #E5D9FA;
+    --color-pastel-lavender-deep: #D5C2F7;
+    --color-pastel-mint: #D5EDE8;
+    --color-pastel-mint-deep: #B4DCD3;
+    --color-pastel-periwinkle: #E6E8FA;
+    --color-pastel-periwinkle-deep: #C7CCF4;
+    --color-pastel-butter: #FBE8A6;
+    --color-pastel-butter-deep: #F5D061;
+    --color-pastel-coral: #F8C8C4;
+}
+
+.bg-lavender-grid {
+    background-color: #E5D9FA;
+    background-image:
+        linear-gradient(45deg, rgba(196, 173, 240, 0.35) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(196, 173, 240, 0.35) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(196, 173, 240, 0.35) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(196, 173, 240, 0.35) 75%);
+    background-size: 64px 64px;
+    background-position: 0 0, 0 32px, 32px -32px, -32px 0;
+}
