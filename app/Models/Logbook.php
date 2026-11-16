@@ -73,6 +73,20 @@ class Logbook extends Model
         return true;
     }
 
+    public function getLocationLabelAttribute(): string
+    {
+        return in_array(strtolower((string) $this->work_location), ['lapangan', 'field'], true)
+            ? 'Lapangan'
+            : 'Kantor';
+    }
+
+    public function getLocationIconAttribute(): string
+    {
+        return $this->location_label === 'Lapangan'
+            ? 'fa-solid fa-location-dot'
+            : 'fa-solid fa-building';
+    }
+
     public function getFormattedDurationAttribute(): string
     {
         $hours = intdiv($this->duration_minutes, 60);

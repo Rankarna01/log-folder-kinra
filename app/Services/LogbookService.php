@@ -27,16 +27,25 @@ class LogbookService
     public function store(Internship $internship, array $data): Logbook
     {
         if (! empty($data['client_uuid'])) {
-            $existing = Logbook::where('client_uuid', $data['client_uuid'])->first();
-            if ($existing) {
-                return $existing;
+            $existingUuid = Logbook::where('client_uuid', $data['client_uuid'])->first();
+            if ($existingUuid) {
+                return $existingUuid;
             }
+        }
+
+        // Enforce 1 logbook per day per internship: if date already exists, update it
+        $existingForDate = Logbook::where('internship_id', $internship->id)
+            ->whereDate('date', $data['date'])
+            ->first();
+
+        if ($existingForDate) {
+            return $this->update($existingForDate, $data);
         }
 
         $duration = $this->calculateDurationMinutes($data['start_time'], $data['end_time']);
         $raw = $data['raw_description'] ?? $data['final_description'] ?? '';
         $final = $data['final_description'] ?? $data['ai_description'] ?? $raw;
-        $status = $data['status'] ?? LogStatus::Draft->value;
+        $status = $data['status'] ?? LogStatus::Approved->value;
 
         return Logbook::create([
             'internship_id' => $internship->id,
@@ -51,9 +60,9 @@ class LogbookService
             'final_description' => $final,
             'output' => $data['output'] ?? null,
             'obstacles' => $data['obstacles'] ?? null,
-            'work_location' => $data['work_location'] ?? 'wfo',
+            'work_location' => $data['work_location'] ?? 'kantor',
             'status' => $status,
-            'submitted_at' => $status === LogStatus::Submitted->value ? now() : null,
+            'submitted_at' => now(),
             'source' => $data['source'] ?? 'manual',
             'client_uuid' => $data['client_uuid'] ?? (string) Str::uuid(),
         ]);

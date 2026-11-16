@@ -3,40 +3,31 @@
 @section('content')
 <div class="px-5 pt-4 pb-8 space-y-4">
 
-    <!-- Back Navigation + Quick Actions -->
+    <!-- Back Navigation + Edit Button -->
     <div class="flex items-center justify-between">
         <a href="{{ route('logbook.index') }}"
            class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#18181B] shadow-xs hover:scale-105 transition">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <path d="m15 18-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <i class="fa-solid fa-chevron-left text-sm"></i>
         </a>
 
         <div class="flex items-center gap-2">
-            <a href="{{ route('logbook.create') }}"
-               class="bg-[#0B6E6C] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm">
-                + Catat Baru
+            <a href="{{ route('logbook.edit', $logbook) }}"
+               class="bg-[#0B6E6C] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Edit Logbook</span>
             </a>
-            <form action="{{ route('logbook.duplicate', $logbook) }}" method="POST">
-                @csrf
-                <button type="submit" title="Duplikat Entri" class="bg-white text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-xs">
-                    Duplikat Hari Ini
-                </button>
-            </form>
         </div>
     </div>
 
-    <!-- Header Detail Card in KINRA Deep Green Grid -->
+    <!-- Header Detail Card in KINRA Deep Green Grid (Location Badge Only, Category Hidden) -->
     <section class="bg-kinra-grid rounded-[28px] p-5 shadow-xs text-white">
         <div class="flex items-center justify-between">
             <div class="w-11 h-11 rounded-[14px] bg-white flex items-center justify-center text-[#0B6E6C] shadow-2xs">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="3" y="4" width="18" height="16" rx="3"/>
-                    <path d="M3 9h18" stroke="#ffffff" stroke-width="2"/>
-                </svg>
+                <i class="fa-solid fa-book-open text-base"></i>
             </div>
-            <span class="bg-white px-3 py-1 rounded-full text-xs font-semibold text-[#0B6E6C]">
-                ⚑ {{ $logbook->category->label() }} • {{ strtoupper($logbook->work_location ?? 'WFO') }}
+            <span class="bg-white px-3 py-1 rounded-full text-xs font-semibold text-[#0B6E6C] flex items-center gap-1.5">
+                <i class="{{ $logbook->location_icon }}"></i>
+                <span>Lokasi: {{ $logbook->location_label }}</span>
             </span>
         </div>
 
@@ -58,23 +49,17 @@
             <a href="{{ route('logbook.edit', $logbook) }}"
                title="Edit Logbook"
                class="w-9 h-9 rounded-full bg-white/85 hover:bg-white flex items-center justify-center text-[#0B6E6C] transition">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5Z"/>
-                </svg>
+                <i class="fa-solid fa-pen text-xs"></i>
             </a>
         </div>
     </section>
 
     <!-- 2-Column Bento Info Grid: Tanggal/Durasi & Divisi/Mentor -->
     <section class="grid grid-cols-2 gap-3.5">
-        <!-- Left Card: Tanggal & Jam Kegiatan -->
         <div class="bg-white rounded-[28px] p-4 text-center shadow-2xs flex flex-col items-center justify-between">
             <span class="text-xs text-zinc-400 font-medium">Tanggal & Jam Kegiatan</span>
             <div class="my-2.5 w-10 h-10 rounded-[12px] bg-[#0B6E6C] text-white flex items-center justify-center">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="4" width="18" height="17" rx="3"/>
-                    <path d="M8 2v4M16 2v4M3 9h18"/>
-                </svg>
+                <i class="fa-regular fa-calendar-check text-base"></i>
             </div>
             <div>
                 <p class="text-sm font-semibold text-[#111827]">{{ $logbook->date->format('d F Y') }}</p>
@@ -82,18 +67,17 @@
             </div>
         </div>
 
-        <!-- Right Card: Divisi, Bagian & Mentor -->
         <div class="bg-white rounded-[28px] p-4 text-center shadow-2xs flex flex-col items-center justify-between">
             <span class="text-xs text-zinc-400 font-medium">Divisi & Pembimbing</span>
             <div class="my-2 flex items-center justify-center -space-x-2.5">
                 <div class="w-10 h-10 rounded-full bg-[#C8EBE5] border-2 border-white flex items-center justify-center text-xs font-bold text-[#074745]">
-                    M
+                    <i class="fa-solid fa-user-tie"></i>
                 </div>
                 <div class="w-12 h-12 rounded-full bg-[#0B6E6C] border-2 border-white flex items-center justify-center text-sm font-bold text-white shadow-xs">
                     {{ $logbook->internship?->participant?->initials ?? 'P' }}
                 </div>
                 <div class="w-10 h-10 rounded-full bg-[#D4EEFC] border-2 border-white flex items-center justify-center text-xs font-bold text-[#0C4A6E]">
-                    K
+                    <i class="fa-solid fa-building"></i>
                 </div>
             </div>
             <div>
@@ -132,23 +116,22 @@
             }
         @endphp
 
-        @foreach ($subItems as $idx => $itemTitle)
+        @foreach ($subItems as $itemTitle)
             <div class="bg-white rounded-[26px] p-4 flex items-center justify-between shadow-2xs">
                 <div class="flex items-center gap-3.5 min-w-0">
                     <span class="w-9 h-9 rounded-full bg-[#C8EBE5] text-[#0B6E6C] flex items-center justify-center shrink-0">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                        <i class="fa-solid fa-check text-sm"></i>
                     </span>
                     <div class="min-w-0">
                         <h4 class="text-[15px] font-semibold text-[#111827] truncate">{{ $itemTitle }}</h4>
-                        <p class="text-xs text-zinc-400 truncate">Output Kegiatan • {{ $logbook->internship?->position ?? 'KINRA Sei Mangkei' }}</p>
+                        <p class="text-xs text-zinc-400 truncate">Output Kegiatan • {{ $logbook->location_label }}</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2 shrink-0">
-                    <span class="bg-[#C8EBE5] text-[#074745] px-3 py-1 rounded-full text-xs font-semibold">
-                        ✓ Selesai
+                    <span class="bg-[#C8EBE5] text-[#074745] px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check text-[10px]"></i>
+                        <span>Selesai</span>
                     </span>
                 </div>
             </div>
@@ -158,8 +141,9 @@
         <div class="bg-white rounded-[26px] p-5 space-y-3 shadow-2xs">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Uraian Logbook Harian</span>
-                <span class="bg-[#C8EBE5] text-[#074745] text-[11px] font-semibold px-2.5 py-0.5 rounded-full">
-                    ✓ Tersimpan
+                <span class="bg-[#C8EBE5] text-[#074745] text-[11px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-check text-[10px]"></i>
+                    <span>Tersimpan</span>
                 </span>
             </div>
             <p class="text-sm text-[#111827] leading-relaxed">
@@ -168,7 +152,7 @@
 
             @if ($logbook->obstacles)
                 <div class="pt-2 border-t border-zinc-100">
-                    <p class="text-[11px] font-semibold text-zinc-400">Kendala di Lapangan:</p>
+                    <p class="text-[11px] font-semibold text-zinc-400">Kendala:</p>
                     <p class="text-xs text-zinc-700 mt-0.5">{{ $logbook->obstacles }}</p>
                 </div>
             @endif
@@ -205,8 +189,9 @@
             <textarea name="message" rows="3" required
                       placeholder="Tulis catatan tambahan terkait kegiatan harian ini..."
                       class="w-full rounded-[16px] bg-[#F4F7F6] border-0 p-3 text-xs text-[#111827] focus:ring-2 focus:ring-[#0B6E6C]"></textarea>
-            <button type="submit" class="w-full bg-[#0B6E6C] text-white text-xs font-semibold py-2.5 rounded-full">
-                Simpan Catatan
+            <button type="submit" class="w-full bg-[#0B6E6C] text-white text-xs font-semibold py-2.5 rounded-full flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>Simpan Catatan</span>
             </button>
         </form>
     </div>

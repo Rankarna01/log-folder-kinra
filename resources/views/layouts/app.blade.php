@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 Free Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     @if (file_exists(public_path('build/manifest.json')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -68,7 +70,6 @@
             background-color: #BFD4D2;
             -webkit-tap-highlight-color: transparent;
         }
-        /* KINRA Deep Teal-Green Checker Grid (replaces old purple grid) */
         .bg-lavender-grid,
         .bg-kinra-grid {
             background-color: #0B6E6C;
@@ -85,6 +86,13 @@
     </style>
 </head>
 <body class="min-h-screen text-[#111827] antialiased selection:bg-[#0B6E6C] selection:text-white">
+
+    @php
+        $navInternship = auth()->user()?->activeInternship ?? \App\Models\Internship::first();
+        $navTodayLog = $navInternship
+            ? $navInternship->logbooks()->whereDate('date', \Carbon\Carbon::now('Asia/Jakarta')->toDateString())->first()
+            : null;
+    @endphp
 
     <!-- Top Participant Status Bar with KINRA Logo & Green Accent -->
     <div class="max-w-[440px] mx-auto pt-2 px-3">
@@ -104,8 +112,9 @@
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
                 <a href="{{ route('register') }}"
-                   class="px-3 py-0.5 rounded-full bg-[#0B6E6C] text-white border border-emerald-400/30 font-bold hover:bg-[#0D8280] transition">
-                    + Daftar Peserta
+                   class="px-3 py-0.5 rounded-full bg-[#0B6E6C] text-white border border-emerald-400/30 font-bold hover:bg-[#0D8280] transition flex items-center gap-1">
+                    <i class="fa-solid fa-user-plus text-[10px]"></i>
+                    <span>Daftar Peserta</span>
                 </a>
             </div>
         </div>
@@ -117,10 +126,14 @@
         @if (session('toast'))
             <div id="toast-banner" class="mx-5 mt-4 bg-[#0B6E6C] text-white px-4 py-3 rounded-[20px] text-xs font-medium flex items-center justify-between shadow-lg">
                 <div class="flex items-center gap-2">
-                    <span class="w-5 h-5 rounded-full bg-[#FDE9B4] text-[#18181B] flex items-center justify-center font-bold">✓</span>
+                    <span class="w-5 h-5 rounded-full bg-[#FDE9B4] text-[#18181B] flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-check text-[10px]"></i>
+                    </span>
                     <span>{{ session('toast') }}</span>
                 </div>
-                <button onclick="document.getElementById('toast-banner').remove()" class="text-emerald-100 hover:text-white ml-2">✕</button>
+                <button onclick="document.getElementById('toast-banner').remove()" class="text-emerald-100 hover:text-white ml-2">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
         @endif
 
@@ -138,66 +151,51 @@
             @yield('content')
         </main>
 
-        <!-- Signature Floating Neo-Dock + Detached Squircle FAB -->
+        <!-- Signature Floating Neo-Dock + Conditional Create FAB (Hidden when today's logbook already exists) -->
         <nav aria-label="Menu Utama Peserta" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2.5 pointer-events-none">
-            <!-- Left 4-Icon Pill Container -->
+            <!-- Left 4-Icon Pill Container (Font Awesome Icons) -->
             <div class="pointer-events-auto flex items-center gap-1.5 bg-white border-[3px] border-[#18181B] rounded-[20px] p-1.5 shadow-[0_12px_28px_rgba(24,24,27,0.16)]">
                 <!-- 1. Home / Beranda -->
                 <a href="{{ route('dashboard') }}"
                    title="Beranda"
                    class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('dashboard') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 3.2 3 10.4V20a1 1 0 0 0 1 1h5v-6h6v6h5a1 1 0 0 0 1-1v-9.6L12 3.2Z"/>
-                    </svg>
+                    <i class="fa-solid fa-house text-[16px]"></i>
                 </a>
 
                 <!-- 2. Calendar / Logbook -->
                 <a href="{{ route('logbook.index') }}"
-                   title="Kalender & Logbook"
+                   title="Kalender & Riwayat Logbook"
                    class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('logbook.index') || request()->routeIs('logbook.show') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                        <rect x="3" y="4" width="18" height="17" rx="3"/>
-                        <path d="M8 2v4M16 2v4M3 9h18"/>
-                        <circle cx="8.5" cy="13.5" r="1" fill="currentColor"/>
-                        <circle cx="12" cy="13.5" r="1" fill="currentColor"/>
-                        <circle cx="15.5" cy="13.5" r="1" fill="currentColor"/>
-                    </svg>
+                    <i class="fa-solid fa-calendar-days text-[16px]"></i>
                 </a>
 
                 <!-- 3. Reports & PDF -->
                 <a href="{{ route('reports.index') }}"
                    title="Laporan PDF"
                    class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('reports.*') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                        <rect x="3" y="3" width="18" height="18" rx="4"/>
-                        <path d="M7 14l3-3 3 2 4-4"/>
-                    </svg>
+                    <i class="fa-solid fa-file-pdf text-[16px]"></i>
                 </a>
 
                 <!-- 4. Profile & Data Peserta -->
                 <a href="{{ route('profile.show') }}"
                    title="Data Peserta"
                    class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('profile.*') || request()->routeIs('register') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <circle cx="12" cy="8" r="4"/>
-                        <path d="M5 20c0-3.8 3.1-6 7-6s7 2.2 7 6H5Z"/>
-                    </svg>
+                    <i class="fa-solid fa-user text-[16px]"></i>
                 </a>
             </div>
 
-            <!-- Right Detached Squircle FAB [⊕] -->
-            <a href="{{ route('logbook.create') }}"
-               title="Tambah Logbook Harian"
-               class="pointer-events-auto w-[54px] h-[54px] bg-white border-[3px] border-[#18181B] rounded-[20px] flex items-center justify-center text-[#18181B] shadow-[0_12px_28px_rgba(24,24,27,0.16)] hover:bg-[#0B6E6C] hover:text-white active:scale-95 transition">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <circle cx="12" cy="12" r="9"/>
-                    <path d="M12 8v8M8 12h8"/>
-                </svg>
-            </a>
+            <!-- Right Detached Squircle FAB: Only shown if today's logbook has NOT been created yet -->
+            @if (! $navTodayLog)
+                <a href="{{ route('logbook.create') }}"
+                   title="Tambah Logbook Hari Ini"
+                   class="pointer-events-auto w-[54px] h-[54px] bg-white border-[3px] border-[#18181B] rounded-[20px] flex items-center justify-center text-[#18181B] shadow-[0_12px_28px_rgba(24,24,27,0.16)] hover:bg-[#0B6E6C] hover:text-white active:scale-95 transition">
+                    <i class="fa-solid fa-circle-plus text-[22px]"></i>
+                </a>
+            @endif
         </nav>
     </div>
 
-    <!-- Global Modal: Fitur Lanjutan (AI Gemini & Voice-to-Log Preview Alert in KINRA Deep Green) -->
+    <!-- Global Modal: Fitur Lanjutan (AI Gemini & Voice-to-Log Preview Alert with Font Awesome Icons) -->
     <div id="advanced-feature-modal"
          role="dialog"
          aria-modal="true"
@@ -208,19 +206,20 @@
             <!-- Modal Top KINRA Deep Green Grid Card -->
             <div class="bg-kinra-grid rounded-[24px] p-5 relative overflow-hidden text-white">
                 <div class="flex items-center justify-between">
-                    <span id="adv-modal-badge" class="inline-flex items-center gap-1 bg-white px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] shadow-2xs">
-                        ✨ Fitur Lanjutan • Segera Hadir
+                    <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] shadow-2xs">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span id="adv-modal-badge">Fitur Lanjutan • Segera Hadir</span>
                     </span>
                     <button type="button"
                             onclick="closeAdvancedFeatureModal()"
                             class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white font-bold text-xs transition">
-                        ✕
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
                 <div class="mt-4 flex items-center gap-3.5">
-                    <div id="adv-modal-icon" class="w-13 h-13 rounded-[18px] bg-[#18181B] text-[#FDE9B4] flex items-center justify-center text-2xl shrink-0 shadow-md">
-                        ✨
+                    <div class="w-13 h-13 rounded-[18px] bg-[#18181B] text-[#FDE9B4] flex items-center justify-center text-xl shrink-0 shadow-md">
+                        <i id="adv-modal-icon" class="fa-solid fa-wand-magic-sparkles"></i>
                     </div>
                     <div>
                         <h3 id="adv-modal-title" class="text-[18px] font-bold text-white leading-snug">
@@ -236,7 +235,7 @@
             <!-- Alert Message Body -->
             <div class="px-1 space-y-3">
                 <div class="bg-[#C8EBE5]/70 rounded-[18px] px-3.5 py-2.5 flex items-start gap-2.5">
-                    <span class="text-sm mt-0.5">🚀</span>
+                    <i class="fa-solid fa-rocket text-[#0B6E6C] text-sm mt-1"></i>
                     <p id="adv-modal-desc" class="text-xs text-[#074745] font-medium leading-relaxed">
                         Fitur ini merupakan <strong>Fitur Lanjutan (Tahap Pengembangan Fase Berikutnya)</strong> dan sedang dalam proses integrasi akhir ke layanan cloud AI.
                     </p>
@@ -249,15 +248,21 @@
                     </p>
                     <ul id="adv-modal-list" class="text-xs text-zinc-300 space-y-1.5">
                         <li class="flex items-center gap-2">
-                            <span class="w-4 h-4 rounded-full bg-[#C8EBE5] text-[#0B6E6C] flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                            <span class="w-4 h-4 rounded-full bg-[#C8EBE5] text-[#0B6E6C] flex items-center justify-center text-[9px] font-bold shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
                             <span>Perapian kalimat otomatis 3 gaya (Formal, Singkat, Detail)</span>
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="w-4 h-4 rounded-full bg-[#FDE9B4] text-[#18181B] flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                            <span class="w-4 h-4 rounded-full bg-[#FDE9B4] text-[#18181B] flex items-center justify-center text-[9px] font-bold shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
                             <span>Dikte suara (Voice-to-Log) Bahasa Indonesia real-time</span>
                         </li>
                         <li class="flex items-center gap-2">
-                            <span class="w-4 h-4 rounded-full bg-[#D4EEFC] text-[#18181B] flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                            <span class="w-4 h-4 rounded-full bg-[#D4EEFC] text-[#18181B] flex items-center justify-center text-[9px] font-bold shrink-0">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
                             <span>Saran deskripsi otomatis dari foto dokumentasi</span>
                         </li>
                     </ul>
@@ -268,8 +273,9 @@
             <div class="pt-1">
                 <button type="button"
                         onclick="closeAdvancedFeatureModal()"
-                        class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-bold py-3.5 rounded-full shadow-md transition active:scale-[0.99]">
-                    Mengerti, Lanjutkan Isi Manual →
+                        class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-bold py-3.5 rounded-full shadow-md transition active:scale-[0.99] flex items-center justify-center gap-2">
+                    <span>Mengerti, Lanjutkan Isi Manual</span>
+                    <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
@@ -278,29 +284,29 @@
     <script>
         const ADVANCED_FEATURE_CONFIG = {
             ai: {
-                icon: '✨',
-                badge: '✨ Fitur Lanjutan • AI Gemini',
+                iconClass: 'fa-solid fa-wand-magic-sparkles',
+                badge: 'Fitur Lanjutan • AI Gemini',
                 title: 'Auto-Polish Deskripsi AI',
                 subtitle: 'Perapian Bahasa Laporan Otomatis',
                 desc: 'Integrasi <strong>Google Gemini AI (Rapikan Teks)</strong> merupakan <strong>Fitur Lanjutan</strong> yang akan diaktifkan pada rilis tahap berikutnya. Saat ini silakan tulis deskripsi kegiatan secara manual atau gunakan <strong>Template Kegiatan Cepat 1-Tap</strong>.'
             },
             voice: {
-                icon: '🎙️',
-                badge: '🎤 Fitur Lanjutan • Voice-to-Log',
+                iconClass: 'fa-solid fa-microphone-lines',
+                badge: 'Fitur Lanjutan • Voice-to-Log',
                 title: 'Dikte Suara ke Logbook',
                 subtitle: 'Transkripsi Suara Otomatis Berbasis AI',
                 desc: 'Fitur <strong>Rekam Suara (Voice-to-Log)</strong> merupakan <strong>Fitur Lanjutan</strong> yang sedang disiapkan agar kamu cukup berbicara lewat mikrofon dan teksnya langsung tertulis rapi. Untuk saat ini silakan ketik kegiatanmu di kolom deskripsi.'
             },
             photo: {
-                icon: '📷',
-                badge: '📷 Fitur Lanjutan • AI Vision',
+                iconClass: 'fa-solid fa-camera-retro',
+                badge: 'Fitur Lanjutan • AI Vision',
                 title: 'Saran Deskripsi dari Foto',
                 subtitle: 'Deteksi Aktivitas Dokumentasi Otomatis',
                 desc: 'Fitur <strong>Saran Deskripsi dari Foto</strong> merupakan <strong>Fitur Lanjutan</strong> berbasis AI Multimodal. Kamu tetap bisa mengunggah foto bukti kegiatan secara normal pada form di bawah.'
             },
             summary: {
-                icon: '📊',
-                badge: '✨ Fitur Lanjutan • AI Summary',
+                iconClass: 'fa-solid fa-chart-pie',
+                badge: 'Fitur Lanjutan • AI Summary',
                 title: 'Ringkasan Eksekutif & Skill AI',
                 subtitle: 'Rekap Narasi Bulanan Otomatis',
                 desc: 'Fitur <strong>Ringkasan Narasi AI & Ekstraksi Kompetensi</strong> merupakan <strong>Fitur Lanjutan</strong>. Saat ini pencetakan tabel kegiatan dan ekspor laporan PDF A4 sudah berfungsi penuh dan siap diunduh.'
@@ -311,7 +317,7 @@
             const modal = document.getElementById('advanced-feature-modal');
             const cfg = ADVANCED_FEATURE_CONFIG[type] || ADVANCED_FEATURE_CONFIG.ai;
 
-            document.getElementById('adv-modal-icon').textContent = cfg.icon;
+            document.getElementById('adv-modal-icon').className = cfg.iconClass;
             document.getElementById('adv-modal-badge').textContent = cfg.badge;
             document.getElementById('adv-modal-title').textContent = cfg.title;
             document.getElementById('adv-modal-subtitle').textContent = cfg.subtitle;

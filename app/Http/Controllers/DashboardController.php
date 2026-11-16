@@ -62,10 +62,21 @@ class DashboardController extends Controller
             'ai_calls_today' => AiUsage::whereDate('created_at', today())->count(),
         ];
 
+        $todayStr = Carbon::now('Asia/Jakarta')->toDateString();
+        $todayLogbook = $logbooks->first(fn ($l) => $l->date->format('Y-m-d') === $todayStr);
+
+        // Keep only 1 entry per day (unique by date) and take the last 3 days for dashboard
+        $recentThreeDaysLogs = $logbooks
+            ->unique(fn ($l) => $l->date->format('Y-m-d'))
+            ->take(3)
+            ->values();
+
         return view('dashboard.index', compact(
             'user',
             'internship',
             'logbooks',
+            'todayLogbook',
+            'recentThreeDaysLogs',
             'heroTimeFormatted',
             'revisionCount',
             'pendingReviewCount',

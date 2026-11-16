@@ -5,8 +5,9 @@
 
     <header class="bg-kinra-grid rounded-[28px] p-5 shadow-2xs text-white">
         <div class="flex items-center justify-between">
-            <span class="bg-white px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C]">
-                📄 Laporan & Ekspor PDF
+            <span class="bg-white px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] flex items-center gap-1.5">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Laporan & Ekspor PDF</span>
             </span>
             <div class="bg-white rounded-xl px-2.5 py-1">
                 <img src="/images/kinra.png" alt="KINRA" class="h-4 w-auto object-contain">
@@ -20,16 +21,18 @@
     <section class="bg-white rounded-[28px] p-5 space-y-3 shadow-2xs">
         <div class="flex items-center justify-between gap-2">
             <div>
-                <span class="bg-[#C8EBE5] text-[#074745] text-[10px] font-bold px-2.5 py-0.5 rounded-full">
-                    ✨ Fitur Lanjutan
+                <span class="bg-[#C8EBE5] text-[#074745] text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Fitur Lanjutan</span>
                 </span>
                 <h2 class="text-sm font-semibold text-[#111827] mt-1.5">Ringkasan Otomatis AI & Ekstraksi Skill</h2>
                 <p class="text-xs text-zinc-500 mt-0.5">Buat narasi capaian bulanan dan daftar kompetensi otomatis dengan AI Gemini.</p>
             </div>
             <button type="button"
                     onclick="openAdvancedFeatureModal('summary')"
-                    class="shrink-0 bg-[#0B6E6C] text-white text-xs font-semibold px-3.5 py-2 rounded-full shadow-xs hover:opacity-90 transition">
-                Lihat Info ✨
+                    class="shrink-0 bg-[#0B6E6C] text-white text-xs font-semibold px-3.5 py-2 rounded-full shadow-xs hover:opacity-90 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Lihat Info</span>
             </button>
         </div>
     </section>
@@ -69,8 +72,9 @@
             </label>
         </div>
 
-        <button type="submit" class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-bold py-3.5 rounded-full shadow-md">
-            🖨️ Generate & Cetak Laporan PDF
+        <button type="submit" class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-bold py-3.5 rounded-full shadow-md flex items-center justify-center gap-2">
+            <i class="fa-solid fa-print"></i>
+            <span>Generate & Cetak Laporan PDF</span>
         </button>
     </form>
 
@@ -90,12 +94,14 @@
                 </div>
                 <div class="flex flex-col gap-1.5">
                     <a href="{{ route('reports.download', $rep) }}"
-                       class="bg-[#0B6E6C] text-white text-xs font-semibold px-3.5 py-1.5 rounded-full text-center">
-                        Buka PDF
+                       class="bg-[#0B6E6C] text-white text-xs font-semibold px-3.5 py-1.5 rounded-full text-center flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-file-pdf text-[11px]"></i>
+                        <span>Buka PDF</span>
                     </a>
                     <a href="{{ route('reports.verify', $rep->verify_token) }}"
-                       class="bg-white text-[#0B6E6C] text-[11px] font-semibold px-3 py-1 rounded-full text-center">
-                        Cek QR
+                       class="bg-white text-[#0B6E6C] text-[11px] font-semibold px-3 py-1 rounded-full text-center flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-qrcode text-[10px]"></i>
+                        <span>Cek QR</span>
                     </a>
                 </div>
             </div>

@@ -51,7 +51,14 @@ class LogbookController extends Controller
             $query->where(fn ($sub) => $sub->where('title', 'like', "%{$q}%")->orWhere('final_description', 'like', "%{$q}%"));
         }
 
-        $logbooks = $query->orderByDesc('date')->orderByDesc('start_time')->get();
+        $logbooks = $query->orderByDesc('date')
+            ->orderByDesc('id')
+            ->get()
+            ->unique(fn ($l) => $l->date->format('Y-m-d'))
+            ->values();
+
+        $todayStr = Carbon::now('Asia/Jakarta')->toDateString();
+        $todayLogbook = $logbooks->first(fn ($l) => $l->date->format('Y-m-d') === $todayStr);
 
         $monthStart = $currentMonth->copy()->startOfMonth();
         $monthEnd = $currentMonth->copy()->endOfMonth();
@@ -78,14 +85,12 @@ class LogbookController extends Controller
             $cursor->addDay();
         }
 
-        $selectedDayLogs = $logbooks->filter(fn ($l) => $l->date->format('Y-m-d') === $selectedDate)->values();
-        if ($selectedDayLogs->isEmpty() && $logbooks->isNotEmpty()) {
-            $selectedDayLogs = $logbooks->take(2)->values();
-        }
+        $selectedDayLogs = $logbooks->filter(fn ($l) => $l->date->format('Y-m-d') === $selectedDate)->take(1)->values();
 
         return view('logbook.index', compact(
             'internship',
             'logbooks',
+            'todayLogbook',
             'currentMonth',
             'selectedDate',
             'calendarDays',
@@ -101,7 +106,12 @@ class LogbookController extends Controller
         $quota = $user ? $this->geminiService->quotaStatus($user) : ['used' => 0, 'limit' => 30, 'remaining' => 30];
         $categories = LogCategory::cases();
 
-        return view('logbook.create', compact('internship', 'templates', 'quota', 'categories'));
+        $targetDate = $request->query('date', Carbon::now('Asia/Jakarta')->toDateString());
+        $existingTodayLog = $internship
+            ? $internship->logbooks()->whereDate('date', $targetDate)->first()
+            : null;
+
+        return view('logbook.create', compact('internship', 'templates', 'quota', 'categories', 'targetDate', 'existingTodayLog'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -111,7 +121,7 @@ class LogbookController extends Controller
             'start_time' => ['required'],
             'end_time' => ['required'],
             'title' => ['required', 'string', 'max:200'],
-            'category' => ['required', 'string'],
+            'category' => ['nullable', 'string'],
             'raw_description' => ['required', 'string'],
             'ai_description' => ['nullable', 'string'],
             'final_description' => ['nullable', 'string'],
@@ -124,6 +134,9 @@ class LogbookController extends Controller
             'photo' => ['nullable', 'image', 'max:5120'],
             'photo_caption' => ['nullable', 'string', 'max:200'],
         ]);
+
+        $validated['category'] = $validated['category'] ?? 'tugas';
+        $validated['work_location'] = $validated['work_location'] ?? 'kantor';
 
         $internship = $request->user()?->activeInternship ?? Internship::firstOrFail();
 
@@ -171,7 +184,7 @@ class LogbookController extends Controller
             'start_time' => ['required'],
             'end_time' => ['required'],
             'title' => ['required', 'string', 'max:200'],
-            'category' => ['required', 'string'],
+            'category' => ['nullable', 'string'],
             'raw_description' => ['required', 'string'],
             'ai_description' => ['nullable', 'string'],
             'final_description' => ['nullable', 'string'],
@@ -180,6 +193,9 @@ class LogbookController extends Controller
             'work_location' => ['nullable', 'string'],
             'status' => ['nullable', 'string'],
         ]);
+
+        $validated['category'] = $validated['category'] ?? 'tugas';
+        $validated['work_location'] = $validated['work_location'] ?? 'kantor';
 
         if (empty($validated['final_description'])) {
             $validated['final_description'] = ($validated['ai_description'] ?? null) ?: $validated['raw_description'];

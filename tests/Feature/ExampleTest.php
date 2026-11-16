@@ -46,7 +46,7 @@ class ExampleTest extends TestCase
         $createPage->assertSeeText('Hendra Wijaya');
     }
 
-    public function test_dashboard_renders_daily_logbook_scripting_without_meeting_terms(): void
+    public function test_dashboard_renders_last_3_days_logbook_and_hides_category_filters(): void
     {
         $participant = User::where('role', 'participant')->firstOrFail();
 
@@ -55,44 +55,37 @@ class ExampleTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText('Randy Karna');
         $response->assertSeeText('Pencatatan Logbook Kegiatan Harian');
-        $response->assertSeeText('Catatan Logbook Harian');
-        $response->assertSeeText('Pencatatan & Rekapitulasi Data Operasional Harian');
-        $response->assertDontSeeText('Join meet');
-        $response->assertDontSeeText('Today\'s meeting');
+        $response->assertSeeText('Catatan Logbook (3 Hari Terakhir)');
+        $response->assertDontSeeText('Tugas Harian');
     }
 
-    public function test_logbook_calendar_detail_and_creation_flow(): void
+    public function test_one_logbook_per_day_hides_create_form_and_shows_bento_grid_card(): void
     {
         $participant = User::where('role', 'participant')->firstOrFail();
 
-        $calendarRes = $this->actingAs($participant)->get('/logbook?month=2026-11&date=2026-11-10');
-        $calendarRes->assertStatus(200);
-        $calendarRes->assertSeeText('November 2026');
-        $calendarRes->assertSeeText('Catatan Kegiatan Harian');
-        $calendarRes->assertSeeText('Rekapitulasi Logbook Bulanan');
-        $calendarRes->assertDontSeeText('Join meet');
-
         $storeRes = $this->actingAs($participant)
             ->post('/logbook', [
-                'date' => '2026-11-16',
+                'date' => '2026-11-18',
                 'start_time' => '09:00',
                 'end_time' => '12:00',
                 'title' => 'Penyusunan Dokumen Rekap Harian Bagian',
-                'category' => 'tugas',
                 'raw_description' => 'menyusun dokumen rekap harian bagian sistem informasi',
                 'output' => 'Dokumen Rekap Harian • Arsip Bagian',
-                'work_location' => 'wfo',
+                'work_location' => 'kantor',
             ]);
 
         $storeRes->assertSessionHasNoErrors();
         $newLog = Logbook::where('title', 'Penyusunan Dokumen Rekap Harian Bagian')->firstOrFail();
         $storeRes->assertRedirect(route('logbook.show', $newLog));
-        $this->assertEquals(180, $newLog->duration_minutes);
+        $this->assertEquals('Kantor', $newLog->location_label);
 
-        $detailRes = $this->actingAs($participant)->get(route('logbook.show', $newLog));
-        $detailRes->assertStatus(200);
-        $detailRes->assertSeeText('Dokumen Rekap Harian');
-        $detailRes->assertSeeText('Rincian & Hasil Kerja');
+        // Visiting create page for a date that already has a logbook hides the form and shows Grid Card
+        $createForFilledDate = $this->actingAs($participant)->get('/logbook/create?date=2026-11-18');
+        $createForFilledDate->assertStatus(200);
+        $createForFilledDate->assertSeeText('Sudah Tercatat Hari Ini');
+        $createForFilledDate->assertSeeText('Penyusunan Dokumen Rekap Harian Bagian');
+        $createForFilledDate->assertSeeText('Edit Logbook Ini');
+        $createForFilledDate->assertDontSeeText('Simpan Logbook Harian');
     }
 
     public function test_ai_polish_transcribe_and_offline_sync_endpoints(): void
@@ -113,7 +106,7 @@ class ExampleTest extends TestCase
                 'items' => [
                     [
                         'client_uuid' => '11111111-2222-3333-4444-555555555555',
-                        'date' => '2026-11-16',
+                        'date' => '2026-11-19',
                         'start_time' => '13:00',
                         'end_time' => '15:00',
                         'title' => 'Entri Offline PWA',

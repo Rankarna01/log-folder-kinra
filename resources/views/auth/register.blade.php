@@ -9,8 +9,9 @@
             <div class="bg-white rounded-2xl px-3.5 py-2 shadow-xs inline-flex items-center">
                 <img src="/images/kinra.png" alt="Logo KINRA Sei Mangkei" class="h-7 w-auto object-contain">
             </div>
-            <span class="inline-block bg-white/95 px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] shadow-2xs">
-                ✨ Registrasi Peserta Magang
+            <span class="inline-flex items-center gap-1.5 bg-white/95 px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] shadow-2xs">
+                <i class="fa-solid fa-user-check"></i>
+                <span>Registrasi Peserta Magang</span>
             </span>
         </div>
 
@@ -18,7 +19,7 @@
             Mulai Catat Logbook Harianmu
         </h1>
         <p class="text-xs text-emerald-100 mt-1 leading-relaxed">
-            Isi data singkat di bawah ini. Setelah daftar, kamu akan otomatis diarahkan ke form tambah kegiatan harian.
+            Isi data singkat di bawah ini. Setelah daftar, kamu akan otomatis diarahkan ke halaman pencatatan kegiatan harian.
         </p>
     </section>
 
@@ -36,7 +37,7 @@
         <div>
             <label for="division" class="block text-xs font-semibold text-[#111827]">2. Divisi</label>
             <input type="text" id="division" name="division" value="{{ old('division') }}" required
-                   placeholder="Contoh: IT & Digital Product / Operasional / SDM"
+                   placeholder="Contoh: IT & Sistem Informasi / Operasional / SDM"
                    class="mt-1.5 w-full rounded-[16px] bg-[#F4F7F6] border-0 px-4 py-3 text-sm font-medium text-[#111827] focus:ring-2 focus:ring-[#0B6E6C]">
         </div>
 
@@ -50,13 +51,14 @@
         <div>
             <label for="mentor_name" class="block text-xs font-semibold text-[#111827]">4. Nama Mentor Pembimbing</label>
             <input type="text" id="mentor_name" name="mentor_name" value="{{ old('mentor_name') }}" required
-                   placeholder="Contoh: Rizky / Agnes Nielsen"
+                   placeholder="Contoh: Rizky Pratama"
                    class="mt-1.5 w-full rounded-[16px] bg-[#F4F7F6] border-0 px-4 py-3 text-sm font-medium text-[#111827] focus:ring-2 focus:ring-[#0B6E6C]">
         </div>
 
         <button type="submit"
-                class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-sm font-bold py-3.5 rounded-full shadow-md transition active:scale-[0.99]">
-            Simpan & Tambah Logbook Harian →
+                class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-sm font-bold py-3.5 rounded-full shadow-md transition active:scale-[0.99] flex items-center justify-center gap-2">
+            <span>Simpan & Tambah Logbook Harian</span>
+            <i class="fa-solid fa-arrow-right"></i>
         </button>
     </form>
 
@@ -81,8 +83,9 @@
                                     </p>
                                 </div>
                             </div>
-                            <span class="bg-[#0B6E6C] text-white text-[11px] font-semibold px-3 py-1 rounded-full shrink-0">
-                                Masuk →
+                            <span class="bg-[#0B6E6C] text-white text-[11px] font-semibold px-3 py-1 rounded-full shrink-0 flex items-center gap-1">
+                                <span>Masuk</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
                             </span>
                         </button>
                     </form>

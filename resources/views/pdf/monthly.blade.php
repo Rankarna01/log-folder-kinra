@@ -170,10 +170,10 @@
             <thead>
                 <tr>
                     <th width="5%">No</th>
-                    <th width="15%">Tanggal & Jam</th>
-                    <th width="22%">Judul & Kategori</th>
-                    <th width="36%">Deskripsi Kegiatan</th>
-                    <th width="14%">Output / Hasil</th>
+                    <th width="16%">Tanggal & Jam</th>
+                    <th width="24%">Judul Kegiatan</th>
+                    <th width="35%">Deskripsi Kegiatan</th>
+                    <th width="12%">Output / Hasil</th>
                     <th width="8%">Lokasi</th>
                 </tr>
             </thead>
@@ -187,12 +187,11 @@
                             <small>({{ $entry->formatted_duration }})</small>
                         </td>
                         <td>
-                            <strong>{{ $entry->title }}</strong><br>
-                            <small>{{ $entry->category->label() }}</small>
+                            <strong>{{ $entry->title }}</strong>
                         </td>
                         <td>{{ $entry->final_description }}</td>
                         <td>{{ $entry->output ?: '-' }}</td>
-                        <td><strong>{{ strtoupper($entry->work_location ?? 'WFO') }}</strong></td>
+                        <td><strong>{{ $entry->location_label }}</strong></td>
                     </tr>
                 @empty
                     <tr>
