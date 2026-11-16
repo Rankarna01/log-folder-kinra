@@ -93,16 +93,24 @@
         </div>
     </section>
 
-    <!-- Quick Action Pills (Tambah Logbook, AI Voice, Cetak PDF) -->
+    <!-- Quick Action Pills (Tambah Logbook, AI Voice, AI Polish, Cetak PDF) -->
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
         <a href="{{ route('logbook.create') }}"
            class="shrink-0 bg-[#18181B] text-white text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
             <span>➕</span> Tambah Logbook
         </a>
-        <a href="{{ route('logbook.create') }}?voice=1"
-           class="shrink-0 bg-white hover:bg-[#E5D9FA] text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
-            <span>🎤</span> Dikte Suara AI
-        </a>
+        <button type="button"
+                onclick="openAdvancedFeatureModal('voice')"
+                class="shrink-0 bg-white hover:bg-[#E5D9FA] text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
+            <span>🎤</span> Dikte Suara
+            <span class="bg-[#E5D9FA] text-[#18181B] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
+        </button>
+        <button type="button"
+                onclick="openAdvancedFeatureModal('ai')"
+                class="shrink-0 bg-white hover:bg-[#D5EDE8] text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
+            <span>✨</span> Asisten AI
+            <span class="bg-[#FBE8A6] text-[#18181B] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Lanjutan</span>
+        </button>
         <a href="{{ route('reports.index') }}"
            class="shrink-0 bg-white hover:bg-[#FBE8A6] text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
             <span>📄</span> Cetak PDF
