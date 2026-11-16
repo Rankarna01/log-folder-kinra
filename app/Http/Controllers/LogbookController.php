@@ -27,14 +27,14 @@ class LogbookController extends Controller
         $user = $request->user();
         $internship = $user?->activeInternship ?? Internship::with(['participant', 'mentor', 'institution'])->first();
 
-        $monthParam = $request->query('month', '2026-11');
+        $monthParam = $request->query('month', now()->timezone('Asia/Jakarta')->format('Y-m'));
         try {
             $currentMonth = Carbon::createFromFormat('Y-m', $monthParam)->startOfMonth();
         } catch (\Throwable $e) {
-            $currentMonth = Carbon::now()->startOfMonth();
+            $currentMonth = Carbon::now('Asia/Jakarta')->startOfMonth();
         }
 
-        $selectedDate = $request->query('date', '2026-11-10');
+        $selectedDate = $request->query('date', now()->timezone('Asia/Jakarta')->format('Y-m-d'));
 
         $query = $internship
             ? $internship->logbooks()->with(['attachments', 'comments.user', 'reviewer'])

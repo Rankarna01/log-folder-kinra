@@ -62,7 +62,7 @@
         <div class="grid grid-cols-2 gap-3">
             <div class="bg-white rounded-[24px] p-4 shadow-2xs">
                 <label class="block text-[11px] font-semibold text-zinc-400">Tanggal Kegiatan</label>
-                <input type="date" name="date" id="input-date" value="{{ old('date', '2026-11-16') }}" required
+                <input type="date" name="date" id="input-date" value="{{ old('date', now()->timezone('Asia/Jakarta')->format('Y-m-d')) }}" required
                        class="mt-1 w-full border-0 p-0 text-sm font-semibold text-[#111827] focus:ring-0 bg-transparent">
             </div>
 

@@ -69,14 +69,18 @@
             </a>
         </div>
 
-        <!-- Dark Charcoal Inner Timer Card + Pop-out 3D Yellow Clock -->
+        <!-- Dark Charcoal Inner Live Clock Card + Pop-out 3D Yellow Clock -->
         <div class="mt-5 bg-[#18181B] rounded-[22px] px-5 py-4 flex items-center justify-between relative">
             <div>
-                <div class="text-[24px] font-bold text-white tracking-tight leading-tight">
-                    {{ $heroTimeFormatted }}
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-[#FDE9B4]">Waktu Saat Ini</span>
                 </div>
-                <p class="text-xs text-zinc-400 mt-1">
-                    Akumulasi jam kegiatan • {{ $logbooks->count() }} logbook harian tercatat
+                <div id="live-current-time" class="text-[24px] font-bold text-white tracking-tight leading-tight mt-0.5 tabular-nums">
+                    {{ now()->timezone('Asia/Jakarta')->format('H:i:s') }} WIB
+                </div>
+                <p id="live-current-date" class="text-xs text-zinc-400 mt-1">
+                    {{ now()->timezone('Asia/Jakarta')->translatedFormat('l, d M Y') }} • {{ $logbooks->count() }} logbook tercatat
                 </p>
             </div>
 
@@ -97,6 +101,36 @@
             </div>
         </div>
     </section>
+
+    <script>
+        (function () {
+            const timeEl = document.getElementById('live-current-time');
+            const dateEl = document.getElementById('live-current-date');
+            const logCount = @js($logbooks->count());
+            const daysId = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const monthsId = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+            function tickClock() {
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2, '0');
+                const mm = String(now.getMinutes()).padStart(2, '0');
+                const ss = String(now.getSeconds()).padStart(2, '0');
+                if (timeEl) {
+                    timeEl.textContent = `${hh}:${mm}:${ss} WIB`;
+                }
+                if (dateEl) {
+                    const dayName = daysId[now.getDay()];
+                    const d = String(now.getDate()).padStart(2, '0');
+                    const m = monthsId[now.getMonth()];
+                    const y = now.getFullYear();
+                    dateEl.textContent = `${dayName}, ${d} ${m} ${y} • ${logCount} logbook tercatat`;
+                }
+            }
+
+            tickClock();
+            setInterval(tickClock, 1000);
+        })();
+    </script>
 
     <!-- Quick Action Pills (KINRA Green, Sky Blue, Amber Palette) -->
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
