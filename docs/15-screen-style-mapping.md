@@ -4,13 +4,14 @@ Dokumen ini memetakan bagaimana ketiga layar referensi di [`public/style-design.
 
 ---
 
-## Ringkasan Pemetaan 3 Layar Referensi
+## Ringkasan Pemetaan 3 Layar Referensi (Fokus Peran Peserta)
 
-| Layar di `style-design.png` | Ciri Visual Utama | Dipetakan ke Menu Aplikasi |
-|-----------------------------|-------------------|----------------------------|
-| **Layar Kiri (Screen 1)** | Header profil + Hero Lavender Grid dengan Dark Timer & Jam 3D + Daftar Kartu Pastel (Mint, Periwinkle, Yellow) + Floating Dock | **Beranda Peserta**, **Daftar Logbook**, **Dashboard Mentor**, **Dashboard Admin** |
-| **Layar Tengah (Screen 2)** | Header Detail Lavender Grid + 2 Kartu Bento Putih (Deadline & People) + Segmented Pill Tabs (`Goals`/`Chat`) + Daftar Sub-Item Putih | **Detail Logbook & Review Mentor**, **Form Tambah/Edit + Panel AI**, **Detail Peserta (Mentor)** |
-| **Layar Kanan (Screen 3)** | Navigasi Bulan + Kalender Grid Putih dengan Highlight Kuning Mentega & Hitam + Kartu Kegiatan Harian + Kartu Progress PDF/Magang | **Kalender Logbook**, **Menu Laporan & Ekspor PDF**, **Rekap Kehadiran & Kepatuhan** |
+| Layar di `style-design.png` | Ciri Visual Utama | Dipetakan ke Menu Peserta |
+|-----------------------------|-------------------|---------------------------|
+| **Onboarding (`/register`)** | Hero Lavender Grid + Form 4 Input (Nama, Divisi, Bagian, Mentor) | **Registrasi Cepat Peserta** → Otomatis redirect ke `/logbook/create` |
+| **Layar Kiri (Screen 1)** | Header profil + Hero Lavender Grid dengan Dark Timer & Jam 3D + Daftar Kartu Pastel (Mint, Periwinkle, Yellow) + Floating Dock | **Beranda Peserta (`/dashboard`)** — menampilkan kategori & lokasi kerja tanpa status approval admin |
+| **Layar Tengah (Screen 2)** | Header Detail Lavender Grid + 2 Kartu Bento Putih (Tanggal/Durasi & Divisi/Mentor) + Segmented Pill Tabs (`Goals`/`Catatan`) + Daftar Sub-Item Putih | **Detail Logbook (`/logbook/{id}`)** & **Form Tambah Logbook + Panel AI (`/logbook/create`)** |
+| **Layar Kanan (Screen 3)** | Navigasi Bulan + Kalender Grid Putih dengan Highlight Kuning Mentega & Hitam + Kartu Kegiatan Harian + Kartu Progress PDF/Magang | **Kalender Logbook (`/logbook`)** & **Menu Laporan PDF (`/reports`)** |
 
 ---
 

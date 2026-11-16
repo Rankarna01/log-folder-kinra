@@ -35,7 +35,7 @@
         </section>
     @endif
 
-    <!-- Form Generate PDF -->
+    <!-- Form Generate PDF (No Admin Approval Filter) -->
     <form action="{{ route('reports.store') }}" method="POST" class="bg-white rounded-[28px] p-5 space-y-3.5 shadow-2xs">
         @csrf
         <h2 class="text-sm font-semibold text-[#111827]">Buat Laporan PDF Baru</h2>
@@ -71,10 +71,6 @@
             <label class="flex items-center gap-2 text-xs text-zinc-700">
                 <input type="checkbox" name="include_photos" value="1" checked class="rounded text-[#18181B]">
                 <span>Sertakan Lampiran Dokumentasi & Tanda Tangan</span>
-            </label>
-            <label class="flex items-center gap-2 text-xs text-zinc-700">
-                <input type="checkbox" name="only_approved" value="1" class="rounded text-[#18181B]">
-                <span>Hanya Entri Berstatus Approved</span>
             </label>
         </div>
 

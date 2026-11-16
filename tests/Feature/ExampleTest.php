@@ -19,7 +19,34 @@ class ExampleTest extends TestCase
         $this->seed(DatabaseSeeder::class);
     }
 
-    public function test_dashboard_renders_pastel_bento_ui_and_logbooks(): void
+    public function test_participant_registration_redirects_directly_to_create_logbook(): void
+    {
+        $registerPage = $this->get('/register');
+        $registerPage->assertStatus(200);
+        $registerPage->assertSeeText('Registrasi Peserta Magang');
+
+        $response = $this->post('/register', [
+            'name' => 'Budi Santoso',
+            'division' => 'IT & Digital Product',
+            'position' => 'Fullstack Web Developer Intern',
+            'mentor_name' => 'Hendra Wijaya',
+        ]);
+
+        $response->assertRedirect(route('logbook.create'));
+        $this->assertAuthenticated();
+        $this->assertEquals('Budi Santoso', auth()->user()->name);
+        $this->assertEquals('IT & Digital Product', auth()->user()->activeInternship->division);
+        $this->assertEquals('Fullstack Web Developer Intern', auth()->user()->activeInternship->position);
+        $this->assertEquals('Hendra Wijaya', auth()->user()->activeInternship->mentor->name);
+
+        $createPage = $this->get(route('logbook.create'));
+        $createPage->assertStatus(200);
+        $createPage->assertSeeText('Budi Santoso');
+        $createPage->assertSeeText('IT & Digital Product');
+        $createPage->assertSeeText('Hendra Wijaya');
+    }
+
+    public function test_dashboard_renders_pastel_bento_ui_without_admin_approval_status(): void
     {
         $participant = User::where('role', 'participant')->firstOrFail();
 
@@ -29,6 +56,8 @@ class ExampleTest extends TestCase
         $response->assertSeeText('Esther Howard');
         $response->assertSeeText('Mastering projects with management');
         $response->assertSeeText('Website Design & Design System');
+        $response->assertDontSeeText('Mode Mentor Pembimbing');
+        $response->assertDontSeeText('Approve Logbook');
     }
 
     public function test_logbook_calendar_detail_and_creation_flow(): void
@@ -40,7 +69,6 @@ class ExampleTest extends TestCase
         $calendarRes->assertSeeText('November 2026');
         $calendarRes->assertSeeText('Delivery App UI Kit');
 
-        $this->withoutExceptionHandling();
         $storeRes = $this->actingAs($participant)
             ->post('/logbook', [
                 'date' => '2026-11-16',
@@ -51,7 +79,6 @@ class ExampleTest extends TestCase
                 'raw_description' => 'bikin komponen floating dock sesuai style-design.png',
                 'output' => 'Floating Dock • Squircle FAB',
                 'work_location' => 'wfo',
-                'status' => 'submitted',
             ]);
 
         $storeRes->assertSessionHasNoErrors();
@@ -62,14 +89,14 @@ class ExampleTest extends TestCase
         $detailRes = $this->actingAs($participant)->get(route('logbook.show', $newLog));
         $detailRes->assertStatus(200);
         $detailRes->assertSeeText('Floating Dock');
+        $detailRes->assertDontSeeText('Panel Persetujuan Mentor');
     }
 
     public function test_ai_polish_transcribe_and_offline_sync_endpoints(): void
     {
         $participant = User::where('role', 'participant')->firstOrFail();
 
-        $polishRes = $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class)
-            ->actingAs($participant)
+        $polishRes = $this->actingAs($participant)
             ->postJson('/api/ai/polish', [
                 'text' => 'bikin laporan bulanan dan rapihin desain komponen',
                 'style' => 'formal',
@@ -78,8 +105,7 @@ class ExampleTest extends TestCase
         $polishRes->assertStatus(200)
             ->assertJsonStructure(['result', 'quality', 'quota']);
 
-        $syncRes = $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class)
-            ->actingAs($participant)
+        $syncRes = $this->actingAs($participant)
             ->postJson('/api/logbooks/sync', [
                 'items' => [
                     [
@@ -97,23 +123,15 @@ class ExampleTest extends TestCase
             ->assertJsonCount(1, 'synced');
     }
 
-    public function test_mentor_review_and_pdf_report_verification(): void
+    public function test_pdf_report_and_qr_verification(): void
     {
-        $mentor = User::where('role', 'mentor')->firstOrFail();
-        $logbook = Logbook::where('status', 'submitted')->firstOrFail();
-
-        $approveRes = $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class)
-            ->actingAs($mentor)
-            ->post(route('review.approve', $logbook), [
-                'message' => 'Sangat rapi, disetujui.',
-            ]);
-        $approveRes->assertRedirect();
-        $this->assertEquals('approved', $logbook->fresh()->status->value);
-
+        $participant = User::where('role', 'participant')->firstOrFail();
         $report = Report::firstOrFail();
-        $pdfRes = $this->actingAs($mentor)->get(route('reports.download', $report));
+
+        $pdfRes = $this->actingAs($participant)->get(route('reports.download', $report));
         $pdfRes->assertStatus(200);
         $pdfRes->assertSeeText($report->verify_token);
+        $pdfRes->assertSeeText('Agnes Nielsen');
 
         $verifyRes = $this->get(route('reports.verify', $report->verify_token));
         $verifyRes->assertStatus(200);

@@ -70,7 +70,7 @@ class Logbook extends Model
 
     public function isEditable(): bool
     {
-        return in_array($this->status, [LogStatus::Draft, LogStatus::Revision], true);
+        return true;
     }
 
     public function getFormattedDurationAttribute(): string

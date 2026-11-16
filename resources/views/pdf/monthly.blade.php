@@ -119,11 +119,11 @@
             <div>
                 <h1>{{ $institution->name }}</h1>
                 <p>{{ $institution->address }}</p>
-                <p><strong>LAPORAN KEGIATAN MAGANG ({{ strtoupper($report->type) }})</strong></p>
+                <p><strong>LAPORAN KEGIATAN HARIAN PESERTA MAGANG ({{ strtoupper($report->type) }})</strong></p>
             </div>
             <div style="text-align: right;">
                 <div style="background: #18181B; color: #fff; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 11px;">
-                    DOKUMEN TERVERIFIKASI
+                    DOKUMEN RESMI
                 </div>
                 <p style="font-size: 10px; margin-top: 4px;">Token: {{ $report->verify_token }}</p>
             </div>
@@ -132,13 +132,13 @@
         <table class="identity-table">
             <tr>
                 <td width="18%"><strong>Nama Peserta</strong></td>
-                <td width="32%">: {{ $participant->name }} ({{ $participant->nim_nik }})</td>
-                <td width="18%"><strong>Divisi Penempatan</strong></td>
+                <td width="32%">: {{ $participant->name }}</td>
+                <td width="18%"><strong>Divisi</strong></td>
                 <td width="32%">: {{ $internship->division }}</td>
             </tr>
             <tr>
-                <td><strong>Asal Kampus</strong></td>
-                <td>: {{ $participant->campus }}</td>
+                <td><strong>Bagian / Posisi</strong></td>
+                <td>: {{ $internship->position ?? '-' }}</td>
                 <td><strong>Mentor Pembimbing</strong></td>
                 <td>: {{ $mentor?->name ?? '-' }}</td>
             </tr>
@@ -166,11 +166,11 @@
             <thead>
                 <tr>
                     <th width="5%">No</th>
-                    <th width="14%">Tanggal & Jam</th>
+                    <th width="15%">Tanggal & Jam</th>
                     <th width="22%">Judul & Kategori</th>
                     <th width="36%">Deskripsi Kegiatan</th>
-                    <th width="15%">Output / Hasil</th>
-                    <th width="8%">Status</th>
+                    <th width="14%">Output / Hasil</th>
+                    <th width="8%">Lokasi</th>
                 </tr>
             </thead>
             <tbody>
@@ -188,7 +188,7 @@
                         </td>
                         <td>{{ $entry->final_description }}</td>
                         <td>{{ $entry->output ?: '-' }}</td>
-                        <td><strong>{{ $entry->status->label() }}</strong></td>
+                        <td><strong>{{ strtoupper($entry->work_location ?? 'WFO') }}</strong></td>
                     </tr>
                 @empty
                     <tr>
@@ -203,12 +203,12 @@
                 <td>
                     <p>Peserta Magang,</p>
                     <br><br><br>
-                    <p><strong><u>{{ $participant->name }}</u></strong><br>NIM/NIK: {{ $participant->nim_nik }}</p>
+                    <p><strong><u>{{ $participant->name }}</u></strong><br>{{ $internship->position ?? 'Peserta Magang' }}</p>
                 </td>
                 <td>
-                    <p>Menyetujui, Mentor Pembimbing</p>
+                    <p>Mengetahui, Mentor Pembimbing</p>
                     <br><br><br>
-                    <p><strong><u>{{ $mentor?->name ?? 'Agnes Nielsen' }}</u></strong><br>{{ $institution->name }}</p>
+                    <p><strong><u>{{ $mentor?->name ?? 'Agnes Nielsen' }}</u></strong><br>{{ $internship->division }}</p>
                 </td>
             </tr>
         </table>

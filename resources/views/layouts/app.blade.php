@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#18181B">
     <link rel="manifest" href="/manifest.webmanifest">
-    <title>{{ $title ?? 'Timesheet MagangHub — Pastel Bento PWA' }}</title>
+    <title>{{ $title ?? 'Timesheet MagangHub — Logbook Harian Peserta' }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,33 +75,24 @@
 </head>
 <body class="min-h-screen text-[#111827] antialiased selection:bg-[#E5D9FA] selection:text-[#18181B]">
 
-    <!-- Role Switcher & PWA Status Bar (Desktop & Demo Helper) -->
+    <!-- Top Participant Status Bar (Single Role: Peserta Magang) -->
     <div class="max-w-[440px] mx-auto pt-2 px-3">
-        <div class="bg-[#18181B] text-white rounded-full px-3 py-1.5 flex items-center justify-between text-[11px] shadow-md">
-            <div class="flex items-center gap-1.5">
-                <span id="network-dot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span id="network-label" class="font-semibold tracking-tight">PWA Ready</span>
+        <div class="bg-[#18181B] text-white rounded-full px-3.5 py-1.5 flex items-center justify-between text-[11px] shadow-md">
+            <div class="flex items-center gap-1.5 min-w-0">
+                <span id="network-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+                <span id="network-label" class="font-semibold tracking-tight truncate">
+                    @auth
+                        {{ auth()->user()->name }} • {{ auth()->user()->activeInternship?->division ?? 'Peserta Magang' }}
+                    @else
+                        Timesheet MagangHub PWA
+                    @endauth
+                </span>
             </div>
-            <div class="flex items-center gap-1">
-                @php $currentRole = auth()->user()?->role?->value ?? 'participant'; @endphp
-                <form action="{{ route('role.switch', 'participant') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="px-2.5 py-0.5 rounded-full transition {{ $currentRole === 'participant' ? 'bg-[#E5D9FA] text-[#18181B] font-bold' : 'text-zinc-400 hover:text-white' }}">
-                        Peserta
-                    </button>
-                </form>
-                <form action="{{ route('role.switch', 'mentor') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="px-2.5 py-0.5 rounded-full transition {{ $currentRole === 'mentor' ? 'bg-[#D5EDE8] text-[#18181B] font-bold' : 'text-zinc-400 hover:text-white' }}">
-                        Mentor
-                    </button>
-                </form>
-                <form action="{{ route('role.switch', 'admin') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="px-2.5 py-0.5 rounded-full transition {{ $currentRole === 'admin' ? 'bg-[#FBE8A6] text-[#18181B] font-bold' : 'text-zinc-400 hover:text-white' }}">
-                        Admin
-                    </button>
-                </form>
+            <div class="flex items-center gap-1.5 shrink-0">
+                <a href="{{ route('register') }}"
+                   class="px-2.5 py-0.5 rounded-full bg-[#E5D9FA] text-[#18181B] font-bold hover:opacity-90 transition">
+                    + Daftar Peserta
+                </a>
             </div>
         </div>
     </div>
@@ -134,7 +125,7 @@
         </main>
 
         <!-- Signature Floating Neo-Dock + Detached Squircle FAB (from style-design.png) -->
-        <nav aria-label="Menu Utama" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 pointer-events-none">
+        <nav aria-label="Menu Utama Peserta" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 pointer-events-none">
             <!-- Left 4-Icon Pill Container -->
             <div class="pointer-events-auto flex items-center gap-1.5 bg-white border-[3px] border-[#18181B] rounded-[20px] p-1.5 shadow-[0_12px_28px_rgba(24,24,27,0.16)]">
                 <!-- 1. Home / Beranda -->
@@ -159,40 +150,20 @@
                     </svg>
                 </a>
 
-                <!-- 3. Reports / Mentor Review -->
-                @if (auth()->user()?->isMentor())
-                    <a href="{{ route('review.index') }}"
-                       title="Review Logbook"
-                       class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('review.*') ? 'bg-[#F1F2F6] text-[#18181B]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                            <rect x="3" y="3" width="18" height="18" rx="4"/>
-                            <path d="m8 12 3 3 5-6"/>
-                        </svg>
-                    </a>
-                @elseif (auth()->user()?->isAdmin())
-                    <a href="{{ route('admin.index') }}"
-                       title="Panel Admin"
-                       class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('admin.*') ? 'bg-[#F1F2F6] text-[#18181B]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                            <rect x="3" y="3" width="18" height="18" rx="4"/>
-                            <path d="M7 14l3-3 3 2 4-4"/>
-                        </svg>
-                    </a>
-                @else
-                    <a href="{{ route('reports.index') }}"
-                       title="Laporan & Statistik"
-                       class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('reports.*') ? 'bg-[#F1F2F6] text-[#18181B]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                            <rect x="3" y="3" width="18" height="18" rx="4"/>
-                            <path d="M7 14l3-3 3 2 4-4"/>
-                        </svg>
-                    </a>
-                @endif
+                <!-- 3. Reports & PDF -->
+                <a href="{{ route('reports.index') }}"
+                   title="Laporan PDF"
+                   class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('reports.*') ? 'bg-[#F1F2F6] text-[#18181B]' : 'text-zinc-500 hover:bg-zinc-100' }}">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <rect x="3" y="3" width="18" height="18" rx="4"/>
+                        <path d="M7 14l3-3 3 2 4-4"/>
+                    </svg>
+                </a>
 
-                <!-- 4. Profile -->
+                <!-- 4. Profile & Data Peserta -->
                 <a href="{{ route('profile.show') }}"
-                   title="Profil & Pengaturan"
-                   class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('profile.*') ? 'bg-[#F1F2F6] text-[#18181B]' : 'text-zinc-500 hover:bg-zinc-100' }}">
+                   title="Data Peserta"
+                   class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('profile.*') || request()->routeIs('register') ? 'bg-[#F1F2F6] text-[#18181B]' : 'text-zinc-500 hover:bg-zinc-100' }}">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                         <circle cx="12" cy="8" r="4"/>
                         <path d="M5 20c0-3.8 3.1-6 7-6s7 2.2 7 6H5Z"/>
@@ -202,7 +173,7 @@
 
             <!-- Right Detached Squircle FAB [⊕] -->
             <a href="{{ route('logbook.create') }}"
-               title="Tambah Logbook Baru"
+               title="Tambah Logbook Harian"
                class="pointer-events-auto w-[54px] h-[54px] bg-white border-[3px] border-[#18181B] rounded-[20px] flex items-center justify-center text-[#18181B] shadow-[0_12px_28px_rgba(24,24,27,0.16)] hover:bg-[#E5D9FA] active:scale-95 transition">
                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <circle cx="12" cy="12" r="9"/>
@@ -221,15 +192,12 @@
 
         function updateNetworkIndicator() {
             const dot = document.getElementById('network-dot');
-            const label = document.getElementById('network-label');
-            if (!dot || !label) return;
+            if (!dot) return;
             if (navigator.onLine) {
-                dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
-                label.textContent = 'PWA Online';
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400 shrink-0';
                 syncOfflineQueue();
             } else {
-                dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
-                label.textContent = 'Mode Offline';
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0';
             }
         }
 

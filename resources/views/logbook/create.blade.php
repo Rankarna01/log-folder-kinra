@@ -4,7 +4,7 @@
 <div class="px-5 pt-4 pb-8 space-y-4">
 
     <header class="flex items-center justify-between">
-        <a href="{{ route('logbook.index') }}"
+        <a href="{{ route('dashboard') }}"
            class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#18181B] shadow-2xs">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <path d="m15 18-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -16,6 +16,23 @@
         </span>
     </header>
 
+    <!-- Active Participant Info Banner (Shows Registered Name, Division, Position, Mentor) -->
+    @if ($internship)
+        <div class="bg-[#D5EDE8] rounded-[22px] px-4 py-3 flex items-center justify-between text-xs">
+            <div class="min-w-0">
+                <p class="font-bold text-[#111827] truncate">
+                    {{ auth()->user()?->name ?? $internship->participant?->name }} • {{ $internship->division }}
+                </p>
+                <p class="text-[11px] text-zinc-600 truncate">
+                    Bagian: {{ $internship->position ?? '-' }} • Mentor: {{ $internship->mentor?->name ?? '-' }}
+                </p>
+            </div>
+            <a href="{{ route('profile.show') }}" class="bg-white text-[#18181B] text-[11px] font-semibold px-3 py-1 rounded-full shrink-0 ml-2">
+                Ubah Data
+            </a>
+        </div>
+    @endif
+
     <!-- Activity Templates Quick Fill -->
     @if ($templates->isNotEmpty())
         <div class="space-y-1.5">
@@ -24,7 +41,7 @@
                 @foreach ($templates as $tpl)
                     <button type="button"
                             onclick="applyTemplate(@js($tpl->title), @js($tpl->category), @js($tpl->description))"
-                            class="shrink-0 bg-white hover:bg-[#D5EDE8] text-[#111827] text-xs font-medium px-3 py-1.5 rounded-full shadow-2xs transition">
+                            class="shrink-0 bg-white hover:bg-[#D5EDE8] text-[#11181B] text-xs font-medium px-3 py-1.5 rounded-full shadow-2xs transition">
                         ⚡ {{ $tpl->title }}
                     </button>
                 @endforeach
@@ -37,6 +54,7 @@
         <input type="hidden" name="source" id="input-source" value="manual">
         <input type="hidden" name="ai_description" id="input-ai-description" value="">
         <input type="hidden" name="final_description" id="input-final-description" value="">
+        <input type="hidden" name="status" value="approved">
 
         <!-- Bento 2-Column Date & Time -->
         <div class="grid grid-cols-2 gap-3">
@@ -61,7 +79,7 @@
         <!-- Title & Category Card -->
         <div class="bg-white rounded-[26px] p-4 space-y-3 shadow-2xs">
             <div>
-                <label class="block text-xs font-semibold text-[#111827]">Judul Kegiatan</label>
+                <label class="block text-xs font-semibold text-[#111827]">Judul Kegiatan Harian</label>
                 <input type="text" name="title" id="input-title" value="{{ old('title') }}" required
                        placeholder="Contoh: Penyusunan Design System & UI Kit"
                        class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3.5 py-2.5 text-sm text-[#111827] focus:ring-2 focus:ring-[#18181B]">
@@ -93,9 +111,8 @@
         <section class="bg-lavender-grid rounded-[28px] p-5 space-y-3 shadow-xs">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-[#111827] flex items-center gap-1.5">
-                    <span>✨</span> Catatan Kegiatan & Asisten AI Gemini
+                    <span>✨</span> Deskripsi Kegiatan & Asisten AI Gemini
                 </span>
-                <!-- Style Selector Pill -->
                 <select id="ai-style-select" class="rounded-full bg-white border-0 px-3 py-1 text-[11px] font-semibold text-[#18181B]">
                     <option value="formal">Gaya: Formal</option>
                     <option value="singkat">Gaya: Singkat</option>
@@ -104,7 +121,7 @@
             </div>
 
             <textarea name="raw_description" id="input-raw" rows="3" required
-                      placeholder="Tulis catatan singkat atau gunakan mikrofon (misal: bikin komponen uiux dashboard dan meeting sama mentor agnes)..."
+                      placeholder="Tulis catatan singkat atau gunakan mikrofon (misal: bikin komponen uiux dashboard dan koordinasi sama mentor)..."
                       class="w-full rounded-[18px] bg-white/95 border-0 p-3.5 text-xs text-[#111827] leading-relaxed focus:ring-2 focus:ring-[#18181B]">{{ old('raw_description') }}</textarea>
 
             <!-- AI Action Buttons -->
@@ -164,23 +181,17 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-[#111827]">Lampiran Bukti Foto (Otomatis Kompres & Watermark)</label>
+                <label class="block text-xs font-semibold text-[#111827]">Lampiran Bukti Foto (Opsional)</label>
                 <input type="file" name="photo" accept="image/*"
                        class="mt-1.5 block w-full text-xs text-zinc-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#E5D9FA] file:text-[#18181B]">
             </div>
         </div>
 
-        <!-- Submit Buttons (Draft vs Submit to Mentor) -->
-        <div class="grid grid-cols-2 gap-3 pt-1">
-            <button type="submit" name="status" value="draft"
-                    class="bg-white border-2 border-[#18181B] text-[#18181B] text-xs font-bold py-3.5 rounded-full shadow-xs">
-                Simpan Draft
-            </button>
-            <button type="submit" name="status" value="submitted"
-                    class="bg-[#18181B] text-white text-xs font-bold py-3.5 rounded-full shadow-md">
-                Simpan & Submit →
-            </button>
-        </div>
+        <!-- Single Direct Submit Button -->
+        <button type="submit"
+                class="w-full bg-[#18181B] hover:bg-zinc-800 text-white text-sm font-bold py-4 rounded-full shadow-md transition active:scale-[0.99]">
+            Simpan Logbook Harian →
+        </button>
     </form>
 </div>
 

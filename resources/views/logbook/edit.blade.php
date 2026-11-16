@@ -23,6 +23,7 @@
     <form action="{{ route('logbook.update', $logbook) }}" method="POST" class="space-y-4">
         @csrf
         @method('PUT')
+        <input type="hidden" name="status" value="approved">
 
         <div class="grid grid-cols-2 gap-3">
             <div class="bg-white rounded-[24px] p-4 shadow-2xs">
@@ -70,7 +71,7 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-[#111827]">Deskripsi Final Laporan</label>
+                <label class="block text-xs font-semibold text-[#111827]">Deskripsi Kegiatan</label>
                 <textarea name="final_description" rows="4" required
                           class="mt-1.5 w-full rounded-[16px] bg-[#F6F7F9] border-0 p-3 text-xs text-[#111827] leading-relaxed">{{ $logbook->final_description }}</textarea>
                 <input type="hidden" name="raw_description" value="{{ $logbook->raw_description }}">
@@ -89,16 +90,10 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-            <button type="submit" name="status" value="draft"
-                    class="bg-white border-2 border-[#18181B] text-[#18181B] text-xs font-bold py-3.5 rounded-full">
-                Simpan Draft
-            </button>
-            <button type="submit" name="status" value="submitted"
-                    class="bg-[#18181B] text-white text-xs font-bold py-3.5 rounded-full">
-                Kirim Revisi →
-            </button>
-        </div>
+        <button type="submit"
+                class="w-full bg-[#18181B] text-white text-sm font-bold py-3.5 rounded-full shadow-md">
+            Simpan Perubahan Logbook →
+        </button>
     </form>
 </div>
 @endsection

@@ -26,13 +26,12 @@ Peserta magang wajib mencatat kegiatan harian beserta bukti dokumentasi. Pencata
 - Integrasi langsung ke sistem MagangHub resmi
 - Chat real-time
 
-## Peran Pengguna
+## Peran & Alur Pengguna (Single-Role: Peserta Magang)
 
-| Peran | Tanggung jawab |
-|-------|----------------|
-| **Peserta** | Isi logbook, upload bukti, cetak laporan, lihat statistik |
-| **Mentor** | Review, komentar, approve/revisi logbook peserta bimbingannya |
-| **Admin** | Kelola user, instansi, periode magang, template laporan, rekap global |
+Aplikasi difokuskan khusus untuk **Peserta Magang** tanpa hambatan birokrasi approval admin/mentor di dalam sistem:
+1. **Registrasi Cepat Peserta (`/register`):** Peserta cukup mengisi **Nama Lengkap**, **Divisi**, **Bagian / Posisi**, dan **Nama Mentor**.
+2. **Otomatis Masuk ke Tambah Logbook Harian (`/logbook/create`):** Setelah mengisi form registrasi, peserta langsung diarahkan ke halaman tambah kegiatan harian.
+3. **Semua Status Approval / Admin Disembunyikan:** Tidak ada antrean status *Draft / Submitted / Approved / Revisi*; seluruh entri yang disimpan langsung aktif dan siap dicetak ke laporan PDF kapan saja.
 
 ## User Stories (inti)
 

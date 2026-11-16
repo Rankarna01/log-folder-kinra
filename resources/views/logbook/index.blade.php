@@ -68,7 +68,7 @@
             <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2.5 min-w-0">
                     <span class="w-8 h-8 rounded-full bg-[#F8C8C4] flex items-center justify-center text-xs font-bold text-[#18181B] shrink-0">
-                        {{ $idx === 0 ? 'EH' : 'AN' }}
+                        {{ $internship?->participant?->initials ?? 'EH' }}
                     </span>
                     <div class="min-w-0">
                         <p class="text-xs font-semibold text-[#111827] truncate">{{ $item->title }}</p>
@@ -124,25 +124,27 @@
         </div>
     </section>
 
-    <!-- Filter & Full Logbook History List -->
+    <!-- Filter by Category (No Approval/Revision Status Filters) -->
     <section class="pt-2 space-y-3">
         <div class="flex items-center justify-between">
             <h3 class="text-sm font-semibold text-[#111827]">Semua Entri Logbook ({{ $logbooks->count() }})</h3>
             <div class="flex items-center gap-1">
-                <a href="{{ route('logbook.index') }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ !request('status') ? 'bg-[#18181B] text-white' : 'bg-white text-zinc-600' }}">Semua</a>
-                <a href="{{ route('logbook.index', ['status' => 'approved']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('status') === 'approved' ? 'bg-[#18181B] text-white' : 'bg-white text-zinc-600' }}">Approved</a>
-                <a href="{{ route('logbook.index', ['status' => 'revision']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('status') === 'revision' ? 'bg-[#18181B] text-white' : 'bg-white text-zinc-600' }}">Revisi</a>
+                <a href="{{ route('logbook.index') }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ !request('category') ? 'bg-[#18181B] text-white' : 'bg-white text-zinc-600' }}">Semua</a>
+                <a href="{{ route('logbook.index', ['category' => 'tugas']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('category') === 'tugas' ? 'bg-[#18181B] text-white' : 'bg-white text-zinc-600' }}">Tugas</a>
+                <a href="{{ route('logbook.index', ['category' => 'meeting']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('category') === 'meeting' ? 'bg-[#18181B] text-white' : 'bg-white text-zinc-600' }}">Meeting</a>
             </div>
         </div>
 
-        @foreach ($logbooks as $log)
-            @php $st = $log->status->cardStyle(); @endphp
+        @php
+            $bgRotation = ['bg-[#D5EDE8]', 'bg-[#E6E8FA]', 'bg-[#FBE8A6]', 'bg-[#E5D9FA]'];
+        @endphp
+        @foreach ($logbooks as $idx => $log)
             <a href="{{ route('logbook.show', $log) }}"
-               class="block {{ $st['bg'] }} rounded-[24px] p-4 transition hover:translate-y-[-1px]">
+               class="block {{ $bgRotation[$idx % count($bgRotation)] }} rounded-[24px] p-4 transition hover:translate-y-[-1px]">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold text-zinc-700">{{ $log->date->format('d M Y') }} • {{ $log->formatted_duration }}</span>
                     <span class="bg-white px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#18181B]">
-                        ⚑ {{ $log->status->label() }}
+                        ⚑ {{ $log->category->label() }}
                     </span>
                 </div>
                 <h4 class="text-sm font-semibold text-[#111827] mt-1">{{ $log->title }}</h4>
