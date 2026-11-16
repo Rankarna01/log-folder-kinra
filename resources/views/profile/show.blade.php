@@ -9,16 +9,18 @@
                 {{ $user->initials }}
             </div>
             <div class="min-w-0">
-                <span class="bg-white/95 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0B6E6C]">
-                    Peserta Magang KINRA
+                <span class="bg-white/95 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0B6E6C] inline-flex items-center gap-1">
+                    <i class="fa-solid fa-id-badge"></i>
+                    <span>Peserta Magang KINRA</span>
                 </span>
                 <h1 class="text-lg font-bold text-white mt-1 truncate">{{ $user->name }}</h1>
                 <p class="text-xs text-emerald-100 truncate">{{ $internship?->division }} • {{ $internship?->position }}</p>
             </div>
         </div>
         <a href="{{ route('profile.export.csv') }}"
-           class="bg-white text-[#0B6E6C] text-xs font-bold px-3.5 py-2 rounded-full shrink-0 shadow-2xs">
-            Ekspor CSV
+           class="bg-white text-[#0B6E6C] text-xs font-bold px-3.5 py-2 rounded-full shrink-0 shadow-2xs flex items-center gap-1.5">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>Ekspor CSV</span>
         </a>
     </header>
 
@@ -26,13 +28,19 @@
     @if ($internship)
         <section class="grid grid-cols-2 gap-3">
             <div class="bg-[#C8EBE5] rounded-[24px] p-4">
-                <p class="text-[11px] text-[#074745] font-medium">Divisi & Bagian</p>
+                <p class="text-[11px] text-[#074745] font-medium flex items-center gap-1">
+                    <i class="fa-solid fa-building text-[10px]"></i>
+                    <span>Divisi & Bagian</span>
+                </p>
                 <p class="text-xs font-bold text-[#111827] mt-1">{{ $internship->division }}</p>
                 <p class="text-[11px] text-zinc-700 mt-0.5">{{ $internship->position }}</p>
             </div>
             <div class="bg-[#D4EEFC] rounded-[24px] p-4">
-                <p class="text-[11px] text-[#0C4A6E] font-medium">Mentor Pembimbing</p>
-                <p class="text-xs font-bold text-[#111827] mt-1">{{ $internship->mentor?->name ?? 'Agnes Nielsen' }}</p>
+                <p class="text-[11px] text-[#0C4A6E] font-medium flex items-center gap-1">
+                    <i class="fa-solid fa-user-tie text-[10px]"></i>
+                    <span>Mentor Pembimbing</span>
+                </p>
+                <p class="text-xs font-bold text-[#111827] mt-1">{{ $internship->mentor?->name ?? '-' }}</p>
                 <p class="text-[11px] text-zinc-700 mt-0.5">Pembimbing Lapangan</p>
             </div>
         </section>
@@ -44,8 +52,9 @@
         @method('PUT')
         <div class="flex items-center justify-between">
             <h2 class="text-sm font-semibold text-[#111827]">Data Registrasi Peserta</h2>
-            <a href="{{ route('register') }}" class="text-xs font-semibold text-[#0B6E6C] hover:underline">
-                + Daftar Peserta Baru
+            <a href="{{ route('register') }}" class="text-xs font-semibold text-[#0B6E6C] hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-user-plus text-[10px]"></i>
+                <span>Daftar Peserta Baru</span>
             </a>
         </div>
 
@@ -67,40 +76,54 @@
                    class="mt-1 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs font-semibold text-[#111827]">
         </div>
 
-        <div class="grid grid-cols-2 gap-2.5">
-            <div>
-                <label class="block text-xs font-semibold text-zinc-500">Nama Mentor</label>
-                <input type="text" name="mentor_name" value="{{ $internship?->mentor?->name ?? ($user->preferences['mentor_name'] ?? 'Agnes Nielsen') }}" required
-                       class="mt-1 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs font-semibold text-[#111827]">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-zinc-500">Gaya AI Default</label>
-                <select name="ai_style" class="mt-1 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3 py-2.5 text-xs font-semibold text-[#111827]">
-                    <option value="formal" @selected(($user->preferences['ai_style'] ?? 'formal') === 'formal')>Formal Baku</option>
-                    <option value="singkat" @selected(($user->preferences['ai_style'] ?? '') === 'singkat')>Singkat Padat</option>
-                    <option value="detail" @selected(($user->preferences['ai_style'] ?? '') === 'detail')>Detail Terstruktur</option>
-                </select>
-            </div>
+        <div>
+            <label class="block text-xs font-semibold text-zinc-500">Nama Mentor</label>
+            <input type="text" name="mentor_name" value="{{ $internship?->mentor?->name ?? ($user->preferences['mentor_name'] ?? '-') }}" required
+                   class="mt-1 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs font-semibold text-[#111827]">
         </div>
 
-        <button type="submit" class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-bold py-3 rounded-full">
-            Simpan Data Peserta
+        <button type="submit" class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-bold py-3 rounded-full flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>Simpan Data Peserta</span>
         </button>
     </form>
 
-    <!-- Add Activity Template -->
-    <form action="{{ route('profile.templates.store') }}" method="POST" class="bg-white rounded-[28px] p-5 space-y-3 shadow-2xs">
-        @csrf
-        <h2 class="text-sm font-semibold text-[#111827]">Tambah Template Catatan Harian</h2>
-        <input type="text" name="title" required placeholder="Judul template (misal: Rekapitulasi Data Harian)"
-               class="w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2 text-xs">
-        <input type="hidden" name="category" value="tugas">
-        <textarea name="description" rows="2" required placeholder="Deskripsi kegiatan harian default..."
-                  class="w-full rounded-[14px] bg-[#F4F7F6] border-0 p-3 text-xs"></textarea>
-        <button type="submit" class="bg-[#C8EBE5] text-[#074745] text-xs font-bold px-4 py-2 rounded-full">
-            + Simpan Template
-        </button>
-    </form>
+    <!-- Tambah Template Catatan Harian (Disabled / Non-Creatable + Labeled as Fitur Lanjutan) -->
+    <section onclick="openAdvancedFeatureModal('template')"
+             class="bg-white rounded-[28px] p-5 space-y-3 shadow-2xs relative cursor-pointer border-2 border-dashed border-[#C8EBE5] hover:border-[#0B6E6C] transition">
+        <div class="flex items-center justify-between gap-2">
+            <h2 class="text-sm font-semibold text-[#111827] flex items-center gap-1.5">
+                <i class="fa-solid fa-layer-group text-[#0B6E6C]"></i>
+                <span>Tambah Template Catatan Harian</span>
+            </h2>
+            <span class="bg-[#FDE9B4] text-[#78350F] text-[10px] font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1 shrink-0">
+                <i class="fa-solid fa-lock text-[9px]"></i>
+                <span>Fitur Lanjutan</span>
+            </span>
+        </div>
+
+        <p class="text-[11px] text-zinc-500">
+            Fitur pembuatan template otomatis sedang dalam tahap pengembangan lanjutan.
+        </p>
+
+        <input type="text" readonly tabindex="-1"
+               placeholder="Judul template (misal: Rekapitulasi Data Harian)"
+               class="w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-zinc-400 pointer-events-none select-none">
+
+        <textarea rows="2" readonly tabindex="-1"
+                  placeholder="Deskripsi kegiatan harian default..."
+                  class="w-full rounded-[14px] bg-[#F4F7F6] border-0 p-3 text-xs text-zinc-400 pointer-events-none select-none"></textarea>
+
+        <div class="flex items-center justify-between pt-1">
+            <button type="button"
+                    onclick="event.stopPropagation(); openAdvancedFeatureModal('template')"
+                    class="bg-[#C8EBE5] hover:bg-[#0B6E6C] text-[#074745] hover:text-white text-xs font-bold px-4 py-2.5 rounded-full inline-flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-plus text-[10px]"></i>
+                <span>Simpan Template</span>
+                <span class="bg-white/90 text-[#0B6E6C] text-[9px] font-bold px-2 py-0.5 rounded-full ml-1">Segera Hadir</span>
+            </button>
+        </div>
+    </section>
 
 </div>
 @endsection

@@ -149,21 +149,23 @@
         </div>
     @else
         <!-- CREATE FORM (Shown only when no logbook exists yet for the selected date) -->
-        @if ($templates->isNotEmpty())
-            <div class="space-y-1.5">
-                <p class="text-[11px] font-semibold text-zinc-500">Template Kegiatan Cepat (1-Tap):</p>
-                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
-                    @foreach ($templates as $tpl)
-                        <button type="button"
-                                onclick="applyTemplate(@js($tpl->title), @js($tpl->description))"
-                                class="shrink-0 bg-white hover:bg-[#C8EBE5] text-[#074745] text-xs font-medium px-3 py-1.5 rounded-full shadow-2xs transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-bolt text-[#F7A61C] text-[11px]"></i>
-                            <span>{{ $tpl->title }}</span>
-                        </button>
-                    @endforeach
+        <div class="bg-white rounded-[22px] p-3.5 flex items-center justify-between shadow-2xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-8 h-8 rounded-[10px] bg-[#C8EBE5] text-[#0B6E6C] flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-layer-group text-xs"></i>
+                </span>
+                <div class="min-w-0">
+                    <p class="text-xs font-semibold text-[#111827] truncate">Template Catatan Harian Cepat</p>
+                    <p class="text-[10px] text-zinc-500 truncate">Isi otomatis kegiatan rutin harian dengan 1 klik</p>
                 </div>
             </div>
-        @endif
+            <button type="button"
+                    onclick="openAdvancedFeatureModal('template')"
+                    class="shrink-0 bg-[#FDE9B4] text-[#78350F] text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+                <i class="fa-solid fa-lock text-[9px]"></i>
+                <span>Fitur Lanjutan</span>
+            </button>
+        </div>
 
         <form id="logbook-form" action="{{ route('logbook.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf

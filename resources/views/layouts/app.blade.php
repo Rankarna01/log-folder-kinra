@@ -310,6 +310,13 @@
                 title: 'Ringkasan Eksekutif & Skill AI',
                 subtitle: 'Rekap Narasi Bulanan Otomatis',
                 desc: 'Fitur <strong>Ringkasan Narasi AI & Ekstraksi Kompetensi</strong> merupakan <strong>Fitur Lanjutan</strong>. Saat ini pencetakan tabel kegiatan dan ekspor laporan PDF A4 sudah berfungsi penuh dan siap diunduh.'
+            },
+            template: {
+                iconClass: 'fa-solid fa-layer-group',
+                badge: 'Fitur Lanjutan • Smart Template',
+                title: 'Template Catatan Harian Pintar',
+                subtitle: 'Pengisian Cepat Kegiatan Berulang',
+                desc: 'Fitur <strong>Tambah & Gunakan Template Catatan Harian</strong> merupakan <strong>Fitur Lanjutan</strong> yang sedang disiapkan untuk pembaruan berikutnya. Saat ini silakan isi kegiatan harianmu langsung pada form utama.'
             }
         };
 
