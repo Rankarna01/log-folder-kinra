@@ -195,89 +195,46 @@
         </nav>
     </div>
 
-    <!-- Global Modal: Fitur Lanjutan (AI Gemini & Voice-to-Log Preview Alert with Font Awesome Icons) -->
+    <!-- Global Modal: Fitur Lanjutan (Single Checkerboard Grid Card Only) -->
     <div id="advanced-feature-modal"
          role="dialog"
          aria-modal="true"
          aria-labelledby="adv-modal-title"
+         onclick="if (event.target === this) closeAdvancedFeatureModal()"
          class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-[#18181B]/60 backdrop-blur-xs transition-opacity">
-        <div class="w-full max-w-[390px] bg-white rounded-[32px] p-5 shadow-2xl border-[3px] border-[#18181B] space-y-4">
-
-            <!-- Modal Top KINRA Deep Green Grid Card -->
-            <div class="bg-kinra-grid rounded-[24px] p-5 relative overflow-hidden text-white">
-                <div class="flex items-center justify-between">
-                    <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] shadow-2xs">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span id="adv-modal-badge">Fitur Lanjutan • Segera Hadir</span>
-                    </span>
-                    <button type="button"
-                            onclick="closeAdvancedFeatureModal()"
-                            class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white font-bold text-xs transition">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <div class="mt-4 flex items-center gap-3.5">
-                    <div class="w-13 h-13 rounded-[18px] bg-[#18181B] text-[#FDE9B4] flex items-center justify-center text-xl shrink-0 shadow-md">
-                        <i id="adv-modal-icon" class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <div>
-                        <h3 id="adv-modal-title" class="text-[18px] font-bold text-white leading-snug">
-                            Asisten AI & Voice-to-Log
-                        </h3>
-                        <p id="adv-modal-subtitle" class="text-xs font-medium text-emerald-100 mt-0.5">
-                            Modul Pintar Timesheet KINRA Sei Mangkei
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Alert Message Body -->
-            <div class="px-1 space-y-3">
-                <div class="bg-[#C8EBE5]/70 rounded-[18px] px-3.5 py-2.5 flex items-start gap-2.5">
-                    <i class="fa-solid fa-rocket text-[#0B6E6C] text-sm mt-1"></i>
-                    <p id="adv-modal-desc" class="text-xs text-[#074745] font-medium leading-relaxed">
-                        Fitur ini merupakan <strong>Fitur Lanjutan (Tahap Pengembangan Fase Berikutnya)</strong> dan sedang dalam proses integrasi akhir ke layanan cloud AI.
-                    </p>
-                </div>
-
-                <!-- Dark Charcoal Preview Island -->
-                <div class="bg-[#18181B] text-white rounded-[22px] p-4 space-y-2">
-                    <p class="text-[11px] font-bold text-[#C8EBE5] uppercase tracking-wider">
-                        Yang Akan Hadir di Pembaruan Ini:
-                    </p>
-                    <ul id="adv-modal-list" class="text-xs text-zinc-300 space-y-1.5">
-                        <li class="flex items-center gap-2">
-                            <span class="w-4 h-4 rounded-full bg-[#C8EBE5] text-[#0B6E6C] flex items-center justify-center text-[9px] font-bold shrink-0">
-                                <i class="fa-solid fa-check"></i>
-                            </span>
-                            <span>Perapian kalimat otomatis 3 gaya (Formal, Singkat, Detail)</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-4 h-4 rounded-full bg-[#FDE9B4] text-[#18181B] flex items-center justify-center text-[9px] font-bold shrink-0">
-                                <i class="fa-solid fa-check"></i>
-                            </span>
-                            <span>Dikte suara (Voice-to-Log) Bahasa Indonesia real-time</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <span class="w-4 h-4 rounded-full bg-[#D4EEFC] text-[#18181B] flex items-center justify-center text-[9px] font-bold shrink-0">
-                                <i class="fa-solid fa-check"></i>
-                            </span>
-                            <span>Saran deskripsi otomatis dari foto dokumentasi</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Action Button -->
-            <div class="pt-1">
+        <div class="w-full max-w-[370px] bg-kinra-grid rounded-[28px] p-5 shadow-2xl border-[3px] border-[#18181B] text-white space-y-4">
+            <div class="flex items-center justify-between">
+                <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] shadow-2xs">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span id="adv-modal-badge">Fitur Lanjutan • Segera Hadir</span>
+                </span>
                 <button type="button"
                         onclick="closeAdvancedFeatureModal()"
-                        class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-bold py-3.5 rounded-full shadow-md transition active:scale-[0.99] flex items-center justify-center gap-2">
-                    <span>Mengerti, Lanjutkan Isi Manual</span>
-                    <i class="fa-solid fa-arrow-right"></i>
+                        class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white font-bold text-xs transition">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
+            <div class="flex items-center gap-3.5 pt-1">
+                <div class="w-13 h-13 rounded-[18px] bg-[#18181B] text-[#FDE9B4] flex items-center justify-center text-xl shrink-0 shadow-md">
+                    <i id="adv-modal-icon" class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                    <h3 id="adv-modal-title" class="text-[18px] font-bold text-white leading-snug">
+                        Asisten AI & Voice-to-Log
+                    </h3>
+                    <p id="adv-modal-subtitle" class="text-xs font-medium text-emerald-100 mt-0.5">
+                        Modul Pintar Timesheet KINRA Sei Mangkei
+                    </p>
+                </div>
+            </div>
+
+            <button type="button"
+                    onclick="closeAdvancedFeatureModal()"
+                    class="w-full bg-[#18181B] hover:bg-zinc-800 text-white text-xs font-bold py-3 rounded-full shadow-md transition active:scale-[0.99] flex items-center justify-center gap-2">
+                <span>Mengerti</span>
+                <i class="fa-solid fa-check"></i>
+            </button>
         </div>
     </div>
 
@@ -328,7 +285,6 @@
             document.getElementById('adv-modal-badge').textContent = cfg.badge;
             document.getElementById('adv-modal-title').textContent = cfg.title;
             document.getElementById('adv-modal-subtitle').textContent = cfg.subtitle;
-            document.getElementById('adv-modal-desc').innerHTML = cfg.desc;
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');
