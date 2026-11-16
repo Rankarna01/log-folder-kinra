@@ -91,11 +91,11 @@
     <!-- Add Activity Template -->
     <form action="{{ route('profile.templates.store') }}" method="POST" class="bg-white rounded-[28px] p-5 space-y-3 shadow-2xs">
         @csrf
-        <h2 class="text-sm font-semibold text-[#111827]">Tambah Template Kegiatan Berulang</h2>
-        <input type="text" name="title" required placeholder="Judul template (misal: Daily Standup)"
+        <h2 class="text-sm font-semibold text-[#111827]">Tambah Template Catatan Harian</h2>
+        <input type="text" name="title" required placeholder="Judul template (misal: Rekapitulasi Data Harian)"
                class="w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2 text-xs">
         <input type="hidden" name="category" value="tugas">
-        <textarea name="description" rows="2" required placeholder="Deskripsi default..."
+        <textarea name="description" rows="2" required placeholder="Deskripsi kegiatan harian default..."
                   class="w-full rounded-[14px] bg-[#F4F7F6] border-0 p-3 text-xs"></textarea>
         <button type="submit" class="bg-[#C8EBE5] text-[#074745] text-xs font-bold px-4 py-2 rounded-full">
             + Simpan Template

@@ -46,18 +46,19 @@ class ExampleTest extends TestCase
         $createPage->assertSeeText('Hendra Wijaya');
     }
 
-    public function test_dashboard_renders_pastel_bento_ui_without_admin_approval_status(): void
+    public function test_dashboard_renders_daily_logbook_scripting_without_meeting_terms(): void
     {
         $participant = User::where('role', 'participant')->firstOrFail();
 
         $response = $this->actingAs($participant)->get('/dashboard');
 
         $response->assertStatus(200);
-        $response->assertSeeText('Esther Howard');
-        $response->assertSeeText('Mastering projects with management');
-        $response->assertSeeText('Website Design & Design System');
-        $response->assertDontSeeText('Mode Mentor Pembimbing');
-        $response->assertDontSeeText('Approve Logbook');
+        $response->assertSeeText('Randy Karna');
+        $response->assertSeeText('Pencatatan Logbook Kegiatan Harian');
+        $response->assertSeeText('Catatan Logbook Harian');
+        $response->assertSeeText('Pencatatan & Rekapitulasi Data Operasional Harian');
+        $response->assertDontSeeText('Join meet');
+        $response->assertDontSeeText('Today\'s meeting');
     }
 
     public function test_logbook_calendar_detail_and_creation_flow(): void
@@ -67,29 +68,31 @@ class ExampleTest extends TestCase
         $calendarRes = $this->actingAs($participant)->get('/logbook?month=2026-11&date=2026-11-10');
         $calendarRes->assertStatus(200);
         $calendarRes->assertSeeText('November 2026');
-        $calendarRes->assertSeeText('Delivery App UI Kit');
+        $calendarRes->assertSeeText('Catatan Kegiatan Harian');
+        $calendarRes->assertSeeText('Rekapitulasi Logbook Bulanan');
+        $calendarRes->assertDontSeeText('Join meet');
 
         $storeRes = $this->actingAs($participant)
             ->post('/logbook', [
                 'date' => '2026-11-16',
                 'start_time' => '09:00',
                 'end_time' => '12:00',
-                'title' => 'Implementasi Komponen Floating Neo-Dock',
+                'title' => 'Penyusunan Dokumen Rekap Harian Bagian',
                 'category' => 'tugas',
-                'raw_description' => 'bikin komponen floating dock sesuai style-design.png',
-                'output' => 'Floating Dock • Squircle FAB',
+                'raw_description' => 'menyusun dokumen rekap harian bagian sistem informasi',
+                'output' => 'Dokumen Rekap Harian • Arsip Bagian',
                 'work_location' => 'wfo',
             ]);
 
         $storeRes->assertSessionHasNoErrors();
-        $newLog = Logbook::where('title', 'Implementasi Komponen Floating Neo-Dock')->firstOrFail();
+        $newLog = Logbook::where('title', 'Penyusunan Dokumen Rekap Harian Bagian')->firstOrFail();
         $storeRes->assertRedirect(route('logbook.show', $newLog));
         $this->assertEquals(180, $newLog->duration_minutes);
 
         $detailRes = $this->actingAs($participant)->get(route('logbook.show', $newLog));
         $detailRes->assertStatus(200);
-        $detailRes->assertSeeText('Floating Dock');
-        $detailRes->assertDontSeeText('Panel Persetujuan Mentor');
+        $detailRes->assertSeeText('Dokumen Rekap Harian');
+        $detailRes->assertSeeText('Rincian & Hasil Kerja');
     }
 
     public function test_ai_polish_transcribe_and_offline_sync_endpoints(): void
@@ -98,7 +101,7 @@ class ExampleTest extends TestCase
 
         $polishRes = $this->actingAs($participant)
             ->postJson('/api/ai/polish', [
-                'text' => 'bikin laporan bulanan dan rapihin desain komponen',
+                'text' => 'bikin laporan bulanan dan rapihin dokumen rekap harian',
                 'style' => 'formal',
             ]);
 
@@ -131,7 +134,7 @@ class ExampleTest extends TestCase
         $pdfRes = $this->actingAs($participant)->get(route('reports.download', $report));
         $pdfRes->assertStatus(200);
         $pdfRes->assertSeeText($report->verify_token);
-        $pdfRes->assertSeeText('Agnes Nielsen');
+        $pdfRes->assertSeeText('Rizky Pratama');
 
         $verifyRes = $this->get(route('reports.verify', $report->verify_token));
         $verifyRes->assertStatus(200);

@@ -6,7 +6,6 @@ use App\Enums\LogCategory;
 use App\Enums\LogStatus;
 use App\Enums\Role;
 use App\Models\ActivityTemplate;
-use App\Models\AiUsage;
 use App\Models\Comment;
 use App\Models\Holiday;
 use App\Models\Institution;
@@ -24,57 +23,43 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $participant = User::create([
-            'name' => 'Esther Howard',
-            'email' => 'peserta@maganghub.id',
+            'name' => 'Randy Karna',
+            'email' => 'peserta@kinra.id',
             'password' => Hash::make('password'),
             'role' => Role::Participant,
             'phone' => '0812-3456-7890',
             'nim_nik' => '2201020048',
-            'campus' => 'Universitas Indonesia',
-            'major' => 'Sistem Informasi & Desain Produk',
+            'campus' => 'IT & Sistem Informasi',
+            'major' => 'Full Stack Developer',
             'preferences' => [
                 'ai_style' => 'formal',
                 'language' => 'id',
-                'reminder_time' => '16:00',
+                'mentor_name' => 'Rizky Pratama',
+                'division' => 'IT & Sistem Informasi',
+                'position' => 'Full Stack Developer',
             ],
             'is_active' => true,
         ]);
 
         $mentor = User::create([
-            'name' => 'Agnes Nielsen',
-            'email' => 'mentor@maganghub.id',
+            'name' => 'Rizky Pratama',
+            'email' => 'mentor@kinra.id',
             'password' => Hash::make('password'),
             'role' => Role::Mentor,
             'phone' => '0811-9988-7766',
             'nim_nik' => 'NIP-19890412',
-            'campus' => 'Lead Product & Engineering Mentor',
-            'major' => 'Digital Transformation Division',
-            'preferences' => [
-                'ai_style' => 'formal',
-                'language' => 'id',
-            ],
-            'is_active' => true,
-        ]);
-
-        $admin = User::create([
-            'name' => 'Muhammad Randy Karna',
-            'email' => 'admin@maganghub.id',
-            'password' => Hash::make('password'),
-            'role' => Role::Admin,
-            'phone' => '0813-0000-1111',
-            'nim_nik' => 'ADM-001',
-            'campus' => 'Koordinator MagangHub Nasional',
-            'major' => 'Manajemen Talenta Digital',
+            'campus' => 'IT & Sistem Informasi',
+            'major' => 'Supervisor Sistem Informasi',
             'is_active' => true,
         ]);
 
         $institution = Institution::create([
-            'name' => 'PT Kinra Digital Nusantara (MagangHub)',
-            'address' => 'Jl. Jenderal Sudirman Kav. 52-53, SCBD, Jakarta Selatan',
+            'name' => 'PT Kawasan Industri Nusantara (KINRA Sei Mangkei)',
+            'address' => 'KEK Sei Mangkei, Kec. Bosar Maligas, Kab. Simalungun, Sumatera Utara',
             'letterhead' => [
-                'subtitle' => 'Program Magang Terpadu & Logbook Digital Berbasis AI',
-                'phone' => '(021) 5099-8877',
-                'website' => 'https://maganghub.kinra.id',
+                'subtitle' => 'Rekapitulasi Logbook Kegiatan Harian Peserta Magang',
+                'phone' => '(0622) 7430-111',
+                'website' => 'https://kinra.co.id',
             ],
         ]);
 
@@ -82,8 +67,8 @@ class DatabaseSeeder extends Seeder
             'participant_id' => $participant->id,
             'mentor_id' => $mentor->id,
             'institution_id' => $institution->id,
-            'division' => 'Product Design & Frontend Engineering',
-            'position' => 'UI/UX & Web Developer Intern',
+            'division' => 'IT & Sistem Informasi',
+            'position' => 'Full Stack Developer',
             'start_date' => '2026-09-01',
             'end_date' => '2026-12-31',
             'work_days' => [1, 2, 3, 4, 5],
@@ -93,184 +78,96 @@ class DatabaseSeeder extends Seeder
         $entries = [
             [
                 'date' => '2026-11-10',
-                'start_time' => '08:30',
-                'end_time' => '12:30',
+                'start_time' => '08:00',
+                'end_time' => '12:00',
                 'duration_minutes' => 240,
-                'title' => 'Website Design & Design System',
+                'title' => 'Pencatatan & Rekapitulasi Data Operasional Harian',
                 'category' => LogCategory::Tugas,
-                'raw_description' => 'bikin design system untuk charty app, landing page, pricing page, dan copywriting bersama tim',
-                'ai_description' => 'Menyusun arsitektur Design System untuk proyek Charty App yang mencakup komponen Landing Page, Pricing Page, serta penyelarasan tata bahasa antarmuka (UX Copywriting) sesuai panduan identitas visual perusahaan.',
-                'final_description' => 'Menyusun arsitektur Design System untuk proyek Charty App yang mencakup komponen Landing Page, Pricing Page, serta penyelarasan tata bahasa antarmuka (UX Copywriting) sesuai panduan identitas visual perusahaan.',
-                'output' => 'Design system • Landing Page • Pricing Page • Copywriting (Charty App)',
-                'obstacles' => 'Penyesuaian kontras warna pastel pada layar dengan kecerahan rendah.',
+                'raw_description' => 'mencatat data operasional harian bagian it dan menyusun rekapitulasi log sistem internal kinra sei mangkei',
+                'ai_description' => 'Melaksanakan pencatatan data operasional harian pada bagian IT serta menyusun dokumen rekapitulasi pemeliharaan sistem internal di PT Kawasan Industri Nusantara (KINRA Sei Mangkei).',
+                'final_description' => 'Melaksanakan pencatatan data operasional harian pada bagian IT serta menyusun dokumen rekapitulasi pemeliharaan sistem internal di PT Kawasan Industri Nusantara (KINRA Sei Mangkei).',
+                'output' => 'Rekap Data Operasional Harian • Dokumentasi Sistem • Arsip Bagian IT',
+                'obstacles' => 'Tidak ada kendala signifikan.',
                 'work_location' => 'wfo',
                 'status' => LogStatus::Approved,
-                'submitted_at' => now()->subDays(5),
-                'reviewed_at' => now()->subDays(4),
-                'reviewed_by' => $mentor->id,
-            ],
-            [
-                'date' => '2026-11-10',
-                'start_time' => '13:30',
-                'end_time' => '16:40',
-                'duration_minutes' => 190,
-                'title' => 'Delivery App UI Kit (Foodnow)',
-                'category' => LogCategory::Meeting,
-                'raw_description' => 'meeting review delivery app ui kit foodnow sama mentor agnes dan rapihin komponen',
-                'ai_description' => 'Mengikuti rapat koordinasi dan evaluasi progres pembuatan Delivery App UI Kit (Foodnow) bersama pembimbing lapangan, serta menyempurnakan komponen kartu pesanan dan navigasi mobile.',
-                'final_description' => 'Mengikuti rapat koordinasi dan evaluasi progres pembuatan Delivery App UI Kit (Foodnow) bersama pembimbing lapangan, serta menyempurnakan komponen kartu pesanan dan navigasi mobile.',
-                'output' => 'Modul UI Kit Foodnow (65% selesai) & Catatan Evaluasi Mentor',
-                'obstacles' => 'Belum ada kendala signifikan.',
-                'work_location' => 'wfo',
-                'status' => LogStatus::Submitted,
-                'submitted_at' => now()->subDays(2),
             ],
             [
                 'date' => '2026-11-12',
-                'start_time' => '09:00',
-                'end_time' => '13:00',
+                'start_time' => '08:30',
+                'end_time' => '12:30',
                 'duration_minutes' => 240,
-                'title' => 'Integrasi PWA Offline & IndexedDB',
+                'title' => 'Pengembangan Modul Pencatatan Logbook Harian',
                 'category' => LogCategory::Tugas,
-                'raw_description' => 'implementasi service worker dan penyimpanan lokal dexie indexeddb buat logbook saat sinyal lemah',
-                'ai_description' => 'Mengembangkan fitur Progressive Web App (PWA) menggunakan Service Worker dan IndexedDB (Dexie.js) agar peserta tetap dapat menyimpan draf logbook secara offline dan melakukan sinkronisasi otomatis.',
-                'final_description' => 'Mengembangkan fitur Progressive Web App (PWA) menggunakan Service Worker dan IndexedDB (Dexie.js) agar peserta tetap dapat menyimpan draf logbook secara offline dan melakukan sinkronisasi otomatis.',
-                'output' => 'Modul Offline Sync & Service Worker v1',
-                'obstacles' => 'Perlu pengujian tambahan untuk Safari iOS.',
-                'work_location' => 'wfh',
-                'status' => LogStatus::Revision,
-                'submitted_at' => now()->subDay(),
-                'reviewed_at' => now()->subHours(6),
-                'reviewed_by' => $mentor->id,
+                'raw_description' => 'membuat halaman form input logbook harian dan kalender riwayat kegiatan peserta magang',
+                'ai_description' => 'Mengembangkan antarmuka formulir pencatatan logbook kegiatan harian peserta magang beserta fitur kalender riwayat pengisian bulanan.',
+                'final_description' => 'Mengembangkan antarmuka formulir pencatatan logbook kegiatan harian peserta magang beserta fitur kalender riwayat pengisian bulanan.',
+                'output' => 'Modul Form Logbook Harian • Kalender Riwayat Kegiatan',
+                'obstacles' => 'Penyesuaian tampilan tabel cetak pada ukuran kertas A4.',
+                'work_location' => 'wfo',
+                'status' => LogStatus::Approved,
             ],
             [
                 'date' => '2026-11-14',
+                'start_time' => '13:00',
+                'end_time' => '16:30',
+                'duration_minutes' => 210,
+                'title' => 'Pengecekan Infrastruktur & Inventaris Perangkat',
+                'category' => LogCategory::Lapangan,
+                'raw_description' => 'melakukan pengecekan kondisi perangkat jaringan dan pencatatan inventaris kantor sei mangkei',
+                'ai_description' => 'Melaksanakan pemeriksaan berkala terhadap perangkat keras dan jaringan kerja di lingkungan kantor operasional KINRA Sei Mangkei serta memperbarui daftar inventaris bagian.',
+                'final_description' => 'Melaksanakan pemeriksaan berkala terhadap perangkat keras dan jaringan kerja di lingkungan kantor operasional KINRA Sei Mangkei serta memperbarui daftar inventaris bagian.',
+                'output' => 'Checklist Pemeriksaan Perangkat • Data Inventaris Terbaru',
+                'work_location' => 'field',
+                'status' => LogStatus::Approved,
+            ],
+            [
+                'date' => '2026-11-16',
                 'start_time' => '08:30',
                 'end_time' => '12:00',
                 'duration_minutes' => 210,
-                'title' => 'Optimasi Prompt AI Gemini Flash',
-                'category' => LogCategory::Belajar,
-                'raw_description' => 'eksperimen prompt gemini flash untuk rapikan teks logbook 3 gaya formal singkat detail',
-                'ai_description' => 'Melakukan pengujian dan kalibrasi sistem instruksi (System Prompt) pada Google Gemini Flash API untuk menghasilkan 3 variasi gaya penulisan logbook (Formal, Singkat, dan Detail) tanpa mengubah fakta lapangan.',
-                'final_description' => 'Melakukan pengujian dan kalibrasi sistem instruksi (System Prompt) pada Google Gemini Flash API untuk menghasilkan 3 variasi gaya penulisan logbook (Formal, Singkat, dan Detail) tanpa mengubah fakta lapangan.',
-                'output' => 'Dokumen Standar PromptBuilder & Kuota Harian',
-                'work_location' => 'wfo',
-                'status' => LogStatus::Approved,
-                'submitted_at' => now()->subDays(2),
-                'reviewed_at' => now()->subDay(),
-                'reviewed_by' => $mentor->id,
-            ],
-            [
-                'date' => '2026-11-18',
-                'start_time' => '09:00',
-                'end_time' => '12:00',
-                'duration_minutes' => 180,
-                'title' => 'Penyusunan Template Ekspor PDF Bulanan',
+                'title' => 'Penyusunan Format Cetak Laporan PDF Bulanan',
                 'category' => LogCategory::Administrasi,
-                'raw_description' => 'buat layout laporan pdf a4 lengkap dengan kop instansi qr verifikasi dan tanda tangan',
-                'ai_description' => 'Merancang tata letak cetak laporan PDF ukuran A4 yang dilengkapi kop resmi instansi, tabel rekapitulasi jam kerja, kolom tanda tangan pembimbing, serta kode QR verifikasi keaslian dokumen.',
-                'final_description' => 'Merancang tata letak cetak laporan PDF ukuran A4 yang dilengkapi kop resmi instansi, tabel rekapitulasi jam kerja, kolom tanda tangan pembimbing, serta kode QR verifikasi keaslian dokumen.',
-                'output' => 'Template Blade PDF Harian, Mingguan, & Bulanan',
+                'raw_description' => 'menyusun template cetak laporan pdf bulanan lengkap dengan kop surat kinra sei mangkei',
+                'ai_description' => 'Merancang tata letak dokumen cetak laporan logbook bulanan berukuran A4 yang dilengkapi kop resmi PT Kawasan Industri Nusantara (KINRA Sei Mangkei) dan kolom pengesahan.',
+                'final_description' => 'Merancang tata letak dokumen cetak laporan logbook bulanan berukuran A4 yang dilengkapi kop resmi PT Kawasan Industri Nusantara (KINRA Sei Mangkei) dan kolom pengesahan.',
+                'output' => 'Format Laporan PDF A4 • Kop Resmi KINRA Sei Mangkei',
                 'work_location' => 'wfo',
                 'status' => LogStatus::Approved,
-                'submitted_at' => now()->subDay(),
-                'reviewed_at' => now(),
-                'reviewed_by' => $mentor->id,
-            ],
-            [
-                'date' => '2026-11-20',
-                'start_time' => '13:00',
-                'end_time' => '16:00',
-                'duration_minutes' => 180,
-                'title' => 'Workshop Aksesibilitas & Audit Lighthouse',
-                'category' => LogCategory::Pelatihan,
-                'raw_description' => 'ikut workshop internal performa web dan audit pwa lighthouse skor 98',
-                'ai_description' => 'Menghadiri pelatihan internal terkait standar aksesibilitas antarmuka (WCAG) serta melaksanakan audit performa PWA menggunakan Google Lighthouse dengan capaian skor 98/100.',
-                'final_description' => 'Menghadiri pelatihan internal terkait standar aksesibilitas antarmuka (WCAG) serta melaksanakan audit performa PWA menggunakan Google Lighthouse dengan capaian skor 98/100.',
-                'output' => 'Laporan Hasil Audit Performa Mobile PWA',
-                'work_location' => 'wfo',
-                'status' => LogStatus::Approved,
-                'submitted_at' => now(),
-                'reviewed_at' => now(),
-                'reviewed_by' => $mentor->id,
-            ],
-            [
-                'date' => '2026-11-25',
-                'start_time' => '09:00',
-                'end_time' => '12:00',
-                'duration_minutes' => 180,
-                'title' => 'Observasi Penggunaan Logbook oleh Peserta Pilot',
-                'category' => LogCategory::Lapangan,
-                'raw_description' => 'uji coba aplikasi langsung ke 15 peserta magang batch november',
-                'ai_description' => 'Melaksanakan sesi uji coba lapangan (Usability Testing) bersama 15 peserta magang untuk mengukur rata-rata waktu pengisian logbook harian (tercapai < 48 detik per entri).',
-                'final_description' => 'Melaksanakan sesi uji coba lapangan (Usability Testing) bersama 15 peserta magang untuk mengukur rata-rata waktu pengisian logbook harian (tercapai < 48 detik per entri).',
-                'output' => 'Rekap Umpan Balik Pengguna & Metrik Kecepatan Input',
-                'work_location' => 'field',
-                'status' => LogStatus::Draft,
-            ],
-            [
-                'date' => '2026-11-28',
-                'start_time' => '10:00',
-                'end_time' => '15:00',
-                'duration_minutes' => 300,
-                'title' => 'Rekapitulasi Laporan Akhir Bulan November',
-                'category' => LogCategory::Tugas,
-                'raw_description' => 'menyusun ringkasan capaian bulan november dan ekstraksi kompetensi',
-                'ai_description' => 'Menyusun laporan rekapitulasi kegiatan bulanan periode November 2026 beserta pemetaan kompetensi teknis yang telah diperoleh selama masa penempatan.',
-                'final_description' => 'Menyusun laporan rekapitulasi kegiatan bulanan periode November 2026 beserta pemetaan kompetensi teknis yang telah diperoleh selama masa penempatan.',
-                'output' => 'Draf Laporan Bulanan Terverifikasi QR',
-                'work_location' => 'wfo',
-                'status' => LogStatus::Approved,
-                'submitted_at' => now(),
-                'reviewed_at' => now(),
-                'reviewed_by' => $mentor->id,
             ],
         ];
 
         foreach ($entries as $idx => $item) {
             $logbook = Logbook::create(array_merge($item, [
                 'internship_id' => $internship->id,
-                'source' => $idx === 1 ? 'voice' : 'manual',
+                'source' => 'manual',
                 'client_uuid' => (string) Str::uuid(),
+                'submitted_at' => now(),
+                'reviewed_at' => now(),
+                'reviewed_by' => $mentor->id,
             ]));
 
             if ($idx === 0) {
                 Comment::create([
                     'logbook_id' => $logbook->id,
-                    'user_id' => $mentor->id,
-                    'message' => 'Struktur komponen Design System sudah sangat rapi dan sesuai standar tim produk. Disetujui!',
-                    'type' => 'approval',
-                ]);
-                Comment::create([
-                    'logbook_id' => $logbook->id,
                     'user_id' => $participant->id,
-                    'message' => 'Terima kasih Kak Agnes! Dokumentasi token warna Pastel Bento juga sudah saya lampirkan.',
+                    'message' => 'Seluruh lampiran berkas rekapitulasi harian sudah disimpan di folder arsip divisi.',
                     'type' => 'comment',
-                ]);
-            }
-
-            if ($idx === 2) {
-                Comment::create([
-                    'logbook_id' => $logbook->id,
-                    'user_id' => $mentor->id,
-                    'message' => 'Tolong tambahkan tangkapan layar pengujian mode offline saat koneksi diputus ya.',
-                    'type' => 'revision_request',
                 ]);
             }
         }
 
         ActivityTemplate::create([
             'user_id' => $participant->id,
-            'title' => 'Daily Standup & Sinkronisasi Tim Produk',
-            'category' => 'meeting',
-            'description' => 'Mengikuti rapat koordinasi harian (Daily Standup) untuk melaporkan progres tugas kemarin, rencana hari ini, serta kendala teknis.',
+            'title' => 'Pencatatan & Rekapitulasi Data Harian Bagian',
+            'category' => 'tugas',
+            'description' => 'Melaksanakan pencatatan data kegiatan harian bagian serta menyusun rekapitulasi dokumen kerja sesuai arahan pembimbing lapangan.',
         ]);
 
         ActivityTemplate::create([
             'user_id' => $participant->id,
-            'title' => 'Pengembangan & Pengujian Komponen UI/UX',
+            'title' => 'Pemeliharaan Sistem & Dokumentasi Teknis',
             'category' => 'tugas',
-            'description' => 'Melaksanakan implementasi komponen antarmuka pengguna sesuai spesifikasi desain serta melakukan pengujian responsivitas pada perangkat mobile.',
+            'description' => 'Melakukan pemeriksaan dan pemeliharaan fitur aplikasi internal serta memperbarui dokumentasi teknis pekerjaan harian.',
         ]);
 
         Report::create([
@@ -281,55 +178,32 @@ class DatabaseSeeder extends Seeder
             'options' => [
                 'include_photos' => true,
                 'include_ai_summary' => true,
-                'only_approved' => false,
             ],
             'ai_summary' => json_encode([
-                'overview' => 'Selama bulan November 2026, Esther Howard telah menyelesaikan rangkaian pengembangan Design System, UI Kit Foodnow, integrasi PWA Offline, serta kalibrasi asisten AI Gemini dengan tingkat kepatuhan pengisian logbook yang sangat tinggi.',
+                'overview' => 'Selama periode November 2026, peserta magang telah melaksanakan pencatatan kegiatan harian secara konsisten pada bagian IT & Sistem Informasi di PT Kawasan Industri Nusantara (KINRA Sei Mangkei).',
                 'main_activities' => [
-                    'Penyusunan Design System & Komponen UI Charty App',
-                    'Evaluasi Delivery App UI Kit (Foodnow) bersama Mentor',
-                    'Implementasi PWA Offline Sync berbasis IndexedDB',
-                    'Kalibrasi Prompt AI Gemini Flash (Formal, Singkat, Detail)',
+                    'Pencatatan & Rekapitulasi Data Operasional Harian',
+                    'Pengembangan Modul Pencatatan Logbook Harian',
+                    'Pengecekan Infrastruktur & Inventaris Perangkat',
+                    'Penyusunan Format Cetak Laporan PDF Bulanan',
                 ],
                 'outputs' => [
-                    'Design System & UI Kit Terdokumentasi',
-                    'Modul Offline Sync Service Worker',
-                    'Template Laporan PDF Berverifikasi QR',
+                    'Rekapitulasi Data Harian Terdokumentasi',
+                    'Modul Aplikasi Logbook Harian KINRA',
+                    'Dokumen Laporan Bulanan PDF A4',
                 ],
                 'obstacles' => [
-                    'Penyesuaian kontras warna pastel pada mode hemat daya',
-                    'Penanganan cache Safari iOS pada mode PWA',
+                    'Penyesuaian format tabel cetak pada ukuran kertas A4',
                 ],
                 'skills' => [
-                    'UI/UX Design System',
-                    'Laravel & Tailwind CSS',
-                    'Progressive Web App (PWA)',
-                    'Prompt Engineering (Google Gemini)',
+                    'Administrasi & Dokumentasi Teknis',
+                    'Pengembangan Aplikasi Web (Laravel)',
+                    'Manajemen Data Operasional Harian',
                 ],
             ], JSON_UNESCAPED_UNICODE),
             'status' => 'ready',
-            'verify_token' => 'MAGANGHUB-2026-NOV-VERIFIED',
+            'verify_token' => 'KINRA-2026-NOV-VERIFIED',
             'generated_at' => now(),
-        ]);
-
-        AiUsage::create([
-            'user_id' => $participant->id,
-            'feature' => 'polish',
-            'model' => 'gemini-flash-latest',
-            'input_tokens' => 84,
-            'output_tokens' => 142,
-            'status' => 'success',
-            'created_at' => now()->subHours(3),
-        ]);
-
-        AiUsage::create([
-            'user_id' => $participant->id,
-            'feature' => 'transcribe',
-            'model' => 'gemini-flash-latest',
-            'input_tokens' => 210,
-            'output_tokens' => 165,
-            'status' => 'success',
-            'created_at' => now()->subHours(1),
         ]);
 
         Setting::create([
@@ -337,14 +211,14 @@ class DatabaseSeeder extends Seeder
             'value' => [
                 'max_backdate_days' => 7,
                 'ai_daily_limit' => 30,
-                'institution_name' => 'PT Kinra Digital Nusantara (MagangHub)',
+                'institution_name' => 'PT Kawasan Industri Nusantara (KINRA Sei Mangkei)',
             ],
         ]);
 
         Holiday::create([
             'institution_id' => $institution->id,
             'date' => '2026-11-10',
-            'name' => 'Hari Pahlawan Nasional (Kegiatan Khusus)',
+            'name' => 'Hari Pahlawan Nasional',
         ]);
     }
 }

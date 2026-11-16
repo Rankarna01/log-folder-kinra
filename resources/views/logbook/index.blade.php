@@ -16,9 +16,12 @@
             </svg>
         </a>
 
-        <h1 class="text-[17px] font-semibold text-[#111827]">
-            {{ $currentMonth->format('F Y') }}
-        </h1>
+        <div class="text-center">
+            <h1 class="text-[17px] font-semibold text-[#111827]">
+                Kalender Logbook • {{ $currentMonth->format('F Y') }}
+            </h1>
+            <p class="text-[11px] text-zinc-500">Pilih tanggal untuk melihat atau mencatat kegiatan harian</p>
+        </div>
 
         <a href="{{ route('logbook.index', ['month' => $nextMonth]) }}"
            class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0B6E6C] shadow-2xs hover:scale-105 transition">
@@ -57,81 +60,82 @@
         </div>
     </section>
 
-    <!-- "Today's meeting" / Kegiatan Harian Card -->
+    <!-- Catatan Kegiatan Harian pada Tanggal Terpilih (Fokus Logbook, Tanpa Jadwal Meeting) -->
     <section class="bg-white rounded-[28px] p-5 shadow-2xs space-y-3.5">
         <div class="flex items-center justify-between">
-            <h2 class="text-[16px] font-semibold text-[#111827]">Today's meeting & logbook</h2>
-            <span class="text-xs text-zinc-400">{{ \Carbon\Carbon::parse($selectedDate)->format('d M Y') }}</span>
+            <h2 class="text-[16px] font-semibold text-[#111827]">Catatan Kegiatan Harian</h2>
+            <span class="text-xs font-medium text-[#0B6E6C]">{{ \Carbon\Carbon::parse($selectedDate)->format('d M Y') }}</span>
         </div>
 
         @forelse ($selectedDayLogs as $idx => $item)
             <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-2.5 min-w-0">
                     <span class="w-8 h-8 rounded-full bg-[#0B6E6C] text-white flex items-center justify-center text-xs font-bold shrink-0">
-                        {{ $internship?->participant?->initials ?? 'EH' }}
+                        {{ $internship?->participant?->initials ?? 'P' }}
                     </span>
                     <div class="min-w-0">
                         <p class="text-xs font-semibold text-[#111827] truncate">{{ $item->title }}</p>
                         <p class="text-[11px] text-zinc-500 flex items-center gap-1 mt-0.5">
                             <span>🕒</span>
-                            <span>{{ substr($item->start_time, 0, 5) }} - {{ substr($item->end_time, 0, 5) }} WIB</span>
+                            <span>{{ substr($item->start_time, 0, 5) }} - {{ substr($item->end_time, 0, 5) }} ({{ $item->formatted_duration }})</span>
                         </p>
                     </div>
                 </div>
 
                 <a href="{{ route('logbook.show', $item) }}"
-                   class="shrink-0 {{ $idx === 0 ? 'bg-[#0B6E6C] text-white' : 'bg-white border border-zinc-200 text-[#111827]' }} text-xs font-semibold px-4 py-2 rounded-full transition">
-                    Detail
+                   class="shrink-0 {{ $idx === 0 ? 'bg-[#0B6E6C] text-white' : 'bg-[#F4F7F6] text-[#0B6E6C]' }} text-xs font-semibold px-3.5 py-2 rounded-full transition">
+                    Lihat Catatan
                 </a>
             </div>
         @empty
-            <p class="text-xs text-zinc-400">Belum ada kegiatan pada tanggal ini.</p>
+            <div class="flex items-center justify-between">
+                <p class="text-xs text-zinc-400">Belum ada logbook pada tanggal ini.</p>
+                <a href="{{ route('logbook.create') }}" class="bg-[#0B6E6C] text-white text-xs font-semibold px-3.5 py-1.5 rounded-full">
+                    + Catat Sekarang
+                </a>
+            </div>
         @endforelse
     </section>
 
-    <!-- "Delivery App UI Kit" / Progress Periode & Laporan Card -->
+    <!-- Ringkasan Kelengkapan Logbook Bulanan & Pintasan Cetak PDF -->
     <section class="bg-white rounded-[28px] p-5 shadow-2xs space-y-3">
         <div class="flex items-start justify-between gap-3">
             <div>
-                <h3 class="text-[16px] font-semibold text-[#111827]">Delivery App UI Kit</h3>
+                <h3 class="text-[16px] font-semibold text-[#111827]">Rekapitulasi Logbook Bulanan</h3>
                 <p class="text-xs text-zinc-500 mt-1 leading-relaxed">
-                    We got a project to make a delivery ui kit called Foodnow • Rekap & Ekspor PDF Bulanan siap diunduh.
+                    Seluruh catatan kegiatan harianmu tersimpan otomatis dan siap dicetak menjadi dokumen Laporan PDF resmi KINRA Sei Mangkei.
                 </p>
             </div>
-            <span class="w-10 h-10 rounded-[13px] bg-[#C8EBE5] flex items-center justify-center text-[#0B6E6C] shrink-0">
+            <a href="{{ route('reports.index') }}"
+               title="Cetak Laporan PDF"
+               class="w-10 h-10 rounded-[13px] bg-[#C8EBE5] flex items-center justify-center text-[#0B6E6C] shrink-0">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                     <rect x="3" y="4" width="18" height="16" rx="3"/>
                     <path d="M3 9h18" stroke="#ffffff" stroke-width="2"/>
                 </svg>
-            </span>
+            </a>
         </div>
 
         <div class="flex items-center justify-between pt-1">
-            <div class="flex items-center gap-1.5">
-                <div class="flex -space-x-2">
-                    <span class="w-6 h-6 rounded-full bg-[#0B6E6C] text-white border-2 border-white flex items-center justify-center text-[10px] font-bold">E</span>
-                    <span class="w-6 h-6 rounded-full bg-[#209CE2] text-white border-2 border-white flex items-center justify-center text-[10px] font-bold">A</span>
-                    <span class="w-6 h-6 rounded-full bg-[#F7A61C] text-white border-2 border-white flex items-center justify-center text-[10px] font-bold">R</span>
-                </div>
-                <span class="text-xs font-semibold text-[#111827]">+3</span>
-            </div>
-            <span class="text-xs font-bold text-[#0B6E6C]">65%</span>
+            <span class="text-xs font-medium text-zinc-600">{{ $logbooks->count() }} Entri Logbook Tercatat</span>
+            <a href="{{ route('reports.index') }}" class="text-xs font-bold text-[#0B6E6C] hover:underline">Cetak PDF →</a>
         </div>
 
         <!-- Soft Teal Track + Deep KINRA Green Progress Bar -->
         <div class="w-full h-2.5 bg-[#C8EBE5] rounded-full overflow-hidden p-0.5">
-            <div class="bg-[#0B6E6C] h-full rounded-full" style="width: 65%"></div>
+            <div class="bg-[#0B6E6C] h-full rounded-full" style="width: {{ min(100, max(20, $logbooks->count() * 12)) }}%"></div>
         </div>
     </section>
 
-    <!-- Filter by Category -->
+    <!-- Filter by Category (Fokus Kegiatan Harian, Tanpa istilah Meeting) -->
     <section class="pt-2 space-y-3">
         <div class="flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-[#111827]">Semua Entri Logbook ({{ $logbooks->count() }})</h3>
+            <h3 class="text-sm font-semibold text-[#111827]">Daftar Riwayat Logbook ({{ $logbooks->count() }})</h3>
             <div class="flex items-center gap-1">
                 <a href="{{ route('logbook.index') }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ !request('category') ? 'bg-[#0B6E6C] text-white' : 'bg-white text-zinc-600' }}">Semua</a>
                 <a href="{{ route('logbook.index', ['category' => 'tugas']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('category') === 'tugas' ? 'bg-[#0B6E6C] text-white' : 'bg-white text-zinc-600' }}">Tugas</a>
-                <a href="{{ route('logbook.index', ['category' => 'meeting']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('category') === 'meeting' ? 'bg-[#0B6E6C] text-white' : 'bg-white text-zinc-600' }}">Meeting</a>
+                <a href="{{ route('logbook.index', ['category' => 'lapangan']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('category') === 'lapangan' ? 'bg-[#0B6E6C] text-white' : 'bg-white text-zinc-600' }}">Lapangan</a>
+                <a href="{{ route('logbook.index', ['category' => 'administrasi']) }}" class="px-2.5 py-1 rounded-full text-[11px] font-semibold {{ request('category') === 'administrasi' ? 'bg-[#0B6E6C] text-white' : 'bg-white text-zinc-600' }}">Admin</a>
             </div>
         </div>
 
