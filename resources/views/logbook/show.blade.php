@@ -3,7 +3,7 @@
 @section('content')
 <div class="px-5 pt-4 pb-8 space-y-4">
 
-    <!-- Back Navigation + Quick Actions (No Mentor Submit / Approval Buttons) -->
+    <!-- Back Navigation + Quick Actions -->
     <div class="flex items-center justify-between">
         <a href="{{ route('logbook.index') }}"
            class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#18181B] shadow-xs hover:scale-105 transition">
@@ -14,7 +14,7 @@
 
         <div class="flex items-center gap-2">
             <a href="{{ route('logbook.create') }}"
-               class="bg-[#18181B] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm">
+               class="bg-[#0B6E6C] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-sm">
                 + Tambah Baru
             </a>
             <form action="{{ route('logbook.duplicate', $logbook) }}" method="POST">
@@ -26,38 +26,38 @@
         </div>
     </div>
 
-    <!-- Header Detail Card in Lavender Grid (Exact Screen 2 Top Card in style-design.png) -->
-    <section class="bg-lavender-grid rounded-[28px] p-5 shadow-xs">
+    <!-- Header Detail Card in KINRA Deep Green Grid (Screen 2 Top Card) -->
+    <section class="bg-kinra-grid rounded-[28px] p-5 shadow-xs text-white">
         <div class="flex items-center justify-between">
-            <div class="w-11 h-11 rounded-[14px] bg-white flex items-center justify-center text-[#18181B] shadow-2xs">
+            <div class="w-11 h-11 rounded-[14px] bg-white flex items-center justify-center text-[#0B6E6C] shadow-2xs">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                     <rect x="3" y="4" width="18" height="16" rx="3"/>
                     <path d="M3 9h18" stroke="#ffffff" stroke-width="2"/>
                 </svg>
             </div>
-            <span class="bg-white px-3 py-1 rounded-full text-xs font-semibold text-[#18181B]">
+            <span class="bg-white px-3 py-1 rounded-full text-xs font-semibold text-[#0B6E6C]">
                 ⚑ {{ $logbook->category->label() }} • {{ strtoupper($logbook->work_location ?? 'WFO') }}
             </span>
         </div>
 
-        <h1 class="text-[22px] font-semibold text-[#111827] mt-4 leading-snug">
+        <h1 class="text-[22px] font-semibold text-white mt-4 leading-snug">
             {{ $logbook->title }}
         </h1>
 
         <div class="mt-4 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <span class="text-xs text-zinc-600">Created by</span>
-                <span class="w-6 h-6 rounded-full bg-[#F8C8C4] border border-white inline-flex items-center justify-center text-[10px] font-bold text-[#18181B]">
+                <span class="text-xs text-emerald-100">Created by</span>
+                <span class="w-6 h-6 rounded-full bg-[#C8EBE5] border border-white inline-flex items-center justify-center text-[10px] font-bold text-[#074745]">
                     {{ $logbook->internship?->participant?->initials ?? 'EH' }}
                 </span>
-                <span class="text-xs font-semibold text-[#111827]">
+                <span class="text-xs font-semibold text-white">
                     {{ $logbook->internship?->participant?->name ?? 'Esther Howard' }}
                 </span>
             </div>
 
             <a href="{{ route('logbook.edit', $logbook) }}"
                title="Edit Logbook"
-               class="w-9 h-9 rounded-full bg-white/70 hover:bg-white flex items-center justify-center text-[#18181B] transition">
+               class="w-9 h-9 rounded-full bg-white/85 hover:bg-white flex items-center justify-center text-[#0B6E6C] transition">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5Z"/>
                 </svg>
@@ -65,12 +65,12 @@
         </div>
     </section>
 
-    <!-- 2-Column Bento Info Grid: Tanggal/Durasi & Divisi/Mentor (Exact Screen 2 Middle Cards) -->
+    <!-- 2-Column Bento Info Grid: Tanggal/Durasi & Divisi/Mentor (Screen 2 Middle Cards) -->
     <section class="grid grid-cols-2 gap-3.5">
         <!-- Left Card: Tanggal & Jam Kerja -->
         <div class="bg-white rounded-[28px] p-4 text-center shadow-2xs flex flex-col items-center justify-between">
             <span class="text-xs text-zinc-400 font-medium">Tanggal & Durasi</span>
-            <div class="my-2.5 w-10 h-10 rounded-[12px] bg-[#18181B] text-white flex items-center justify-center">
+            <div class="my-2.5 w-10 h-10 rounded-[12px] bg-[#0B6E6C] text-white flex items-center justify-center">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="4" width="18" height="17" rx="3"/>
                     <path d="M8 2v4M16 2v4M3 9h18"/>
@@ -86,14 +86,14 @@
         <div class="bg-white rounded-[28px] p-4 text-center shadow-2xs flex flex-col items-center justify-between">
             <span class="text-xs text-zinc-400 font-medium">Divisi & Mentor</span>
             <div class="my-2 flex items-center justify-center -space-x-2.5">
-                <div class="w-10 h-10 rounded-full bg-[#D5EDE8] border-2 border-white flex items-center justify-center text-xs font-bold text-[#18181B]">
+                <div class="w-10 h-10 rounded-full bg-[#C8EBE5] border-2 border-white flex items-center justify-center text-xs font-bold text-[#074745]">
                     M
                 </div>
-                <div class="w-12 h-12 rounded-full bg-[#F8C8C4] border-2 border-white flex items-center justify-center text-sm font-bold text-[#18181B] shadow-xs">
+                <div class="w-12 h-12 rounded-full bg-[#0B6E6C] border-2 border-white flex items-center justify-center text-sm font-bold text-white shadow-xs">
                     {{ $logbook->internship?->participant?->initials ?? 'EH' }}
                 </div>
-                <div class="w-10 h-10 rounded-full bg-[#E5D9FA] border-2 border-white flex items-center justify-center text-xs font-bold text-[#18181B]">
-                    AI
+                <div class="w-10 h-10 rounded-full bg-[#D4EEFC] border-2 border-white flex items-center justify-center text-xs font-bold text-[#0C4A6E]">
+                    K
                 </div>
             </div>
             <div>
@@ -104,11 +104,11 @@
     </section>
 
     <!-- Segmented Pill Tabs: Goals (Rincian & Sub-output) | Catatan Tambahan -->
-    <div class="bg-[#ECEEF3] p-1.5 rounded-full grid grid-cols-2 gap-1">
+    <div class="bg-[#E6ECEB] p-1.5 rounded-full grid grid-cols-2 gap-1">
         <button type="button"
                 id="tab-btn-goals"
                 onclick="switchDetailTab('goals')"
-                class="bg-white text-[#111827] font-semibold text-sm py-2.5 rounded-full shadow-xs transition">
+                class="bg-white text-[#0B6E6C] font-semibold text-sm py-2.5 rounded-full shadow-xs transition">
             Goals & Output
         </button>
         <button type="button"
@@ -119,7 +119,7 @@
         </button>
     </div>
 
-    <!-- TAB 1: Goals & Sub-Items Breakdown (Exact Screen 2 White Sub-Cards) -->
+    <!-- TAB 1: Goals & Sub-Items Breakdown -->
     <div id="tab-panel-goals" class="space-y-3">
         @php
             $subItems = collect(preg_split('/[•,\n]+/', (string) $logbook->output))
@@ -136,19 +136,19 @@
             @php $isLow = $idx === 2; @endphp
             <div class="bg-white rounded-[26px] p-4 flex items-center justify-between shadow-2xs">
                 <div class="flex items-center gap-3.5 min-w-0">
-                    <span class="w-9 h-9 rounded-full bg-[#D5EDE8] text-[#2D8A78] flex items-center justify-center shrink-0">
+                    <span class="w-9 h-9 rounded-full bg-[#C8EBE5] text-[#0B6E6C] flex items-center justify-center shrink-0">
                         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <path d="m5 13 4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
                     <div class="min-w-0">
                         <h4 class="text-[15px] font-semibold text-[#111827] truncate">{{ $itemTitle }}</h4>
-                        <p class="text-xs text-zinc-400 truncate">{{ $logbook->category->label() }} • {{ $logbook->internship?->position ?? 'MagangHub' }}</p>
+                        <p class="text-xs text-zinc-400 truncate">{{ $logbook->category->label() }} • {{ $logbook->internship?->position ?? 'KINRA Sei Mangkei' }}</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2 shrink-0">
-                    <span class="{{ $isLow ? 'bg-[#D5EDE8] text-emerald-900' : 'bg-[#E5D9FA] text-purple-950' }} px-3 py-1 rounded-full text-xs font-semibold">
+                    <span class="{{ $isLow ? 'bg-[#D4EEFC] text-[#0C4A6E]' : 'bg-[#C8EBE5] text-[#074745]' }} px-3 py-1 rounded-full text-xs font-semibold">
                         ⚑ {{ $isLow ? 'Low' : 'High' }}
                     </span>
                     <span class="text-zinc-400 px-1">⋮</span>
@@ -156,26 +156,17 @@
             </div>
         @endforeach
 
-        <!-- Final Description vs Raw Text Card -->
+        <!-- Final Description Card -->
         <div class="bg-white rounded-[26px] p-5 space-y-3 shadow-2xs">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Deskripsi Kegiatan Harian</span>
-                @if ($logbook->ai_description)
-                    <span class="bg-[#E5D9FA] text-[#18181B] text-[11px] font-semibold px-2.5 py-0.5 rounded-full">
-                        ✨ Dirapikan AI Gemini
-                    </span>
-                @endif
+                <span class="bg-[#C8EBE5] text-[#074745] text-[11px] font-semibold px-2.5 py-0.5 rounded-full">
+                    ✓ Tercatat
+                </span>
             </div>
             <p class="text-sm text-[#111827] leading-relaxed">
                 {{ $logbook->final_description }}
             </p>
-
-            @if ($logbook->raw_description && $logbook->raw_description !== $logbook->final_description)
-                <div class="pt-3 border-t border-zinc-100">
-                    <p class="text-[11px] font-semibold text-zinc-400">Catatan Asli Peserta:</p>
-                    <p class="text-xs text-zinc-500 italic mt-0.5">"{{ $logbook->raw_description }}"</p>
-                </div>
-            @endif
 
             @if ($logbook->obstacles)
                 <div class="pt-2 border-t border-zinc-100">
@@ -192,7 +183,7 @@
             <div class="bg-white rounded-[24px] p-4 shadow-2xs">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <span class="w-7 h-7 rounded-full bg-[#E5D9FA] flex items-center justify-center text-xs font-bold">
+                        <span class="w-7 h-7 rounded-full bg-[#0B6E6C] text-white flex items-center justify-center text-xs font-bold">
                             {{ $comment->user?->initials ?? 'P' }}
                         </span>
                         <div>
@@ -215,8 +206,8 @@
             <label class="block text-xs font-semibold text-[#111827]">Tambah Catatan Kegiatan</label>
             <textarea name="message" rows="3" required
                       placeholder="Tulis catatan tambahan untuk kegiatan ini..."
-                      class="w-full rounded-[16px] bg-[#F6F7F9] border-0 p-3 text-xs text-[#111827] focus:ring-2 focus:ring-[#18181B]"></textarea>
-            <button type="submit" class="w-full bg-[#18181B] text-white text-xs font-semibold py-2.5 rounded-full">
+                      class="w-full rounded-[16px] bg-[#F4F7F6] border-0 p-3 text-xs text-[#111827] focus:ring-2 focus:ring-[#0B6E6C]"></textarea>
+            <button type="submit" class="w-full bg-[#0B6E6C] text-white text-xs font-semibold py-2.5 rounded-full">
                 Simpan Catatan
             </button>
         </form>
@@ -234,12 +225,12 @@
         if (tab === 'chat') {
             goalsPanel.classList.add('hidden');
             chatPanel.classList.remove('hidden');
-            chatBtn.className = 'bg-white text-[#111827] font-semibold text-sm py-2.5 rounded-full shadow-xs transition';
+            chatBtn.className = 'bg-white text-[#0B6E6C] font-semibold text-sm py-2.5 rounded-full shadow-xs transition';
             goalsBtn.className = 'text-zinc-500 font-medium text-sm py-2.5 rounded-full transition';
         } else {
             chatPanel.classList.add('hidden');
             goalsPanel.classList.remove('hidden');
-            goalsBtn.className = 'bg-white text-[#111827] font-semibold text-sm py-2.5 rounded-full shadow-xs transition';
+            goalsBtn.className = 'bg-white text-[#0B6E6C] font-semibold text-sm py-2.5 rounded-full shadow-xs transition';
             chatBtn.className = 'text-zinc-500 font-medium text-sm py-2.5 rounded-full transition';
         }
     }

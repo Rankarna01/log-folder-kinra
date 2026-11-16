@@ -28,15 +28,17 @@ Berdasarkan 3 layar utama pada `style-design.png`, identitas visual aplikasi mem
 | `bg-muted` | `#F1F2F6` | `bg-[#F1F2F6]` | Latar track *segmented tab* (`Goals` / `Chat`), tanggal bulan lain di kalender |
 | `bg-dark-island` | `#18181B` | `bg-[#18181B]` | Kartu gelap *timer* (`7h 34m`), tanggal aktif (`10`), tombol utama (`Join meet`), border navigasi bawah |
 
-### B. Warna Kartu Pastel (Pastel Card Accents)
+### B. Warna Kartu & Identitas Brand KINRA Sei Mangkei (`public/images/kinra.png`)
 
-| Nama Gaya | Surface Hex | Aksen/Progress Hex | Penggunaan di Timesheet MagangHub |
-|-----------|-------------|--------------------|-----------------------------------|
-| **Pastel Lavender** | `#E5D9FA` | `#D6C4F7` (grid) / `#8B5CF6` | Hero card beranda, Header detail logbook, Badge kategori/prioritas *High*, Panel fitur AI Gemini |
-| **Pastel Mint / Sage** | `#D5EDE8` | `#B2DDD4` (bar) / `#2D8A78` | Kartu logbook status **Approved** / kategori *Tugas Utama*, ikon centang selesai |
-| **Pastel Periwinkle** | `#E6E8FA` | `#C7CCF4` (bar) / `#4F5BD5` | Kartu logbook status **Submitted** / kategori *Meeting & Diskusi* |
-| **Pastel Butter Yellow** | `#FBE8A6` | `#F5D061` / `#D97706` | Highlight tanggal terisi pada kalender, kartu logbook status **Draft / Revisi** |
-| **Pastel Coral Pink** | `#F8C8C4` | `#EF4444` | Latar avatar pengguna, indikator dot notifikasi merah |
+Mengikuti palet warna resmi dari logo [`public/images/kinra.png`](../public/images/kinra.png) (**KINRA SEI MANGKEI**):
+
+| Nama Gaya | Surface / Primary Hex | Aksen / Progress Hex | Penggunaan di Timesheet KINRA |
+|-----------|-----------------------|----------------------|-------------------------------|
+| **KINRA Deep Teal-Green** | `#0B6E6C` | `#064E4C` (grid) / `#FFFFFF` (teks) | Hero card beranda (`.bg-kinra-grid`), Header detail, Avatar utama (menggantikan warna ungu & pink), Kop PDF, Tombol utama |
+| **KINRA Soft Sage-Teal** | `#C8EBE5` | `#0B6E6C` (bar) / `#074745` | Kartu logbook utama, ikon centang selesai, banner info peserta |
+| **KINRA Sky Blue** | `#D4EEFC` | `#209CE2` (bar) / `#0C4A6E` | Kartu logbook variasi ke-2 (diambil dari menara biru pada logo `kinra.png`) |
+| **KINRA Warm Amber Gold** | `#FDE9B4` | `#F7A61C` (bar) / `#78350F` | Highlight tanggal terisi pada kalender, kartu logbook variasi ke-3 (atap emas pada logo `kinra.png`) |
+| **KINRA Soft Terracotta** | `#FCE1D4` | `#EE5A24` (bar) / `#9A3412` | Kartu logbook variasi ke-4 & tombol aksi hapus (atap oranye pada logo `kinra.png`) |
 
 ### C. Warna Tipografi (Text Colors)
 

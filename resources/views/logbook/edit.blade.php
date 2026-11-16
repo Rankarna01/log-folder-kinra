@@ -14,7 +14,7 @@
         <form action="{{ route('logbook.destroy', $logbook) }}" method="POST" onsubmit="return confirm('Hapus logbook ini?')">
             @csrf
             @method('DELETE')
-            <button type="submit" class="bg-[#F8C8C4] text-[#18181B] text-xs font-bold px-3 py-1.5 rounded-full">
+            <button type="submit" class="bg-[#FCE1D4] text-[#9A3412] text-xs font-bold px-3 py-1.5 rounded-full">
                 Hapus
             </button>
         </form>
@@ -48,13 +48,13 @@
             <div>
                 <label class="block text-xs font-semibold text-[#111827]">Judul Kegiatan</label>
                 <input type="text" name="title" value="{{ $logbook->title }}" required
-                       class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3.5 py-2.5 text-sm text-[#111827]">
+                       class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-sm text-[#111827]">
             </div>
 
             <div class="grid grid-cols-2 gap-2.5">
                 <div>
                     <label class="block text-xs font-semibold text-[#111827]">Kategori</label>
-                    <select name="category" class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3 py-2.5 text-xs font-semibold">
+                    <select name="category" class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3 py-2.5 text-xs font-semibold">
                         @foreach ($categories as $cat)
                             <option value="{{ $cat->value }}" @selected($logbook->category === $cat)>{{ $cat->label() }}</option>
                         @endforeach
@@ -62,7 +62,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-[#111827]">Lokasi</label>
-                    <select name="work_location" class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3 py-2.5 text-xs font-semibold">
+                    <select name="work_location" class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3 py-2.5 text-xs font-semibold">
                         <option value="wfo" @selected($logbook->work_location === 'wfo')>WFO</option>
                         <option value="wfh" @selected($logbook->work_location === 'wfh')>WFH</option>
                         <option value="field" @selected($logbook->work_location === 'field')>Lapangan</option>
@@ -73,25 +73,25 @@
             <div>
                 <label class="block text-xs font-semibold text-[#111827]">Deskripsi Kegiatan</label>
                 <textarea name="final_description" rows="4" required
-                          class="mt-1.5 w-full rounded-[16px] bg-[#F6F7F9] border-0 p-3 text-xs text-[#111827] leading-relaxed">{{ $logbook->final_description }}</textarea>
+                          class="mt-1.5 w-full rounded-[16px] bg-[#F4F7F6] border-0 p-3 text-xs text-[#111827] leading-relaxed">{{ $logbook->final_description }}</textarea>
                 <input type="hidden" name="raw_description" value="{{ $logbook->raw_description }}">
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-[#111827]">Hasil / Output</label>
                 <input type="text" name="output" value="{{ $logbook->output }}"
-                       class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
+                       class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-[#111827]">Kendala</label>
                 <input type="text" name="obstacles" value="{{ $logbook->obstacles }}"
-                       class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
+                       class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
             </div>
         </div>
 
         <button type="submit"
-                class="w-full bg-[#18181B] text-white text-sm font-bold py-3.5 rounded-full shadow-md">
+                class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-sm font-bold py-3.5 rounded-full shadow-md">
             Simpan Perubahan Logbook →
         </button>
     </form>

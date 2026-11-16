@@ -3,18 +3,19 @@
 @section('content')
 <div class="px-5 pt-5 pb-6 space-y-5">
 
-    <!-- Top App Bar (Matches Screen 1 Top Header in style-design.png) -->
-    <header class="flex items-center justify-between">
+    <!-- Top App Bar (Green Avatar + KINRA Logo + Action Buttons) -->
+    <header class="flex items-center justify-between gap-2">
         <a href="{{ route('profile.show') }}" class="flex items-center gap-3 group min-w-0">
-            <div class="w-11 h-11 rounded-full bg-[#F8C8C4] border-2 border-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+            <!-- Avatar Circle: Replaced Pink with KINRA Deep Teal-Green (#0B6E6C) -->
+            <div class="w-11 h-11 rounded-full bg-[#0B6E6C] border-2 border-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
                 <svg class="w-9 h-9 mt-1" viewBox="0 0 64 64" fill="none">
-                    <circle cx="32" cy="24" r="12" fill="#4A2C2A"/>
+                    <circle cx="32" cy="24" r="12" fill="#074745"/>
                     <circle cx="32" cy="26" r="10" fill="#F3C6B6"/>
-                    <path d="M22 24c0-6 4.5-10 10-10s10 4 10 10c-3-2-6-3-10-3s-7 1-10 3Z" fill="#2D1B18"/>
+                    <path d="M22 24c0-6 4.5-10 10-10s10 4 10 10c-3-2-6-3-10-3s-7 1-10 3Z" fill="#18181B"/>
                     <circle cx="28.5" cy="25.5" r="1.3" fill="#18181B"/>
                     <circle cx="35.5" cy="25.5" r="1.3" fill="#18181B"/>
                     <path d="M28 30c2 1.8 6 1.8 8 0" stroke="#18181B" stroke-width="1.6" stroke-linecap="round"/>
-                    <path d="M16 56c2-10 9-15 16-15s14 5 16 15" fill="#18181B"/>
+                    <path d="M16 56c2-10 9-15 16-15s14 5 16 15" fill="#FDE9B4"/>
                 </svg>
             </div>
             <div class="min-w-0">
@@ -25,11 +26,16 @@
             </div>
         </a>
 
-        <div class="flex items-center gap-2.5 shrink-0">
+        <div class="flex items-center gap-2 shrink-0">
+            <!-- Official KINRA Sei Mangkei Logo Pill -->
+            <div class="bg-white rounded-full px-2.5 py-1.5 shadow-sm flex items-center justify-center">
+                <img src="/images/kinra.png" alt="KINRA Sei Mangkei" class="h-5 w-auto object-contain">
+            </div>
+
             <!-- Quick Add Logbook Button -->
             <a href="{{ route('logbook.create') }}"
                title="Tambah Logbook Harian"
-               class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#18181B] shadow-sm hover:scale-105 transition">
+               class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0B6E6C] shadow-sm hover:scale-105 transition">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <path d="M12 5v14M5 12h14" stroke-linecap="round"/>
                 </svg>
@@ -47,19 +53,19 @@
         </div>
     </header>
 
-    <!-- Hero Lavender Grid Card with Dark Timer Island & 3D Yellow Alarm Clock (Screen 1) -->
-    <section class="bg-lavender-grid rounded-[28px] p-5 relative overflow-hidden shadow-sm">
+    <!-- Hero KINRA Deep Green Grid Card with Dark Timer Island & 3D Yellow Alarm Clock -->
+    <section class="bg-kinra-grid rounded-[28px] p-5 relative overflow-hidden shadow-sm text-white">
         <div class="flex items-start justify-between gap-2">
             <div>
-                <h2 class="text-[20px] font-semibold text-[#111827] leading-[1.3] max-w-[240px]">
+                <h2 class="text-[20px] font-semibold text-white leading-[1.3] max-w-[240px]">
                     Mastering projects with management
                 </h2>
-                <p class="text-xs text-zinc-700 mt-1 font-medium">
+                <p class="text-xs text-emerald-100 mt-1 font-medium">
                     Mentor: {{ $internship?->mentor?->name ?? 'Agnes Nielsen' }}
                 </p>
             </div>
             <a href="{{ route('logbook.create') }}"
-               class="bg-white/85 hover:bg-white text-[#18181B] text-[11px] font-semibold px-3 py-1.5 rounded-full shadow-sm transition shrink-0">
+               class="bg-white hover:bg-[#FDE9B4] text-[#0B6E6C] text-[11px] font-bold px-3.5 py-1.5 rounded-full shadow-sm transition shrink-0">
                 + Isi Hari Ini
             </a>
         </div>
@@ -75,7 +81,7 @@
                 </p>
             </div>
 
-            <!-- 3D Amber/Yellow Alarm Clock Illustration (Matches style-design.png) -->
+            <!-- 3D Amber/Yellow Alarm Clock Illustration (Matches KINRA Amber #F7A61C) -->
             <div class="w-20 h-20 -my-5 -mr-1 flex items-center justify-center select-none">
                 <svg class="w-20 h-20 drop-shadow-[0_8px_12px_rgba(0,0,0,0.45)]" viewBox="0 0 96 96" fill="none">
                     <path d="M20 24c-6 4-8 12-4 18l14-14c-4-6-6-6-10-4Z" fill="#F59E0B"/>
@@ -93,7 +99,7 @@
         </div>
     </section>
 
-    <!-- Quick Action Pills (Tambah Logbook, AI Voice, AI Polish, Cetak PDF) -->
+    <!-- Quick Action Pills (KINRA Green, Sky Blue, Amber Palette) -->
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
         <a href="{{ route('logbook.create') }}"
            class="shrink-0 bg-[#18181B] text-white text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
@@ -101,35 +107,35 @@
         </a>
         <button type="button"
                 onclick="openAdvancedFeatureModal('voice')"
-                class="shrink-0 bg-white hover:bg-[#E5D9FA] text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
+                class="shrink-0 bg-[#C8EBE5] hover:bg-[#B3E2DA] text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
             <span>🎤</span> Dikte Suara
-            <span class="bg-[#E5D9FA] text-[#18181B] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
+            <span class="bg-[#0B6E6C] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
         </button>
         <button type="button"
                 onclick="openAdvancedFeatureModal('ai')"
-                class="shrink-0 bg-white hover:bg-[#D5EDE8] text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
+                class="shrink-0 bg-[#D4EEFC] hover:bg-[#BCE3FA] text-[#0C4A6E] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
             <span>✨</span> Asisten AI
-            <span class="bg-[#FBE8A6] text-[#18181B] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Lanjutan</span>
+            <span class="bg-[#209CE2] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">Lanjutan</span>
         </button>
         <a href="{{ route('reports.index') }}"
-           class="shrink-0 bg-white hover:bg-[#FBE8A6] text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
+           class="shrink-0 bg-[#FDE9B4] hover:bg-[#FBD97F] text-[#78350F] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
             <span>📄</span> Cetak PDF
         </a>
     </div>
 
-    <!-- Section Header: "Your task" + "See All" (Exact Screen 1 layout) -->
+    <!-- Section Header: "Your task" + "See All" -->
     <div class="flex items-center justify-between pt-1">
         <h3 class="text-[17px] font-semibold text-[#111827]">Your task</h3>
-        <a href="{{ route('logbook.index') }}" class="text-xs font-medium text-zinc-400 hover:text-[#111827]">See All</a>
+        <a href="{{ route('logbook.index') }}" class="text-xs font-medium text-[#0B6E6C] hover:underline">See All</a>
     </div>
 
-    <!-- Colored Pastel Logbook Cards (Mint, Periwinkle, Butter Yellow, Lavender) -->
+    <!-- Colored Logbook Cards Following KINRA Logo Palette (Teal-Green, Sky Blue, Amber Gold, Terracotta) -->
     @php
         $cardPalettes = [
-            ['bg' => 'bg-[#D5EDE8]', 'bar' => 'bg-[#B4DCD3]', 'pct' => 85],
-            ['bg' => 'bg-[#E6E8FA]', 'bar' => 'bg-[#C7CCF4]', 'pct' => 75],
-            ['bg' => 'bg-[#FBE8A6]', 'bar' => 'bg-[#F5D061]', 'pct' => 90],
-            ['bg' => 'bg-[#E5D9FA]', 'bar' => 'bg-[#D5C2F7]', 'pct' => 80],
+            ['bg' => 'bg-[#C8EBE5]', 'bar' => 'bg-[#0B6E6C]', 'pct' => 85],
+            ['bg' => 'bg-[#D4EEFC]', 'bar' => 'bg-[#209CE2]', 'pct' => 75],
+            ['bg' => 'bg-[#FDE9B4]', 'bar' => 'bg-[#F7A61C]', 'pct' => 90],
+            ['bg' => 'bg-[#FCE1D4]', 'bar' => 'bg-[#EE5A24]', 'pct' => 80],
         ];
     @endphp
 
@@ -142,7 +148,7 @@
                 <!-- Row 1: White Squircle Icon + Title + Edit Pencil Circle -->
                 <div class="flex items-center justify-between gap-2">
                     <a href="{{ route('logbook.show', $log) }}" class="flex items-center gap-3 min-w-0">
-                        <span class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center text-[#18181B] shrink-0 shadow-xs">
+                        <span class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center text-[#0B6E6C] shrink-0 shadow-xs">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                                 <rect x="3" y="4" width="18" height="16" rx="3"/>
                                 <path d="M3 9h18" stroke="#ffffff" stroke-width="2"/>
@@ -162,39 +168,33 @@
                     </a>
                 </div>
 
-                <!-- Row 2: Duration + Category Pill (No Admin/Approval Status) -->
+                <!-- Row 2: Duration + Category Pill -->
                 <div class="flex items-center gap-2.5 mt-3">
-                    <span class="inline-flex items-center gap-1.5 text-xs text-zinc-600 font-medium">
-                        <svg class="w-3.5 h-3.5 text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <span class="inline-flex items-center gap-1.5 text-xs text-zinc-700 font-medium">
+                        <svg class="w-3.5 h-3.5 text-[#0B6E6C]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="13" r="8"/>
                             <path d="M12 9v4l2.5 1.5M9 2h6"/>
                         </svg>
                         {{ substr($log->start_time, 0, 5) }} - {{ substr($log->end_time, 0, 5) }} ({{ $log->formatted_duration }})
                     </span>
 
-                    <span class="inline-flex items-center gap-1 bg-white px-3 py-1 rounded-full text-xs font-semibold text-[#18181B] shadow-2xs">
+                    <span class="inline-flex items-center gap-1 bg-white px-3 py-1 rounded-full text-xs font-semibold text-[#0B6E6C] shadow-2xs">
                         <span>⚑</span> {{ $log->category->label() }}
                     </span>
-
-                    @if ($log->ai_description)
-                        <span class="inline-flex items-center gap-1 bg-white/70 px-2.5 py-1 rounded-full text-[11px] font-semibold text-purple-900">
-                            ✨ AI
-                        </span>
-                    @endif
                 </div>
 
-                <!-- Row 3: White Progress Bar Track + Tonal Pastel Fill -->
+                <!-- Row 3: White Progress Bar Track + KINRA Tonal Fill -->
                 <div class="mt-3.5 w-full h-2.5 bg-white/85 rounded-full overflow-hidden p-0.5">
                     <div class="{{ $palette['bar'] }} h-full rounded-full transition-all"
                          style="width: {{ $palette['pct'] }}%"></div>
                 </div>
 
-                <!-- Row 4: Stacked Avatars +3 | Date Pill | Comment Count Pill -->
+                <!-- Row 4: Stacked Avatars | Date Pill | Notes Count Pill -->
                 <div class="mt-3.5 flex items-center justify-between gap-2">
                     <div class="flex items-center gap-1.5">
                         <div class="flex -space-x-2">
-                            <span class="w-6 h-6 rounded-full bg-[#F8C8C4] border-2 border-white flex items-center justify-center text-[10px] font-bold">{{ $user->initials }}</span>
-                            <span class="w-6 h-6 rounded-full bg-[#D5C2F7] border-2 border-white flex items-center justify-center text-[10px] font-bold">M</span>
+                            <span class="w-6 h-6 rounded-full bg-[#0B6E6C] text-white border-2 border-white flex items-center justify-center text-[10px] font-bold">{{ $user->initials }}</span>
+                            <span class="w-6 h-6 rounded-full bg-[#209CE2] text-white border-2 border-white flex items-center justify-center text-[10px] font-bold">M</span>
                         </div>
                         <span class="text-xs font-semibold text-[#111827] ml-0.5">{{ strtoupper($log->work_location ?? 'WFO') }}</span>
                     </div>
@@ -203,7 +203,7 @@
                         <!-- White Date Pill -->
                         <a href="{{ route('logbook.show', $log) }}"
                            class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full text-xs font-semibold text-[#111827] shadow-2xs">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg class="w-3.5 h-3.5 text-[#0B6E6C]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="4" width="18" height="17" rx="3"/>
                                 <path d="M3 9h18"/>
                             </svg>
@@ -214,7 +214,7 @@
                         <!-- White Notes Count Pill -->
                         <a href="{{ route('logbook.show', $log) }}#comments"
                            class="inline-flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-full text-xs font-semibold text-[#111827] shadow-2xs">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                            <svg class="w-3.5 h-3.5 text-[#0B6E6C]" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 3C6.5 3 2 6.6 2 11c0 2.1 1 4 2.7 5.4L4 21l4.8-1.9c1 .3 2.1.4 3.2.4 5.5 0 10-3.6 10-8.5S17.5 3 12 3Z"/>
                             </svg>
                             <span>{{ str_pad((string) max(1, $log->comments->count()), 2, '0', STR_PAD_LEFT) }}</span>
@@ -225,7 +225,7 @@
         @empty
             <div class="bg-white rounded-[28px] p-8 text-center">
                 <p class="text-sm font-semibold text-zinc-700">Belum ada logbook harian tercatat.</p>
-                <a href="{{ route('logbook.create') }}" class="mt-3 inline-block bg-[#18181B] text-white text-xs font-semibold px-4 py-2.5 rounded-full">
+                <a href="{{ route('logbook.create') }}" class="mt-3 inline-block bg-[#0B6E6C] hover:bg-[#085856] text-white text-xs font-semibold px-5 py-2.5 rounded-full shadow-xs transition">
                     + Tambah Logbook Harian
                 </a>
             </div>

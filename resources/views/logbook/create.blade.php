@@ -13,23 +13,23 @@
         <h1 class="text-[17px] font-semibold text-[#111827]">Tambah Logbook Harian</h1>
         <button type="button"
                 onclick="openAdvancedFeatureModal('ai')"
-                class="bg-[#E5D9FA] hover:bg-[#D5C2F7] text-[#18181B] text-[11px] font-bold px-3 py-1 rounded-full transition">
+                class="bg-[#0B6E6C] hover:bg-[#085856] text-white text-[11px] font-bold px-3 py-1 rounded-full transition">
             ✨ Fitur AI
         </button>
     </header>
 
     <!-- Active Participant Info Banner (Shows Registered Name, Division, Position, Mentor) -->
     @if ($internship)
-        <div class="bg-[#D5EDE8] rounded-[22px] px-4 py-3 flex items-center justify-between text-xs">
+        <div class="bg-[#C8EBE5] rounded-[22px] px-4 py-3 flex items-center justify-between text-xs">
             <div class="min-w-0">
-                <p class="font-bold text-[#111827] truncate">
+                <p class="font-bold text-[#074745] truncate">
                     {{ auth()->user()?->name ?? $internship->participant?->name }} • {{ $internship->division }}
                 </p>
-                <p class="text-[11px] text-zinc-600 truncate">
+                <p class="text-[11px] text-zinc-700 truncate">
                     Bagian: {{ $internship->position ?? '-' }} • Mentor: {{ $internship->mentor?->name ?? '-' }}
                 </p>
             </div>
-            <a href="{{ route('profile.show') }}" class="bg-white text-[#18181B] text-[11px] font-semibold px-3 py-1 rounded-full shrink-0 ml-2">
+            <a href="{{ route('profile.show') }}" class="bg-white text-[#0B6E6C] text-[11px] font-bold px-3 py-1 rounded-full shrink-0 ml-2 shadow-2xs">
                 Ubah Data
             </a>
         </div>
@@ -43,7 +43,7 @@
                 @foreach ($templates as $tpl)
                     <button type="button"
                             onclick="applyTemplate(@js($tpl->title), @js($tpl->category), @js($tpl->description))"
-                            class="shrink-0 bg-white hover:bg-[#D5EDE8] text-[#11181B] text-xs font-medium px-3 py-1.5 rounded-full shadow-2xs transition">
+                            class="shrink-0 bg-white hover:bg-[#C8EBE5] text-[#074745] text-xs font-medium px-3 py-1.5 rounded-full shadow-2xs transition">
                         ⚡ {{ $tpl->title }}
                     </button>
                 @endforeach
@@ -84,14 +84,14 @@
                 <label class="block text-xs font-semibold text-[#111827]">Judul Kegiatan Harian</label>
                 <input type="text" name="title" id="input-title" value="{{ old('title') }}" required
                        placeholder="Contoh: Penyusunan Design System & UI Kit"
-                       class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3.5 py-2.5 text-sm text-[#111827] focus:ring-2 focus:ring-[#18181B]">
+                       class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-sm text-[#111827] focus:ring-2 focus:ring-[#0B6E6C]">
             </div>
 
             <div class="grid grid-cols-2 gap-2.5">
                 <div>
                     <label class="block text-xs font-semibold text-[#111827]">Kategori</label>
                     <select name="category" id="input-category"
-                            class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3 py-2.5 text-xs font-semibold text-[#111827]">
+                            class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3 py-2.5 text-xs font-semibold text-[#111827]">
                         @foreach ($categories as $cat)
                             <option value="{{ $cat->value }}">{{ $cat->label() }}</option>
                         @endforeach
@@ -100,7 +100,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-[#111827]">Lokasi Kerja</label>
                     <select name="work_location"
-                            class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3 py-2.5 text-xs font-semibold text-[#111827]">
+                            class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3 py-2.5 text-xs font-semibold text-[#111827]">
                         <option value="wfo">WFO (Kantor)</option>
                         <option value="wfh">WFH (Rumah)</option>
                         <option value="field">Lapangan</option>
@@ -109,22 +109,22 @@
             </div>
         </div>
 
-        <!-- Description Card + AI & Voice Advanced Feature Triggers (Lavender Grid Style) -->
-        <section class="bg-lavender-grid rounded-[28px] p-5 space-y-3 shadow-xs">
+        <!-- Description Card + AI & Voice Advanced Feature Triggers (KINRA Deep Green Grid Style) -->
+        <section class="bg-kinra-grid rounded-[28px] p-5 space-y-3 shadow-xs text-white">
             <div class="flex items-center justify-between gap-2">
-                <span class="text-xs font-bold text-[#111827] flex items-center gap-1.5">
+                <span class="text-xs font-bold text-white flex items-center gap-1.5">
                     <span>📝</span> Deskripsi Kegiatan Harian
                 </span>
                 <button type="button"
                         onclick="openAdvancedFeatureModal('ai')"
-                        class="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#18181B] shadow-2xs hover:bg-[#FBE8A6] transition">
+                        class="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#0B6E6C] shadow-2xs hover:bg-[#FDE9B4] transition">
                     ✨ AI & Voice: Fitur Lanjutan
                 </button>
             </div>
 
             <textarea name="raw_description" id="input-raw" rows="3" required
                       placeholder="Tuliskan rincian kegiatan harian yang kamu kerjakan hari ini..."
-                      class="w-full rounded-[18px] bg-white/95 border-0 p-3.5 text-xs text-[#111827] leading-relaxed focus:ring-2 focus:ring-[#18181B]">{{ old('raw_description') }}</textarea>
+                      class="w-full rounded-[18px] bg-white border-0 p-3.5 text-xs text-[#111827] leading-relaxed focus:ring-2 focus:ring-[#FDE9B4]">{{ old('raw_description') }}</textarea>
 
             <!-- AI & Voice Action Buttons -> Opens Stylized Advanced Feature Modal Alert -->
             <div class="flex flex-wrap items-center gap-2">
@@ -132,19 +132,19 @@
                         onclick="openAdvancedFeatureModal('ai')"
                         class="bg-[#18181B] text-white text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-xs hover:opacity-90 transition">
                     <span>✨</span> Rapikan AI
-                    <span class="bg-[#E5D9FA] text-[#18181B] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
+                    <span class="bg-[#C8EBE5] text-[#074745] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
                 </button>
 
                 <button type="button"
                         onclick="openAdvancedFeatureModal('voice')"
-                        class="bg-white text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-2xs hover:bg-[#D5EDE8] transition">
+                        class="bg-white text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-2xs hover:bg-[#C8EBE5] transition">
                     <span>🎤</span> Rekam Suara
-                    <span class="bg-[#FBE8A6] text-[#18181B] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Lanjutan</span>
+                    <span class="bg-[#FDE9B4] text-[#78350F] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Lanjutan</span>
                 </button>
 
                 <button type="button"
                         onclick="openAdvancedFeatureModal('photo')"
-                        class="bg-white text-[#18181B] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-2xs hover:bg-[#FBE8A6] transition">
+                        class="bg-white text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-2xs hover:bg-[#D4EEFC] transition">
                     <span>📷</span> Saran Foto
                 </button>
             </div>
@@ -156,26 +156,26 @@
                 <label class="block text-xs font-semibold text-[#111827]">Hasil / Output Kerja (Pisahkan dengan •)</label>
                 <input type="text" name="output" id="input-output" value="{{ old('output') }}"
                        placeholder="Contoh: Design system • Landing Page • Pricing Page"
-                       class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
+                       class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-[#111827]">Kendala (Opsional)</label>
                 <input type="text" name="obstacles" value="{{ old('obstacles') }}"
                        placeholder="Contoh: Penyesuaian kontras warna pada layar mobile"
-                       class="mt-1.5 w-full rounded-[14px] bg-[#F6F7F9] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
+                       class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
             </div>
 
             <div>
                 <label class="block text-xs font-semibold text-[#111827]">Lampiran Bukti Foto (Opsional)</label>
                 <input type="file" name="photo" accept="image/*"
-                       class="mt-1.5 block w-full text-xs text-zinc-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#E5D9FA] file:text-[#18181B]">
+                       class="mt-1.5 block w-full text-xs text-zinc-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#C8EBE5] file:text-[#074745]">
             </div>
         </div>
 
         <!-- Single Direct Submit Button -->
         <button type="submit"
-                class="w-full bg-[#18181B] hover:bg-zinc-800 text-white text-sm font-bold py-4 rounded-full shadow-md transition active:scale-[0.99]">
+                class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-sm font-bold py-4 rounded-full shadow-md transition active:scale-[0.99]">
             Simpan Logbook Harian →
         </button>
     </form>

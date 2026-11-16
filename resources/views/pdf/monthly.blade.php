@@ -7,7 +7,7 @@
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: #18181B;
-            background: #E5E7EB;
+            background: #D9E5E4;
             margin: 0;
             padding: 24px;
             font-size: 12px;
@@ -27,13 +27,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #18181B;
+            background: #0B6E6C;
             color: #fff;
             padding: 12px 20px;
             border-radius: 999px;
         }
         .toolbar a, .toolbar button {
-            background: #E5D9FA;
+            background: #FDE9B4;
             color: #18181B;
             border: 0;
             padding: 8px 16px;
@@ -44,14 +44,14 @@
             cursor: pointer;
         }
         .letterhead {
-            border-bottom: 3px solid #18181B;
+            border-bottom: 3px solid #0B6E6C;
             padding-bottom: 12px;
             margin-bottom: 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .letterhead h1 { margin: 0; font-size: 18px; text-transform: uppercase; }
+        .letterhead h1 { margin: 0; font-size: 17px; text-transform: uppercase; color: #0B6E6C; }
         .letterhead p { margin: 2px 0 0; color: #52525B; font-size: 11px; }
         .identity-table {
             width: 100%;
@@ -63,8 +63,8 @@
             font-size: 12px;
         }
         .summary-box {
-            background: #F6F7F9;
-            border-left: 4px solid #18181B;
+            background: #F4F7F6;
+            border-left: 4px solid #0B6E6C;
             padding: 12px 14px;
             margin-bottom: 16px;
             border-radius: 6px;
@@ -81,7 +81,8 @@
             vertical-align: top;
         }
         table.activities th {
-            background: #E5D9FA;
+            background: #0B6E6C;
+            color: #FFFFFF;
             font-weight: 700;
             font-size: 11px;
         }
@@ -105,8 +106,8 @@
 
     <div class="toolbar">
         <div>
-            <strong>Timesheet MagangHub — Pratinjau Cetak PDF A4</strong>
-            <span style="margin-left: 8px; opacity: 0.75;">({{ $entries->count() }} Entri • {{ $totalHours }} Jam)</span>
+            <strong>Timesheet KINRA Sei Mangkei — Pratinjau Cetak PDF A4</strong>
+            <span style="margin-left: 8px; opacity: 0.85;">({{ $entries->count() }} Entri • {{ $totalHours }} Jam)</span>
         </div>
         <div style="display: flex; gap: 8px;">
             <a href="{{ route('reports.index') }}" style="background: #fff;">← Kembali</a>
@@ -116,13 +117,16 @@
 
     <div class="page">
         <div class="letterhead">
-            <div>
-                <h1>{{ $institution->name }}</h1>
-                <p>{{ $institution->address }}</p>
-                <p><strong>LAPORAN KEGIATAN HARIAN PESERTA MAGANG ({{ strtoupper($report->type) }})</strong></p>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <img src="/images/kinra.png" alt="KINRA Sei Mangkei" style="height: 48px; width: auto;">
+                <div>
+                    <h1>{{ $institution->name }}</h1>
+                    <p>{{ $institution->address }}</p>
+                    <p><strong>LAPORAN KEGIATAN HARIAN PESERTA MAGANG ({{ strtoupper($report->type) }})</strong></p>
+                </div>
             </div>
             <div style="text-align: right;">
-                <div style="background: #18181B; color: #fff; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 11px;">
+                <div style="background: #0B6E6C; color: #fff; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 11px;">
                     DOKUMEN RESMI
                 </div>
                 <p style="font-size: 10px; margin-top: 4px;">Token: {{ $report->verify_token }}</p>
@@ -152,7 +156,7 @@
 
         @if ($summary)
             <div class="summary-box">
-                <strong>Ringkasan Eksekutif (AI Gemini):</strong>
+                <strong>Ringkasan Eksekutif:</strong>
                 <p style="margin: 4px 0 0;">{{ $summary['overview'] ?? '' }}</p>
                 @if (!empty($summary['skills']))
                     <p style="margin: 6px 0 0; font-size: 11px;">
@@ -214,7 +218,7 @@
         </table>
 
         <div style="margin-top: 24px; border-top: 1px dashed #D4D4D8; padding-top: 10px; font-size: 10px; color: #71717A; display: flex; justify-content: space-between;">
-            <span>Dicetak otomatis melalui Timesheet MagangHub PWA pada {{ now()->format('d/m/Y H:i') }}</span>
+            <span>Dicetak otomatis melalui Timesheet KINRA Sei Mangkei PWA pada {{ now()->format('d/m/Y H:i') }}</span>
             <span>Verifikasi keaslian: <a href="{{ $verifyUrl }}">{{ $verifyUrl }}</a></span>
         </div>
     </div>
