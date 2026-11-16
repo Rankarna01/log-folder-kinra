@@ -13,23 +13,16 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $user = $request->user();
-
-        if (! $user) {
-            $user = User::where('role', 'participant')->first() ?? User::first();
-            if ($user) {
-                auth()->login($user);
-            }
-        }
 
         $internship = $user->activeInternship()
             ->with(['institution', 'mentor', 'participant'])
             ->first();
 
         if (! $internship) {
-            $internship = Internship::with(['institution', 'mentor', 'participant'])->first();
+            return redirect()->route('onboarding.show');
         }
 
         $logbooks = $internship

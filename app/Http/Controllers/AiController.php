@@ -79,7 +79,7 @@ class AiController extends Controller
     public function syncOffline(Request $request): JsonResponse
     {
         $items = $request->input('items', []);
-        $internship = $request->user()?->activeInternship ?? Internship::firstOrFail();
+        $internship = $request->user()?->activeInternship()->first() ?? Internship::firstOrFail();
 
         $synced = [];
         $failed = [];

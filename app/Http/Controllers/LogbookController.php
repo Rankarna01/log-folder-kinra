@@ -22,10 +22,14 @@ class LogbookController extends Controller
         protected GeminiService $geminiService
     ) {}
 
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $user = $request->user();
-        $internship = $user?->activeInternship ?? Internship::with(['participant', 'mentor', 'institution'])->first();
+        $internship = $user->activeInternship()->with(['participant', 'mentor', 'institution'])->first();
+
+        if (! $internship) {
+            return redirect()->route('onboarding.show');
+        }
 
         $monthParam = $request->query('month', now()->timezone('Asia/Jakarta')->format('Y-m'));
         try {
@@ -98,10 +102,14 @@ class LogbookController extends Controller
         ));
     }
 
-    public function create(Request $request): View
+    public function create(Request $request)
     {
         $user = $request->user();
-        $internship = $user?->activeInternship ?? Internship::first();
+        $internship = $user->activeInternship()->with(['participant', 'mentor', 'institution'])->first();
+
+        if (! $internship) {
+            return redirect()->route('onboarding.show');
+        }
         $templates = $user ? $user->activityTemplates()->latest()->get() : collect();
         $quota = $user ? $this->geminiService->quotaStatus($user) : ['used' => 0, 'limit' => 30, 'remaining' => 30];
         $categories = LogCategory::cases();
@@ -138,7 +146,7 @@ class LogbookController extends Controller
         $validated['category'] = $validated['category'] ?? 'tugas';
         $validated['work_location'] = $validated['work_location'] ?? 'kantor';
 
-        $internship = $request->user()?->activeInternship ?? Internship::firstOrFail();
+        $internship = $request->user()?->activeInternship()->first() ?? Internship::firstOrFail();
 
         if (empty($validated['final_description'])) {
             $validated['final_description'] = ($validated['ai_description'] ?? null) ?: $validated['raw_description'];

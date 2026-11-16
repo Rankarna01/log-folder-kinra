@@ -52,10 +52,7 @@
         @method('PUT')
         <div class="flex items-center justify-between">
             <h2 class="text-sm font-semibold text-[#111827]">Data Registrasi Peserta</h2>
-            <a href="{{ route('register') }}" class="text-xs font-semibold text-[#0B6E6C] hover:underline flex items-center gap-1">
-                <i class="fa-solid fa-user-plus text-[10px]"></i>
-                <span>Daftar Peserta Baru</span>
-            </a>
+            <span class="text-[11px] font-medium text-zinc-400">{{ $user->email }}</span>
         </div>
 
         <div>
@@ -124,6 +121,16 @@
             </button>
         </div>
     </section>
+
+    <!-- Logout / Ganti Akun Card -->
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit"
+                class="w-full bg-white hover:bg-[#FCE1D4] text-[#9A3412] text-xs font-bold py-3.5 rounded-full shadow-2xs flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Keluar dari Akun ({{ $user->email }})</span>
+        </button>
+    </form>
 
 </div>
 @endsection

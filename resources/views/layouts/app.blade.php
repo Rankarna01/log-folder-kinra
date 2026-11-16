@@ -88,13 +88,14 @@
 <body class="min-h-screen text-[#111827] antialiased selection:bg-[#0B6E6C] selection:text-white">
 
     @php
-        $navInternship = auth()->user()?->activeInternship ?? \App\Models\Internship::first();
+        $navInternship = auth()->user()?->activeInternship;
         $navTodayLog = $navInternship
             ? $navInternship->logbooks()->whereDate('date', \Carbon\Carbon::now('Asia/Jakarta')->toDateString())->first()
             : null;
+        $isAuthPage = request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('onboarding.*');
     @endphp
 
-    <!-- Top Participant Status Bar with KINRA Logo & Green Accent -->
+    <!-- Top Participant Status Bar with KINRA Logo & Account Controls -->
     <div class="max-w-[440px] mx-auto pt-2 px-3">
         <div class="bg-[#18181B] text-white rounded-full px-3 py-1.5 flex items-center justify-between text-[11px] shadow-md">
             <div class="flex items-center gap-2 min-w-0">
@@ -104,18 +105,29 @@
                 <span id="network-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
                 <span id="network-label" class="font-semibold tracking-tight truncate">
                     @auth
-                        {{ auth()->user()->name }} • {{ auth()->user()->activeInternship?->division ?? 'Peserta' }}
+                        {{ auth()->user()->name }} • {{ auth()->user()->activeInternship?->division ?? auth()->user()->email }}
                     @else
-                        KINRA Sei Mangkei
+                        Timesheet KINRA Sei Mangkei
                     @endauth
                 </span>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
-                <a href="{{ route('register') }}"
-                   class="px-3 py-0.5 rounded-full bg-[#0B6E6C] text-white border border-emerald-400/30 font-bold hover:bg-[#0D8280] transition flex items-center gap-1">
-                    <i class="fa-solid fa-user-plus text-[10px]"></i>
-                    <span>Daftar Peserta</span>
-                </a>
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                                class="px-3 py-0.5 rounded-full bg-[#0B6E6C] text-white border border-emerald-400/30 font-bold hover:bg-[#0D8280] transition flex items-center gap-1">
+                            <i class="fa-solid fa-right-from-bracket text-[10px]"></i>
+                            <span>Keluar</span>
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}"
+                       class="px-3 py-0.5 rounded-full bg-[#0B6E6C] text-white border border-emerald-400/30 font-bold hover:bg-[#0D8280] transition flex items-center gap-1">
+                        <i class="fa-solid fa-right-to-bracket text-[10px]"></i>
+                        <span>Masuk</span>
+                    </a>
+                @endauth
             </div>
         </div>
     </div>
@@ -151,6 +163,7 @@
             @yield('content')
         </main>
 
+        @if (! $isAuthPage)
         <!-- Signature Floating Neo-Dock + Conditional Create FAB (Hidden when today's logbook already exists) -->
         <nav aria-label="Menu Utama Peserta" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2.5 pointer-events-none">
             <!-- Left 4-Icon Pill Container (Font Awesome Icons) -->
@@ -193,6 +206,7 @@
                 </a>
             @endif
         </nav>
+        @endif
     </div>
 
     <!-- Global Modal: Fitur Lanjutan (Single Checkerboard Grid Card Only) -->

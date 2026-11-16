@@ -15,18 +15,112 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function showRegister(): View
+    public function showLogin(): View
     {
-        $recentParticipants = User::where('role', Role::Participant->value)
-            ->with('activeInternship.mentor')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        return view('auth.register', compact('recentParticipants'));
+        return view('auth.login');
     }
 
+    public function login(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'password.required' => 'Password wajib diisi.',
+        ]);
+
+        if (Auth::attempt($credentials, true)) {
+            $request->session()->regenerate();
+            $user = $request->user();
+
+            if (! $user->activeInternship()->exists()) {
+                return redirect()
+                    ->route('onboarding.show')
+                    ->with('toast', 'Silakan lengkapi data peserta magang terlebih dahulu.');
+            }
+
+            return redirect()
+                ->route('dashboard')
+                ->with('toast', "Selamat datang kembali, {$user->name}!");
+        }
+
+        return back()
+            ->withErrors(['email' => 'Email atau password yang dimasukkan tidak sesuai.'])
+            ->onlyInput('email');
+    }
+
+    public function showRegister(): View
+    {
+        return view('auth.register');
+    }
+
+    /**
+     * Step 1: Register account with Email + Password (2x confirmation),
+     * then redirect to Step 2 (/onboarding) to fill Nama, Divisi, Bagian, & Mentor.
+     */
     public function register(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'max:150', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'name' => ['nullable', 'string', 'max:150'],
+            'division' => ['nullable', 'string', 'max:150'],
+            'position' => ['nullable', 'string', 'max:150'],
+            'mentor_name' => ['nullable', 'string', 'max:150'],
+        ], [
+            'email.unique' => 'Email ini sudah terdaftar. Silakan langsung masuk (Login).',
+            'password.min' => 'Password minimal 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password (ulangi password) tidak sama.',
+        ]);
+
+        $defaultName = ! empty($validated['name'])
+            ? trim($validated['name'])
+            : Str::headline( explode('@', $validated['email'])[0]);
+
+        $participant = User::create([
+            'name' => $defaultName,
+            'email' => strtolower(trim($validated['email'])),
+            'password' => Hash::make($validated['password']),
+            'role' => Role::Participant,
+            'is_active' => true,
+        ]);
+
+        Auth::login($participant, true);
+        $request->session()->regenerate();
+
+        // If the request also included onboarding fields directly, save them right away
+        if (! empty($validated['division']) && ! empty($validated['position']) && ! empty($validated['mentor_name'])) {
+            $this->saveParticipantInternship($participant, [
+                'name' => $defaultName,
+                'division' => $validated['division'],
+                'position' => $validated['position'],
+                'mentor_name' => $validated['mentor_name'],
+            ]);
+
+            return redirect()
+                ->route('logbook.create')
+                ->with('toast', "Selamat datang, {$participant->name}! Silakan isi logbook harianmu.");
+        }
+
+        return redirect()
+            ->route('onboarding.show')
+            ->with('toast', 'Akun berhasil dibuat! Sekarang lengkapi data peserta magangmu.');
+    }
+
+    /**
+     * Step 2: Fill Participant Details (Nama, Divisi, Bagian, Mentor)
+     */
+    public function showOnboarding(Request $request): View
+    {
+        $user = $request->user();
+        $internship = $user?->activeInternship()->with('mentor')->first();
+
+        return view('auth.onboarding', compact('user', 'internship'));
+    }
+
+    public function storeOnboarding(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:150'],
@@ -35,10 +129,20 @@ class AuthController extends Controller
             'mentor_name' => ['required', 'string', 'max:150'],
         ]);
 
+        $user = $request->user();
+        $this->saveParticipantInternship($user, $validated);
+
+        return redirect()
+            ->route('logbook.create')
+            ->with('toast', "Data peserta tersimpan! Silakan catat logbook harianmu, {$user->fresh()->name}.");
+    }
+
+    protected function saveParticipantInternship(User $participant, array $data): void
+    {
         $institution = Institution::firstOrCreate(
-            ['name' => 'PT Kinra Digital Nusantara (MagangHub)'],
+            ['name' => 'PT Kawasan Industri Nusantara (KINRA Sei Mangkei)'],
             [
-                'address' => 'Jakarta Selatan, Indonesia',
+                'address' => 'KEK Sei Mangkei, Sumatera Utara',
                 'letterhead' => [
                     'subtitle' => 'Logbook Kegiatan Harian Peserta Magang',
                 ],
@@ -47,63 +151,46 @@ class AuthController extends Controller
 
         $mentor = User::firstOrCreate(
             [
-                'name' => trim($validated['mentor_name']),
+                'name' => trim($data['mentor_name']),
                 'role' => Role::Mentor->value,
             ],
             [
-                'email' => 'mentor.' . Str::slug($validated['mentor_name']) . '.' . Str::lower(Str::random(4)) . '@maganghub.local',
+                'email' => 'mentor.' . Str::slug($data['mentor_name']) . '.' . Str::lower(Str::random(4)) . '@kinra.local',
                 'password' => Hash::make('password'),
-                'campus' => $validated['division'],
-                'major' => $validated['position'],
+                'campus' => trim($data['division']),
+                'major' => trim($data['position']),
                 'is_active' => true,
             ]
         );
 
-        $participant = User::create([
-            'name' => trim($validated['name']),
-            'email' => Str::slug($validated['name']) . '.' . Str::lower(Str::random(5)) . '@peserta.maganghub.local',
-            'password' => Hash::make('password'),
-            'role' => Role::Participant,
-            'campus' => $validated['division'],
-            'major' => $validated['position'],
+        $participant->update([
+            'name' => trim($data['name']),
+            'campus' => trim($data['division']),
+            'major' => trim($data['position']),
             'preferences' => [
                 'ai_style' => 'formal',
                 'language' => 'id',
-                'mentor_name' => trim($validated['mentor_name']),
-                'division' => trim($validated['division']),
-                'position' => trim($validated['position']),
+                'mentor_name' => trim($data['mentor_name']),
+                'division' => trim($data['division']),
+                'position' => trim($data['position']),
             ],
-            'is_active' => true,
         ]);
 
-        Internship::create([
-            'participant_id' => $participant->id,
-            'mentor_id' => $mentor->id,
-            'institution_id' => $institution->id,
-            'division' => trim($validated['division']),
-            'position' => trim($validated['position']),
-            'start_date' => today()->startOfMonth()->toDateString(),
-            'end_date' => today()->addMonths(3)->endOfMonth()->toDateString(),
-            'work_days' => [1, 2, 3, 4, 5],
-            'status' => 'active',
-        ]);
-
-        Auth::login($participant, true);
-        $request->session()->regenerate();
-
-        return redirect()
-            ->route('logbook.create')
-            ->with('toast', "Selamat datang, {$participant->name}! Silakan isi logbook harianmu.");
-    }
-
-    public function quickLoginParticipant(Request $request, User $user): RedirectResponse
-    {
-        Auth::login($user, true);
-        $request->session()->regenerate();
-
-        return redirect()
-            ->route('logbook.create')
-            ->with('toast', "Masuk sebagai {$user->name}. Silakan tambah logbook harian.");
+        Internship::updateOrCreate(
+            [
+                'participant_id' => $participant->id,
+                'status' => 'active',
+            ],
+            [
+                'mentor_id' => $mentor->id,
+                'institution_id' => $institution->id,
+                'division' => trim($data['division']),
+                'position' => trim($data['position']),
+                'start_date' => today()->startOfMonth()->toDateString(),
+                'end_date' => today()->addMonths(3)->endOfMonth()->toDateString(),
+                'work_days' => [1, 2, 3, 4, 5],
+            ]
+        );
     }
 
     public function logout(Request $request): RedirectResponse
@@ -112,6 +199,8 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('register');
+        return redirect()
+            ->route('login')
+            ->with('toast', 'Berhasil keluar akun. Silakan masuk kembali dengan email & passwordmu.');
     }
 }

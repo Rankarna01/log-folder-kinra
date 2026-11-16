@@ -19,10 +19,14 @@ class ReportController extends Controller
         protected GeminiService $geminiService
     ) {}
 
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $user = $request->user();
-        $internship = $user?->activeInternship ?? Internship::with(['participant', 'mentor', 'institution', 'logbooks'])->first();
+        $internship = $user->activeInternship()->with(['participant', 'mentor', 'institution', 'logbooks'])->first();
+
+        if (! $internship) {
+            return redirect()->route('onboarding.show');
+        }
 
         $reports = $internship
             ? $internship->reports()->latest()->get()
@@ -47,7 +51,7 @@ class ReportController extends Controller
             'only_approved' => ['nullable', 'boolean'],
         ]);
 
-        $internship = $request->user()?->activeInternship ?? Internship::firstOrFail();
+        $internship = $request->user()?->activeInternship()->first() ?? Internship::firstOrFail();
 
         $report = $this->reportService->generateReport(
             $internship,

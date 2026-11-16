@@ -19,31 +19,67 @@ class ExampleTest extends TestCase
         $this->seed(DatabaseSeeder::class);
     }
 
-    public function test_participant_registration_redirects_directly_to_create_logbook(): void
+    public function test_two_step_registration_and_persistent_relogin_with_email_and_password(): void
     {
+        // Step 1: Register account with Email + Password (2x confirmation)
         $registerPage = $this->get('/register');
         $registerPage->assertStatus(200);
-        $registerPage->assertSeeText('Registrasi Peserta Magang');
+        $registerPage->assertSeeText('Daftar Akun Peserta Baru');
 
-        $response = $this->post('/register', [
+        $step1Res = $this->post('/register', [
+            'email' => 'budi.santoso@kinra.id',
+            'password' => 'rahasia123',
+            'password_confirmation' => 'rahasia123',
+        ]);
+
+        $step1Res->assertRedirect(route('onboarding.show'));
+        $this->assertAuthenticated();
+        $this->assertEquals('budi.santoso@kinra.id', auth()->user()->email);
+
+        // Step 2: Fill Participant Details (Nama, Divisi, Bagian, Mentor)
+        $onboardingPage = $this->get(route('onboarding.show'));
+        $onboardingPage->assertStatus(200);
+        $onboardingPage->assertSeeText('Lengkapi Data Peserta Magang');
+
+        $step2Res = $this->post(route('onboarding.store'), [
             'name' => 'Budi Santoso',
             'division' => 'IT & Digital Product',
             'position' => 'Fullstack Web Developer Intern',
             'mentor_name' => 'Hendra Wijaya',
         ]);
 
-        $response->assertRedirect(route('logbook.create'));
+        $step2Res->assertRedirect(route('logbook.create'));
+
+        // Create a logbook entry for Budi
+        $this->post('/logbook', [
+            'date' => '2026-11-16',
+            'start_time' => '08:30',
+            'end_time' => '12:00',
+            'title' => 'Pengerjaan Modul Autentikasi Peserta',
+            'raw_description' => 'Membuat fitur login dan registrasi peserta magang',
+            'output' => 'Modul Login & Registrasi',
+            'work_location' => 'kantor',
+        ]);
+
+        // Logout
+        $this->post('/logout')->assertRedirect(route('login'));
+        $this->assertGuest();
+
+        // Re-Login with Email & Password -> Data must not disappear
+        $loginRes = $this->post('/login', [
+            'email' => 'budi.santoso@kinra.id',
+            'password' => 'rahasia123',
+        ]);
+
+        $loginRes->assertRedirect(route('dashboard'));
         $this->assertAuthenticated();
         $this->assertEquals('Budi Santoso', auth()->user()->name);
-        $this->assertEquals('IT & Digital Product', auth()->user()->activeInternship->division);
-        $this->assertEquals('Fullstack Web Developer Intern', auth()->user()->activeInternship->position);
-        $this->assertEquals('Hendra Wijaya', auth()->user()->activeInternship->mentor->name);
 
-        $createPage = $this->get(route('logbook.create'));
-        $createPage->assertStatus(200);
-        $createPage->assertSeeText('Budi Santoso');
-        $createPage->assertSeeText('IT & Digital Product');
-        $createPage->assertSeeText('Hendra Wijaya');
+        $dashboard = $this->get('/dashboard');
+        $dashboard->assertStatus(200);
+        $dashboard->assertSeeText('Budi Santoso');
+        $dashboard->assertSeeText('IT & Digital Product');
+        $dashboard->assertSeeText('Pengerjaan Modul Autentikasi Peserta');
     }
 
     public function test_dashboard_renders_last_3_days_logbook_and_hides_category_filters(): void
