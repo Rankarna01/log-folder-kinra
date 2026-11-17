@@ -72,8 +72,9 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-[#111827]">Hasil / Output</label>
+                <label class="block text-xs font-semibold text-[#111827]">Hasil / Output (Teks atau Link Dokumen / Drive)</label>
                 <input type="text" name="output" value="{{ $logbook->output }}"
+                       placeholder="Contoh: https://docs.google.com/... atau Laporan Akhir"
                        class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
             </div>
 

@@ -100,7 +100,20 @@
             @if ($existingTodayLog->output)
                 <div class="pt-2.5 border-t border-zinc-100">
                     <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Hasil / Output</p>
-                    <p class="text-xs font-semibold text-[#0B6E6C] mt-1">{{ $existingTodayLog->output }}</p>
+                    @php
+                        $outTrim = trim($existingTodayLog->output);
+                        $isLink = preg_match('~^(https?://|www\.)~i', $outTrim);
+                        $linkUrl = $isLink ? (str_starts_with($outTrim, 'http') ? $outTrim : 'https://' . $outTrim) : null;
+                    @endphp
+                    @if ($linkUrl)
+                        <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B6E6C] hover:underline mt-1 bg-[#C8EBE5] px-3 py-1 rounded-full">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            <span class="truncate max-w-[280px]">Buka Link: {{ $existingTodayLog->output }}</span>
+                        </a>
+                    @else
+                        <p class="text-xs font-semibold text-[#0B6E6C] mt-1">{{ $existingTodayLog->output }}</p>
+                    @endif
                 </div>
             @endif
 
@@ -222,9 +235,9 @@
             <!-- Output, Obstacles & Photo Upload -->
             <div class="bg-white rounded-[26px] p-4 space-y-3 shadow-2xs">
                 <div>
-                    <label class="block text-xs font-semibold text-[#111827]">Hasil / Output Kerja (Pisahkan dengan •)</label>
+                    <label class="block text-xs font-semibold text-[#111827]">Hasil / Output Kerja (Teks atau Link Dokumen / Drive)</label>
                     <input type="text" name="output" id="input-output" value="{{ old('output') }}"
-                           placeholder="Contoh: Modul HR System • Rekap Laporan Harian"
+                           placeholder="Contoh: https://docs.google.com/... atau Laporan Akhir Modul HR"
                            class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
                 </div>
 

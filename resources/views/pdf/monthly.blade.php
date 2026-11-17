@@ -125,12 +125,6 @@
                     <p><strong>LAPORAN KEGIATAN HARIAN PESERTA MAGANG ({{ strtoupper($report->type) }})</strong></p>
                 </div>
             </div>
-            <div style="text-align: right;">
-                <div style="background: #0B6E6C; color: #fff; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 11px;">
-                    DOKUMEN RESMI
-                </div>
-                <p style="font-size: 10px; margin-top: 4px;">Token: {{ $report->verify_token }}</p>
-            </div>
         </div>
 
         <table class="identity-table">
@@ -190,7 +184,24 @@
                             <strong>{{ $entry->title }}</strong>
                         </td>
                         <td>{{ $entry->final_description }}</td>
-                        <td>{{ $entry->output ?: '-' }}</td>
+                        <td>
+                            @if (!empty($entry->output))
+                                @php
+                                    $outputTrimmed = trim($entry->output);
+                                    $isUrl = preg_match('~^(https?://|www\.)~i', $outputTrimmed);
+                                    $href = $isUrl ? (str_starts_with($outputTrimmed, 'http') ? $outputTrimmed : 'https://' . $outputTrimmed) : null;
+                                @endphp
+                                @if ($href)
+                                    <a href="{{ $href }}" target="_blank" rel="noopener noreferrer" style="color: #0B6E6C; font-weight: bold; text-decoration: underline; word-break: break-all;">
+                                        🔗 Buka Tautan Output
+                                    </a>
+                                @else
+                                    {{ $entry->output }}
+                                @endif
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td><strong>{{ $entry->location_label }}</strong></td>
                     </tr>
                 @empty
