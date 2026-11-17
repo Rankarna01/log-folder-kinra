@@ -70,6 +70,35 @@
             background-color: #BFD4D2;
             -webkit-tap-highlight-color: transparent;
         }
+        @media (min-width: 1024px) {
+            body {
+                background: linear-gradient(135deg, #FBFEFD 0%, #EEF9F7 45%, #DDF3EF 100%);
+                background-attachment: fixed;
+                min-height: 100vh;
+            }
+            body::before,
+            body::after {
+                content: '';
+                position: fixed;
+                border-radius: 9999px;
+                pointer-events: none;
+                z-index: -1;
+            }
+            body::before {
+                top: -180px;
+                right: -160px;
+                width: 620px;
+                height: 620px;
+                background: radial-gradient(circle, rgba(11, 110, 108, 0.18) 0%, rgba(11, 110, 108, 0) 70%);
+            }
+            body::after {
+                bottom: -220px;
+                left: -120px;
+                width: 560px;
+                height: 560px;
+                background: radial-gradient(circle, rgba(32, 156, 226, 0.14) 0%, rgba(32, 156, 226, 0) 70%);
+            }
+        }
         .bg-lavender-grid,
         .bg-kinra-grid {
             background-color: #0B6E6C;
@@ -106,6 +135,7 @@
 </head>
 <body class="min-h-screen text-[#111827] antialiased selection:bg-[#0B6E6C] selection:text-white">
 
+
     @php
         // Auto-purge any legacy demo user (Esther Howard / Agnes Nielsen) on every view render
         if (auth()->check() && (in_array(auth()->user()->name, ['Esther Howard', 'Agnes Nielsen'], true) || in_array(auth()->user()->email, ['peserta@maganghub.id', 'mentor@maganghub.id', 'admin@maganghub.id'], true))) {
@@ -123,8 +153,14 @@
         $isAuthPage = request()->routeIs('login') || request()->routeIs('register') || request()->routeIs('onboarding.*');
     @endphp
 
+    @if (! $isAuthPage)
+        <x-nav.sidebar :today-log="$navTodayLog" />
+    @endif
+
+    <div class="{{ $isAuthPage ? '' : 'lg:pl-[270px]' }}">
+
     <!-- Top Participant Status Bar with KINRA Logo & Account Controls -->
-    <div class="max-w-[440px] mx-auto pt-2 px-3">
+    <div class="max-w-[440px] mx-auto pt-2 px-3 {{ $isAuthPage ? 'lg:max-w-xl lg:pt-8' : 'lg:max-w-6xl lg:px-8 lg:pt-6' }}">
         <div class="bg-[#18181B] text-white rounded-full px-3 py-1.5 flex items-center justify-between text-[11px] shadow-md">
             <div class="flex items-center gap-2 min-w-0">
                 <span class="bg-white rounded-full px-2 py-0.5 flex items-center justify-center shrink-0">
@@ -161,7 +197,7 @@
     </div>
 
     <!-- Mobile App Shell -->
-    <div class="max-w-[440px] mx-auto min-h-[calc(100vh-3rem)] my-2 bg-[#F4F7F6] sm:rounded-[44px] shadow-2xl border-[6px] border-white relative pb-28 overflow-x-hidden">
+    <div class="max-w-[440px] mx-auto min-h-[calc(100vh-3rem)] my-2 bg-[#F4F7F6] sm:rounded-[44px] shadow-2xl border-[6px] border-white relative pb-28 overflow-x-hidden {{ $isAuthPage ? 'lg:max-w-xl lg:my-10 lg:border-0 lg:shadow-none lg:rounded-none lg:bg-transparent lg:pb-12' : 'lg:max-w-6xl lg:my-0 lg:px-8 lg:py-6 lg:border-0 lg:shadow-none lg:rounded-none lg:bg-transparent lg:pb-12' }}">
 
         @if (session('toast'))
             <div id="toast-banner" class="mx-5 mt-4 bg-[#0B6E6C] text-white px-4 py-3 rounded-[20px] text-xs font-medium flex items-center justify-between shadow-lg">
@@ -192,49 +228,9 @@
         </main>
 
         @if (! $isAuthPage)
-        <!-- Signature Floating Neo-Dock + Conditional Create FAB (Hidden when today's logbook already exists) -->
-        <nav aria-label="Menu Utama Peserta" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2.5 pointer-events-none">
-            <!-- Left 4-Icon Pill Container (Font Awesome Icons) -->
-            <div class="pointer-events-auto flex items-center gap-1.5 bg-white border-[3px] border-[#18181B] rounded-[20px] p-1.5 shadow-[0_12px_28px_rgba(24,24,27,0.16)]">
-                <!-- 1. Home / Beranda -->
-                <a href="{{ route('dashboard') }}"
-                   title="Beranda"
-                   class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('dashboard') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <i class="fa-solid fa-house text-[16px]"></i>
-                </a>
-
-                <!-- 2. Calendar / Logbook -->
-                <a href="{{ route('logbook.index') }}"
-                   title="Kalender & Riwayat Logbook"
-                   class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('logbook.index') || request()->routeIs('logbook.show') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <i class="fa-solid fa-calendar-days text-[16px]"></i>
-                </a>
-
-                <!-- 3. Reports & PDF -->
-                <a href="{{ route('reports.index') }}"
-                   title="Laporan PDF"
-                   class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('reports.*') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <i class="fa-solid fa-file-pdf text-[16px]"></i>
-                </a>
-
-                <!-- 4. Profile & Data Peserta -->
-                <a href="{{ route('profile.show') }}"
-                   title="Data Peserta"
-                   class="w-11 h-10 rounded-[13px] flex items-center justify-center transition {{ request()->routeIs('profile.*') || request()->routeIs('register') ? 'bg-[#C8EBE5] text-[#0B6E6C]' : 'text-zinc-500 hover:bg-zinc-100' }}">
-                    <i class="fa-solid fa-user text-[16px]"></i>
-                </a>
-            </div>
-
-            <!-- Right Detached Squircle FAB: Only shown if today's logbook has NOT been created yet -->
-            @if (! $navTodayLog)
-                <a href="{{ route('logbook.create') }}"
-                   title="Tambah Logbook Hari Ini"
-                   class="pointer-events-auto w-[54px] h-[54px] bg-white border-[3px] border-[#18181B] rounded-[20px] flex items-center justify-center text-[#18181B] shadow-[0_12px_28px_rgba(24,24,27,0.16)] hover:bg-[#0B6E6C] hover:text-white active:scale-95 transition">
-                    <i class="fa-solid fa-circle-plus text-[22px]"></i>
-                </a>
-            @endif
-        </nav>
+        <x-nav.floating-dock :today-log="$navTodayLog" />
         @endif
+    </div>
     </div>
 
     <!-- Global Modal: Fitur Lanjutan (Single Checkerboard Grid Card Only) -->
@@ -288,13 +284,6 @@
                 title: 'Auto-Polish Deskripsi AI',
                 subtitle: 'Perapian Bahasa Laporan Otomatis',
                 desc: 'Integrasi <strong>Google Gemini AI (Rapikan Teks)</strong> merupakan <strong>Fitur Lanjutan</strong> yang akan diaktifkan pada rilis tahap berikutnya. Saat ini silakan tulis deskripsi kegiatan secara manual atau gunakan <strong>Template Kegiatan Cepat 1-Tap</strong>.'
-            },
-            voice: {
-                iconClass: 'fa-solid fa-microphone-lines',
-                badge: 'Fitur Lanjutan • Voice-to-Log',
-                title: 'Dikte Suara ke Logbook',
-                subtitle: 'Transkripsi Suara Otomatis Berbasis AI',
-                desc: 'Fitur <strong>Rekam Suara (Voice-to-Log)</strong> merupakan <strong>Fitur Lanjutan</strong> yang sedang disiapkan agar kamu cukup berbicara lewat mikrofon dan teksnya langsung tertulis rapi. Untuk saat ini silakan ketik kegiatanmu di kolom deskripsi.'
             },
             photo: {
                 iconClass: 'fa-solid fa-camera-retro',
@@ -390,10 +379,6 @@
         window.addEventListener('offline', updateNetworkIndicator);
         document.addEventListener('DOMContentLoaded', () => {
             updateNetworkIndicator();
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('voice') === '1') {
-                openAdvancedFeatureModal('voice');
-            }
         });
     </script>
 </body>

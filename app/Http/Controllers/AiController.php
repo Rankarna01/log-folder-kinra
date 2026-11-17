@@ -11,10 +11,31 @@ use Illuminate\Http\Request;
 
 class AiController extends Controller
 {
+    /**
+     * @var list<string>
+     */
+    private const ALLOWED_AUDIO_MIME_TYPES = [
+        'audio/webm',
+        'audio/mp4',
+        'audio/ogg',
+        'audio/mpeg',
+        'audio/wav',
+    ];
+
     public function __construct(
         protected GeminiService $geminiService,
         protected LogbookService $logbookService
     ) {}
+
+    /**
+     * Ambil tipe MIME audio tanpa parameter codec, misalnya "audio/webm;codecs=opus" menjadi "audio/webm".
+     */
+    private function normalizeAudioMimeType(?string $clientMimeType): string
+    {
+        $baseMimeType = strtolower(trim(explode(';', (string) $clientMimeType)[0]));
+
+        return str_replace('video/', 'audio/', $baseMimeType);
+    }
 
     public function polish(Request $request): JsonResponse
     {
@@ -44,17 +65,52 @@ class AiController extends Controller
         ]);
     }
 
+    /**
+     * Transkripsikan rekaman suara dari browser yang tidak mendukung Web Speech API.
+     */
     public function transcribe(Request $request): JsonResponse
     {
-        $user = $request->user() ?? User::firstOrFail();
-        $rawVoiceText = $request->input('voice_text', 'hari ini saya bikin desain komponen uiux dashboard dan meeting sama mentor buat review wireframe aplikasi');
-        $style = $request->input('style', 'formal');
+        $validated = $request->validate([
+            'audio' => ['required', 'file', 'max:10240'],
+        ]);
 
-        $polished = $this->geminiService->polish($user, $rawVoiceText, $style);
+        $audioFile = $validated['audio'];
+        $mimeType = $this->normalizeAudioMimeType($audioFile->getClientMimeType());
+        if (! in_array($mimeType, self::ALLOWED_AUDIO_MIME_TYPES, true)) {
+            return response()->json([
+                'message' => 'Format rekaman tidak didukung.',
+            ], 422);
+        }
+
+        if (empty(config('services.gemini.key'))) {
+            return response()->json([
+                'message' => 'Layanan transkripsi suara belum dikonfigurasi. Isi GEMINI_API_KEY di file .env.',
+            ], 503);
+        }
+
+        $user = $request->user() ?? User::firstOrFail();
+        $quota = $this->geminiService->quotaStatus($user);
+
+        if ($quota['remaining'] <= 0) {
+            return response()->json([
+                'message' => 'Kuota AI harian habis.',
+            ], 429);
+        }
+
+        try {
+            $transcript = $this->geminiService->transcribeAudio(
+                $user,
+                base64_encode($audioFile->get()),
+                $mimeType
+            );
+        } catch (\RuntimeException) {
+            return response()->json([
+                'message' => 'Transkripsi gagal. Coba lagi atau ketik manual.',
+            ], 502);
+        }
 
         return response()->json([
-            'transcript' => $rawVoiceText,
-            'polished' => $polished,
+            'transcript' => $transcript,
             'quota' => $this->geminiService->quotaStatus($user),
         ]);
     }
@@ -64,7 +120,7 @@ class AiController extends Controller
         $filename = $request->input('filename', 'dokumentasi-kegiatan.jpg');
 
         return response()->json([
-            'caption' => 'Dokumentasi pengerjaan tugas dan koordinasi teknis pada divisi magang (' . $filename . ').',
+            'caption' => 'Dokumentasi pengerjaan tugas dan koordinasi teknis pada divisi magang ('.$filename.').',
             'suggestion' => 'Melaksanakan pengerjaan modul tugas harian serta mendokumentasikan progres bersama tim pembimbing di lapangan.',
         ]);
     }

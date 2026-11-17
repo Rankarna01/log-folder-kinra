@@ -58,7 +58,7 @@ class GeminiService
         if (! empty($cfg['key']) && $entries->isNotEmpty()) {
             try {
                 $rawJson = $this->callGemini(
-                    [['text' => PromptBuilder::summaryInstruction($periodLabel) . "\n\n" . $lines]],
+                    [['text' => PromptBuilder::summaryInstruction($periodLabel)."\n\n".$lines]],
                     null,
                     true
                 );
@@ -123,6 +123,30 @@ class GeminiService
         ];
     }
 
+    /**
+     * Transkripsikan rekaman suara ke teks Bahasa Indonesia.
+     *
+     * @throws \RuntimeException Jika panggilan ke Gemini gagal.
+     */
+    public function transcribeAudio(User $user, string $audioBase64, string $mimeType): string
+    {
+        $parts = [
+            ['text' => 'Transkripsikan rekaman suara berikut ke dalam Bahasa Indonesia. Keluarkan hanya teks transkripsinya tanpa penjelasan tambahan.'],
+            ['inline_data' => ['mime_type' => $mimeType, 'data' => $audioBase64]],
+        ];
+
+        try {
+            $transcript = trim($this->callGemini($parts, null, false, 0.1));
+            $this->recordUsage($user, 'transcribe', 'success');
+        } catch (\Throwable $exception) {
+            $this->recordUsage($user, 'transcribe', 'failed');
+
+            throw new \RuntimeException('Transkripsi suara gagal.', 0, $exception);
+        }
+
+        return $transcript;
+    }
+
     protected function callGemini(array $parts, ?string $system = null, bool $json = false, float $temp = 0.3): string
     {
         $cfg = config('services.gemini');
@@ -149,7 +173,7 @@ class GeminiService
             ->post($url, $payload);
 
         if ($res->failed()) {
-            throw new \RuntimeException('Gemini error: ' . $res->status());
+            throw new \RuntimeException('Gemini error: '.$res->status());
         }
 
         return $res->json('candidates.0.content.parts.0.text') ?? '';
@@ -175,13 +199,13 @@ class GeminiService
         $polished = ucfirst(rtrim($polished, '.'));
 
         if (! preg_match('/^(Menyusun|Membuat|Merapikan|Memeriksa|Mengikuti|Melakukan|Memperbaiki|Memperbarui|Menganalisis|Mengembangkan)/i', $polished)) {
-            $polished = 'Melaksanakan kegiatan ' . lcfirst($polished);
+            $polished = 'Melaksanakan kegiatan '.lcfirst($polished);
         }
 
         return match ($style) {
-            'singkat' => $polished . '.',
-            'detail' => $polished . ' secara terstruktur sesuai arahan pembimbing lapangan. Kegiatan ini dilaksanakan untuk memastikan target harian divisi tercapai dengan dokumentasi yang lengkap dan terukur.',
-            default => $polished . ' sesuai standar operasional yang berlaku pada divisi penempatan magang.',
+            'singkat' => $polished.'.',
+            'detail' => $polished.' secara terstruktur sesuai arahan pembimbing lapangan. Kegiatan ini dilaksanakan untuk memastikan target harian divisi tercapai dengan dokumentasi yang lengkap dan terukur.',
+            default => $polished.' sesuai standar operasional yang berlaku pada divisi penempatan magang.',
         };
     }
 

@@ -231,13 +231,7 @@
                         <span class="bg-[#C8EBE5] text-[#074745] text-[9px] font-bold px-2 py-0.5 rounded-full">Segera</span>
                     </button>
 
-                    <button type="button"
-                            onclick="openAdvancedFeatureModal('voice')"
-                            class="shrink-0 h-9 bg-white hover:bg-[#F4F7F6] text-[#074745] text-xs font-semibold px-4 rounded-full flex items-center gap-2 shadow-xs transition">
-                        <i class="fa-solid fa-microphone-lines text-[#0B6E6C] text-xs"></i>
-                        <span class="whitespace-nowrap">Rekam Suara</span>
-                        <span class="bg-[#FDE9B4] text-[#78350F] text-[9px] font-bold px-2 py-0.5 rounded-full">Lanjutan</span>
-                    </button>
+                    <x-logbook.voice-input target="input-raw" />
 
                     <button type="button"
                             onclick="openAdvancedFeatureModal('photo')"

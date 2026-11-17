@@ -1,0 +1,333 @@
+{
+  "judul": "A1.1 Pembuatan Aplikasi Timesheet MagangHub",
+  "tanggal_laporan": "17 Nov 2026",
+  "ringkasan": {
+    "program_strategis": "Pengembangan aplikasi logbook harian peserta magang berbasis web (PWA), dengan cetak laporan PDF",
+    "deskripsi": "Peserta magang mencatat kegiatan harian beserta foto bukti dari HP, lalu mencetak rekap PDF per hari, minggu, atau bulan. Mentor dapat meninjau logbook peserta. Fitur tambahan (rapikan teks, rekam suara, saran dari foto) bersifat opsional dan di luar target rilis.",
+    "pic": "Bagian Teknologi Informasi (IT Development)",
+    "target": "18 November 2026",
+    "persentase": 80,
+    "catatan_persentase": ""
+  },
+  "timeline": {
+    "minggu": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "keterangan": "November (minggu ke-)"
+  },
+  "objektif": [
+    {
+      "teks": "1. Melakukan analisis kebutuhan dan desain sistem, termasuk pemecahan komponen tampilan (Fase 0).",
+      "status": "selesai",
+      "target": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "real": [
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "teks": "2. Melakukan pengembangan modul registrasi, login, onboarding, dan dashboard peserta (Fase 1).",
+      "status": "selesai",
+      "target": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "real": [
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "teks": "3. Melakukan pengembangan modul logbook harian, lampiran foto, dan ekspor PDF (Fase 1).",
+      "status": "on-going",
+      "target": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "real": [
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "teks": "4. Melakukan pengembangan fitur tambahan opsional: rapikan teks, rekam suara, saran dari foto (Fase 2).",
+      "status": "rencana",
+      "target": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "real": [
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "teks": "5. Melakukan pengembangan peran mentor dan admin, serta workflow persetujuan logbook (Fase 3).",
+      "status": "rencana",
+      "target": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "real": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "update_saat_ini": [
+    "Fungsi inti sudah berjalan: registrasi, login, pencatatan logbook harian dengan foto, dan cetak PDF.",
+    "Registrasi dua langkah (email dan kata sandi) dan login yang tetap tersimpan. Peserta langsung masuk ke dashboard setelah onboarding.",
+    "Data tiap peserta terpisah. Akun demo dan data demo lama sudah dihapus dari sistem.",
+    "Logbook dibatasi satu entri per hari, dengan lokasi Kantor atau Lapangan.",
+    "PDF sudah memuat foto logbook dan output/hasil sebagai tautan yang bisa diklik.",
+    "Fitur tambahan belum diaktifkan dan tidak termasuk target rilis."
+  ],
+  "pica": {
+    "pi": "Pencatatan kegiatan magang masih manual (kertas, Word, Excel), rawan terlewat, sulit dirapikan, dan sulit ditinjau mentor.",
+    "ca": "Logbook digital dari HP dengan foto bukti, laporan PDF dibuat otomatis, dan kalimat dapat dirapikan dengan fitur tambahan (opsional)."
+  },
+  "next_actions": [
+    "Melakukan deploy staging, lalu uji langsung di HP peserta.",
+    "Melengkapi kompresi foto, thumbnail, dan watermark tanggal serta jam pada foto logbook.",
+    "Menyusun halaman mentor (antrean review) setelah rilis awal.",
+    "Fitur tambahan (opsional) dikerjakan setelah rilis, sesuai kebutuhan pengguna."
+  ],
+  "catatan_kaki": "Status Selesai berarti fitur sudah dikerjakan di repositori. Pengujian di lingkungan staging belum dicatat dalam laporan ini.",
+  "pengembangan": [
+    {
+      "judul": "Fondasi Aplikasi",
+      "baris": [
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Rilis awal aplikasi",
+          "hasil": "Aplikasi logbook peserta dibangun sebagai aplikasi web (PWA) dengan tampilan Soft Pastel Bento.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Dokumen perancangan",
+          "hasil": "Dokumen perancangan 01 sampai 15 disusun: ruang lingkup, arsitektur, database, rute, PDF, dan keamanan.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Struktur database",
+          "hasil": "Tabel dan model untuk pengguna, periode magang, instansi, logbook, lampiran foto, komentar, libur, dan laporan.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Pembagian peran",
+          "hasil": "Peran peserta, mentor, dan admin didefinisikan pada sistem. Halaman mentor dan admin belum dibuat.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Layanan pendukung",
+          "hasil": "Layanan pengolahan teks, suara, dan foto disiapkan sebagai fitur tambahan opsional.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Navigasi dan tampilan dasar",
+          "hasil": "Navigasi bawah (dock), kerangka halaman, dan komponen tampilan dasar dibuat.",
+          "status": "Selesai"
+        }
+      ]
+    },
+    {
+      "judul": "Logbook Harian & Lampiran Foto",
+      "baris": [
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Form tambah dan ubah logbook",
+          "hasil": "Isian tanggal, jam mulai dan selesai, judul, deskripsi, output, kendala, dan lokasi.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Daftar dan detail logbook",
+          "hasil": "Daftar logbook, halaman detail entri, serta ubah dan hapus entri.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Duplikasi logbook",
+          "hasil": "Entri dapat disalin sebagai dasar untuk entri baru.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Lampiran foto",
+          "hasil": "Unggah foto dengan keterangan pada setiap logbook.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Satu logbook per hari",
+          "hasil": "Satu entri per hari dengan tampilan kartu. Lokasi disederhanakan menjadi Kantor atau Lapangan, dan kategori disembunyikan.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Template harian dikunci",
+          "hasil": "Pembuatan template harian ditandai Fitur Lanjutan dengan badge dan modal. Modal hanya menampilkan kartu fitur.",
+          "status": "Selesai"
+        }
+      ]
+    },
+    {
+      "judul": "Registrasi, Login & Data Peserta",
+      "baris": [
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Registrasi disederhanakan",
+          "hasil": "Alur registrasi dirampingkan. Status persetujuan dan menu admin disembunyikan sesuai ruang lingkup.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Registrasi dua langkah",
+          "hasil": "Registrasi dengan email dan kata sandi dalam dua langkah.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Login tetap tersimpan dan data terpisah",
+          "hasil": "Sesi login tetap tersimpan. Data tiap peserta dipisahkan dari peserta lain.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "17 Nov",
+          "revisi": "Pembersihan akun demo",
+          "hasil": "Akun dan data demo dihapus dari sistem. Data demo lama dibersihkan otomatis saat aplikasi dibuka.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "17 Nov",
+          "revisi": "Perbaikan sesi dan cache",
+          "hasil": "Cache halaman lama dibersihkan dan sesi akun lama dikeluarkan otomatis pada setiap halaman.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "17 Nov",
+          "revisi": "Langsung ke dashboard",
+          "hasil": "Setelah login dan onboarding, peserta langsung diarahkan ke dashboard.",
+          "status": "Selesai"
+        }
+      ]
+    },
+    {
+      "judul": "Dashboard & Identitas Visual",
+      "baris": [
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Identitas visual KINRA",
+          "hasil": "Palet warna hijau KINRA Sei Mangkei dan logo KINRA diterapkan pada tampilan aplikasi dan PDF.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Teks dashboard",
+          "hasil": "Kalimat dashboard dan logbook difokuskan pada pencatatan kegiatan harian.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Jam dan tanggal real-time",
+          "hasil": "Jam dan tanggal tampil secara real-time pada timer dashboard.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "16–17 Nov",
+          "revisi": "Judul dan ikon dashboard",
+          "hasil": "Judul hero dibuat dua baris dengan ukuran lebih kecil. Ikon avatar diganti ikon pekerja, dan ikon tanggal serta waktu dirapikan.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "17 Nov",
+          "revisi": "Tombol deskripsi dan Catat Tanggal",
+          "hasil": "Tombol aksi deskripsi berbentuk slider horizontal. Tombol Catat Tanggal pada kondisi kosong diperkecil.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "17 Nov",
+          "revisi": "Header dan form logbook",
+          "hasil": "Tombol tambah dan cari di header dashboard disembunyikan. Banner info peserta dan kartu template di form dihapus.",
+          "status": "Selesai"
+        }
+      ]
+    },
+    {
+      "judul": "Cetak PDF & Lampiran",
+      "baris": [
+        {
+          "tanggal": "16 Nov",
+          "revisi": "Ekspor PDF laporan",
+          "hasil": "Laporan PDF dibuat dari logbook sesuai periode, dengan tanda verifikasi berbentuk tautan publik.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "17 Nov",
+          "revisi": "Tautan output/hasil",
+          "hasil": "Kolom output/hasil dibuat sebagai tautan yang bisa diklik pada PDF dan tampilan logbook.",
+          "status": "Selesai"
+        },
+        {
+          "tanggal": "17 Nov",
+          "revisi": "Pratinjau foto di PDF",
+          "hasil": "Foto logbook menjadi tautan pratinjau pada PDF dan tampilan logbook.",
+          "status": "Selesai"
+        }
+      ]
+    }
+  ],
+  "fitur_belum_siap": [
+    {
+      "fitur": "Rekam Suara (voice-to-log)",
+      "hasil": "Tombol sudah tampil di form, tetapi masih terkunci dengan modal Segera Hadir. Layanan transkripsi di server sudah disiapkan.",
+      "status": "On-going"
+    },
+    {
+      "fitur": "Ambil Foto",
+      "hasil": "Tombol sudah tampil di form, tetapi masih terkunci. Input unggah foto sudah ada. Pengambilan foto langsung dari kamera belum tersedia.",
+      "status": "On-going"
+    },
+    {
+      "fitur": "Rapikan AI",
+      "hasil": "Tombol sudah tampil di form dengan label Segera, dan belum bisa dipakai. Layanan perapihan teks di server sudah disiapkan.",
+      "status": "On-going"
+    },
+    {
+      "fitur": "Tampilan PWA (instal aplikasi)",
+      "hasil": "Manifest dan service worker sudah ada sehingga aplikasi dapat dipasang di layar utama. Tombol instal di dalam aplikasi belum tersedia, dan penyimpanan offline baru berupa antrean sederhana.",
+      "status": "On-going"
+    }
+  ]
+}

@@ -120,13 +120,11 @@
             </a>
         @endif
 
-        <button type="button"
-                onclick="openAdvancedFeatureModal('voice')"
-                class="shrink-0 bg-[#C8EBE5] hover:bg-[#B3E2DA] text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
+        <a href="{{ route('logbook.create') }}"
+           class="shrink-0 bg-[#C8EBE5] hover:bg-[#B3E2DA] text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
             <i class="fa-solid fa-microphone-lines"></i>
             <span>Voice Suara</span>
-            <span class="bg-[#0B6E6C] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
-        </button>
+        </a>
 
         <button type="button"
                 onclick="openAdvancedFeatureModal('ai')"
@@ -245,5 +243,16 @@
             </div>
         @endforelse
     </div>
+
+    <!-- Desktop only: tombol tambah logbook di bawah catatan 3 hari terakhir -->
+    @unless ($todayLogbook)
+        <div class="hidden lg:flex justify-center pt-2">
+            <a href="{{ route('logbook.create') }}"
+               class="inline-flex items-center gap-3 rounded-full border-[2.5px] border-[#18181B] bg-white px-7 py-3 text-sm font-bold text-[#18181B] shadow-[0_10px_24px_rgba(24,24,27,0.12)] transition hover:bg-[#0B6E6C] hover:text-white">
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>Tambah Logbook</span>
+            </a>
+        </div>
+    @endunless
 </div>
 @endsection
