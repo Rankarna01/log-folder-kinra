@@ -192,6 +192,6 @@ class ExampleTest extends TestCase
 
         $verifyRes = $this->get(route('reports.verify', $report->verify_token));
         $verifyRes->assertStatus(200);
-        $verifyRes->assertSeeText('Dokumen Resmi & Terverifikasi');
+        $verifyRes->assertSeeText('Dokumen Resmi dan Terverifikasi');
     }
 }

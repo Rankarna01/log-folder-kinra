@@ -7,7 +7,7 @@
             ✓
         </div>
         <span class="inline-block bg-white px-3 py-1 rounded-full text-xs font-bold text-emerald-900">
-            Dokumen Resmi & Terverifikasi
+            Dokumen Resmi dan Terverifikasi
         </span>
         <h1 class="text-xl font-bold text-[#111827]">Verifikasi Laporan MagangHub</h1>
         <p class="text-xs text-zinc-700">
