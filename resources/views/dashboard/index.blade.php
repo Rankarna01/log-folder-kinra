@@ -145,7 +145,7 @@
                 onclick="openAdvancedFeatureModal('voice')"
                 class="shrink-0 bg-[#C8EBE5] hover:bg-[#B3E2DA] text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition">
             <i class="fa-solid fa-microphone-lines"></i>
-            <span>Dikte Suara</span>
+            <span>Voice Suara</span>
             <span class="bg-[#0B6E6C] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
         </button>
 

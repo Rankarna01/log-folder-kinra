@@ -82,7 +82,7 @@ class ExampleTest extends TestCase
             'mentor_name' => 'Hendra Wijaya',
         ]);
 
-        $step2Res->assertRedirect(route('logbook.create'));
+        $step2Res->assertRedirect(route('dashboard'));
 
         $this->post('/logbook', [
             'date' => '2026-11-16',

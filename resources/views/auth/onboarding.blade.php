@@ -29,8 +29,8 @@
 
         <div>
             <label for="name" class="block text-xs font-semibold text-[#111827]">1. Nama Lengkap Peserta</label>
-            <input type="text" id="name" name="name" value="{{ old('name', $user?->name) }}" required autofocus
-                   placeholder="Contoh: Randy Karna / Budi Santoso"
+            <input type="text" id="name" name="name" value="{{ old('name', $internship ? $user?->name : '') }}" required autofocus
+                   placeholder="Contoh: Muhammad Randy Karna"
                    class="mt-1.5 w-full rounded-[16px] bg-[#F4F7F6] border-0 px-4 py-3 text-sm font-medium text-[#111827] focus:ring-2 focus:ring-[#0B6E6C]">
         </div>
 
@@ -56,7 +56,7 @@
 
         <button type="submit"
                 class="w-full bg-[#0B6E6C] hover:bg-[#085856] text-white text-sm font-bold py-3.5 rounded-full shadow-md transition active:scale-[0.99] flex items-center justify-center gap-2">
-            <span>Simpan & Tambah Logbook Harian</span>
+            <span>Simpan & Masuk ke Beranda</span>
             <i class="fa-solid fa-arrow-right"></i>
         </button>
     </form>

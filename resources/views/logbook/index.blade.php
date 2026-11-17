@@ -18,7 +18,6 @@
             <h1 class="text-[17px] font-semibold text-[#111827]">
                 Kalender Logbook • {{ $currentMonth->format('F Y') }}
             </h1>
-            <p class="text-[11px] text-zinc-500">Pilih tanggal untuk melihat atau mengedit logbook harian</p>
         </div>
 
         <a href="{{ route('logbook.index', ['month' => $nextMonth]) }}"
@@ -105,7 +104,7 @@
                 <a href="{{ route('logbook.create', ['date' => $selectedDate]) }}"
                    class="bg-[#0B6E6C] text-white text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5">
                     <i class="fa-solid fa-plus"></i>
-                    <span>Catat Tanggal Ini</span>
+                    <span>Catat Tanggal</span>
                 </a>
             </div>
         @endforelse

@@ -136,8 +136,8 @@ class AuthController extends Controller
             ]);
 
             return redirect()
-                ->route('logbook.create')
-                ->with('toast', "Selamat datang, {$participant->name}! Silakan isi logbook harianmu.");
+                ->route('dashboard')
+                ->with('toast', "Selamat datang, {$participant->name}!");
         }
 
         return redirect()
@@ -169,8 +169,8 @@ class AuthController extends Controller
         $this->saveParticipantInternship($user, $validated);
 
         return redirect()
-            ->route('logbook.create')
-            ->with('toast', "Data peserta tersimpan! Silakan catat logbook harianmu, {$user->fresh()->name}.");
+            ->route('dashboard')
+            ->with('toast', "Selamat datang, {$user->fresh()->name}! Data peserta berhasil disimpan.");
     }
 
     protected function saveParticipantInternship(User $participant, array $data): void
