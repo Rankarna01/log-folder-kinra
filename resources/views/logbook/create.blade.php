@@ -11,30 +11,8 @@
         <h1 class="text-[17px] font-semibold text-[#111827]">
             {{ $existingTodayLog ? 'Logbook Hari Ini' : 'Tambah Logbook Harian' }}
         </h1>
-        <button type="button"
-                onclick="openAdvancedFeatureModal('ai')"
-                class="bg-[#0B6E6C] hover:bg-[#085856] text-white text-[11px] font-bold px-3 py-1.5 rounded-full transition flex items-center gap-1.5">
-            <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-            <span>Fitur AI</span>
-        </button>
+        <div class="w-10"></div>
     </header>
-
-    <!-- Active Participant Info Banner -->
-    @if ($internship)
-        <div class="bg-[#C8EBE5] rounded-[22px] px-4 py-3 flex items-center justify-between text-xs">
-            <div class="min-w-0">
-                <p class="font-bold text-[#074745] truncate">
-                    {{ auth()->user()?->name ?? $internship->participant?->name }} • {{ $internship->division }}
-                </p>
-                <p class="text-[11px] text-zinc-700 truncate">
-                    Bagian: {{ $internship->position ?? '-' }} • Mentor: {{ $internship->mentor?->name ?? '-' }}
-                </p>
-            </div>
-            <a href="{{ route('profile.show') }}" class="bg-white text-[#0B6E6C] text-[11px] font-bold px-3 py-1 rounded-full shrink-0 ml-2 shadow-2xs">
-                Ubah Data
-            </a>
-        </div>
-    @endif
 
     @if ($existingTodayLog)
         <!-- 1 DAY = 1 LOGBOOK: Form is hidden, displays recorded data as Bento Grid Cards + Edit button -->
@@ -149,24 +127,6 @@
         </div>
     @else
         <!-- CREATE FORM (Shown only when no logbook exists yet for the selected date) -->
-        <div class="bg-white rounded-[22px] p-3.5 flex items-center justify-between shadow-2xs">
-            <div class="flex items-center gap-2.5 min-w-0">
-                <span class="w-8 h-8 rounded-[10px] bg-[#C8EBE5] text-[#0B6E6C] flex items-center justify-center shrink-0">
-                    <i class="fa-solid fa-layer-group text-xs"></i>
-                </span>
-                <div class="min-w-0">
-                    <p class="text-xs font-semibold text-[#111827] truncate">Template Catatan Harian Cepat</p>
-                    <p class="text-[10px] text-zinc-500 truncate">Isi otomatis kegiatan rutin harian dengan 1 klik</p>
-                </div>
-            </div>
-            <button type="button"
-                    onclick="openAdvancedFeatureModal('template')"
-                    class="shrink-0 bg-[#FDE9B4] text-[#78350F] text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
-                <i class="fa-solid fa-lock text-[9px]"></i>
-                <span>Fitur Lanjutan</span>
-            </button>
-        </div>
-
         <form id="logbook-form" action="{{ route('logbook.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             <input type="hidden" name="source" id="input-source" value="manual">
@@ -225,12 +185,6 @@
                         <i class="fa-solid fa-pen-clip"></i>
                         <span>Deskripsi Kegiatan Harian</span>
                     </span>
-                    <button type="button"
-                            onclick="openAdvancedFeatureModal('ai')"
-                            class="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#0B6E6C] shadow-2xs hover:bg-[#FDE9B4] transition flex items-center gap-1">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>AI & Voice: Fitur Lanjutan</span>
-                    </button>
                 </div>
 
                 <textarea name="raw_description" id="input-raw" rows="3" required
