@@ -22,28 +22,6 @@
             <div class="bg-white rounded-full px-2.5 py-1.5 shadow-sm flex items-center justify-center">
                 <img src="/images/kinra.png" alt="KINRA Sei Mangkei" class="h-5 w-auto object-contain">
             </div>
-
-            <!-- If Today's Logbook is NOT filled yet, show Add button; otherwise show Edit Today button -->
-            @if (! $todayLogbook)
-                <a href="{{ route('logbook.create') }}"
-                   title="Tambah Logbook Hari Ini"
-                   class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0B6E6C] shadow-sm hover:scale-105 transition">
-                    <i class="fa-solid fa-plus text-sm"></i>
-                </a>
-            @else
-                <a href="{{ route('logbook.edit', $todayLogbook) }}"
-                   title="Edit Logbook Hari Ini"
-                   class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#0B6E6C] shadow-sm hover:scale-105 transition">
-                    <i class="fa-solid fa-pen-to-square text-sm"></i>
-                </a>
-            @endif
-
-            <!-- Riwayat Logbook Button -->
-            <a href="{{ route('logbook.index') }}"
-               title="Kalender & Riwayat Logbook"
-               class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#18181B] shadow-sm hover:scale-105 transition">
-                <i class="fa-solid fa-magnifying-glass text-sm"></i>
-            </a>
         </div>
     </header>
 
