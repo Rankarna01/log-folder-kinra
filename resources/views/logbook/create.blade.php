@@ -177,20 +177,29 @@
 
             <!-- Bento 2-Column Date & Time -->
             <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white rounded-[24px] p-4 shadow-2xs">
-                    <label class="block text-[11px] font-semibold text-zinc-400">Tanggal Kegiatan</label>
-                    <input type="date" name="date" id="input-date" value="{{ old('date', $targetDate) }}" required
-                           class="mt-1 w-full border-0 p-0 text-sm font-semibold text-[#111827] focus:ring-0 bg-transparent">
+                <div class="bg-white rounded-[24px] p-4 shadow-2xs flex flex-col justify-between">
+                    <label for="input-date" class="block text-[11px] font-semibold text-zinc-400">Tanggal Kegiatan</label>
+                    <div class="mt-2 flex items-center justify-between gap-1.5 cursor-pointer">
+                        <input type="date" name="date" id="input-date" value="{{ old('date', $targetDate) }}" required
+                               class="w-full border-0 p-0 text-sm font-bold text-[#111827] focus:ring-0 bg-transparent cursor-pointer tracking-tight">
+                        <i class="fa-regular fa-calendar text-zinc-400 text-xs pointer-events-none shrink-0"></i>
+                    </div>
                 </div>
 
-                <div class="bg-white rounded-[24px] p-4 shadow-2xs">
+                <div class="bg-white rounded-[24px] p-4 shadow-2xs flex flex-col justify-between">
                     <label class="block text-[11px] font-semibold text-zinc-400">Jam Mulai & Selesai</label>
-                    <div class="mt-1 flex items-center gap-1">
-                        <input type="time" name="start_time" id="input-start" value="{{ old('start_time', '08:30') }}" required
-                               class="w-full border-0 p-0 text-xs font-semibold text-[#111827] focus:ring-0 bg-transparent">
-                        <span class="text-zinc-400">-</span>
-                        <input type="time" name="end_time" id="input-end" value="{{ old('end_time', '12:00') }}" required
-                               class="w-full border-0 p-0 text-xs font-semibold text-[#111827] focus:ring-0 bg-transparent">
+                    <div class="mt-2 flex items-center justify-between gap-1 text-[#111827]">
+                        <div class="flex items-center gap-1 min-w-0 flex-1">
+                            <input type="time" name="start_time" id="input-start" value="{{ old('start_time', '08:30') }}" required
+                                   class="w-full border-0 p-0 text-xs font-bold text-[#111827] focus:ring-0 bg-transparent text-center cursor-pointer">
+                            <i class="fa-regular fa-clock text-zinc-400 text-[10px] pointer-events-none shrink-0"></i>
+                        </div>
+                        <span class="text-zinc-300 font-bold px-0.5 text-xs">–</span>
+                        <div class="flex items-center gap-1 min-w-0 flex-1">
+                            <input type="time" name="end_time" id="input-end" value="{{ old('end_time', '12:00') }}" required
+                                   class="w-full border-0 p-0 text-xs font-bold text-[#111827] focus:ring-0 bg-transparent text-center cursor-pointer">
+                            <i class="fa-regular fa-clock text-zinc-400 text-[10px] pointer-events-none shrink-0"></i>
+                        </div>
                     </div>
                 </div>
             </div>
