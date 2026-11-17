@@ -1,8 +1,8 @@
 @props(['target'])
 
-<!-- Voice-to-Log: dikte langsung ke textarea deskripsi. Browser dengan Web Speech API memakai pengenalan suara bawaan,
-     browser lain merekam audio lalu ditranskripsikan oleh layanan Gemini di server (butuh GEMINI_API_KEY di .env). -->
-<div data-voice-root class="shrink-0 flex flex-col gap-1">
+<!-- Voice-to-Log: tombol dikte. Hasil rekam ditampilkan di panel pratinjau (x-logbook.voice-preview) sebelum masuk deskripsi.
+     Browser dengan Web Speech API memakai pengenalan suara bawaan, browser lain merekam audio lalu ditranskripsikan di server (Gemini). -->
+<div data-voice-root class="shrink-0">
     <button type="button"
             data-voice-toggle
             data-target="{{ $target }}"
@@ -10,7 +10,6 @@
         <i data-voice-icon class="fa-solid fa-microphone-lines text-[#0B6E6C] text-xs"></i>
         <span data-voice-label class="whitespace-nowrap">Rekam Suara</span>
     </button>
-    <p data-voice-status aria-live="polite" class="hidden text-[11px] font-medium text-white/90 px-1"></p>
 </div>
 
 @once
@@ -28,19 +27,29 @@
                 'network': 'Pengenalan suara butuh koneksi internet.',
             };
 
-            function getRoot(button) {
-                return button.closest('[data-voice-root]');
+            function getPreview(targetId) {
+                return document.getElementById(`voice-preview-${targetId}`);
             }
 
-            function setStatus(button, message, tone) {
-                const statusEl = getRoot(button).querySelector('[data-voice-status]');
-                statusEl.textContent = message;
-                statusEl.classList.remove('hidden', 'text-white/90', 'text-[#FDE9B4]', 'text-[#FCE1D4]');
-                statusEl.classList.add(tone === 'error' ? 'text-[#FCE1D4]' : 'text-white/90');
+            function renderPreview(preview, { text = '', state = '', error = '', showActions = false }) {
+                preview.classList.remove('hidden');
+                preview.querySelector('[data-voice-preview-state]').textContent = state;
+                preview.querySelector('[data-voice-preview-text]').textContent = text;
+
+                const errorEl = preview.querySelector('[data-voice-preview-error]');
+                errorEl.textContent = error;
+                errorEl.classList.toggle('hidden', error === '');
+
+                const actionsEl = preview.querySelector('[data-voice-preview-actions]');
+                actionsEl.classList.toggle('hidden', !showActions);
+                actionsEl.classList.toggle('flex', showActions);
             }
 
-            function clearStatus(button) {
-                getRoot(button).querySelector('[data-voice-status]').classList.add('hidden');
+            function hidePreview(preview) {
+                preview.classList.add('hidden');
+                preview.querySelector('[data-voice-preview-text]').textContent = '';
+                preview.querySelector('[data-voice-preview-error]').classList.add('hidden');
+                preview.querySelector('[data-voice-preview-actions]').classList.add('hidden');
             }
 
             function setButtonState(button, state) {
@@ -67,55 +76,62 @@
                 button.classList.remove('ring-2', 'ring-[#FCE1D4]');
             }
 
-            function appendTranscript(textarea, transcript) {
-                const cleaned = (transcript || '').trim();
-                if (cleaned === '') {
-                    return;
+            function joinText(existing, addition) {
+                const cleanedAddition = (addition || '').trim();
+                if (cleanedAddition === '') {
+                    return existing;
                 }
-
-                const existing = textarea.value.trimEnd();
-                textarea.value = existing === '' ? cleaned : `${existing} ${cleaned}`;
-                textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                return existing.trim() === '' ? cleanedAddition : `${existing.trimEnd()} ${cleanedAddition}`;
             }
 
-            function startSpeechRecognition(button, textarea) {
+            function startSpeechRecognition(button, targetId, preview) {
                 const recognition = new SpeechRecognitionApi();
                 recognition.lang = 'id-ID';
                 recognition.continuous = true;
                 recognition.interimResults = true;
+
+                let finalText = '';
+                let errorMessage = '';
 
                 recognition.onresult = (event) => {
                     let interimText = '';
                     for (let index = event.resultIndex; index < event.results.length; index++) {
                         const result = event.results[index];
                         if (result.isFinal) {
-                            appendTranscript(textarea, result[0].transcript);
+                            finalText = joinText(finalText, result[0].transcript);
                         } else {
                             interimText += result[0].transcript;
                         }
                     }
-                    setStatus(button, interimText ? `Mendengarkan: ${interimText}` : 'Mendengarkan...', 'info');
+                    renderPreview(preview, { text: joinText(finalText, interimText), state: 'Mendengarkan...' });
                 };
 
                 recognition.onerror = (event) => {
-                    setStatus(button, SPEECH_ERROR_MESSAGES[event.error] || 'Rekam suara gagal. Silakan ketik manual.', 'error');
+                    errorMessage = SPEECH_ERROR_MESSAGES[event.error] || 'Rekam suara gagal. Silakan ketik manual.';
                 };
 
                 recognition.onend = () => {
-                    if (activeSessions.get(button) === recognition) {
-                        activeSessions.delete(button);
-                        setButtonState(button, 'idle');
-                        clearStatus(button);
+                    if (activeSessions.get(button) !== recognition) {
+                        return;
                     }
+                    activeSessions.delete(button);
+                    setButtonState(button, 'idle');
+
+                    if (finalText.trim() === '') {
+                        renderPreview(preview, { error: errorMessage || 'Tidak ada suara terdeteksi. Coba lagi.', state: 'Gagal' });
+                        return;
+                    }
+                    renderPreview(preview, { text: finalText, state: 'Selesai', showActions: true });
+                    pendingTranscripts.set(targetId, finalText);
                 };
 
                 activeSessions.set(button, recognition);
                 setButtonState(button, 'listening');
-                setStatus(button, 'Mendengarkan... ketuk Berhenti jika sudah selesai.', 'info');
+                renderPreview(preview, { text: '', state: 'Mendengarkan...' });
                 recognition.start();
             }
 
-            async function startAudioRecording(button, textarea) {
+            async function startAudioRecording(button, targetId, preview) {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 const chunks = [];
                 const recorder = new MediaRecorder(stream);
@@ -130,21 +146,21 @@
                     stream.getTracks().forEach((track) => track.stop());
                     activeSessions.delete(button);
                     const audioBlob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
-                    await uploadForTranscript(button, textarea, audioBlob);
+                    await uploadForTranscript(button, targetId, preview, audioBlob);
                 };
 
                 activeSessions.set(button, recorder);
                 setButtonState(button, 'listening');
-                setStatus(button, 'Merekam... ketuk Berhenti jika sudah selesai.', 'info');
+                renderPreview(preview, { text: '', state: 'Merekam...' });
                 recorder.start();
             }
 
-            async function uploadForTranscript(button, textarea, audioBlob) {
+            async function uploadForTranscript(button, targetId, preview, audioBlob) {
                 const formData = new FormData();
                 formData.append('audio', audioBlob, `rekaman.${audioBlob.type.includes('mp4') ? 'mp4' : 'webm'}`);
 
                 setButtonState(button, 'busy');
-                setStatus(button, 'Mentranskripsi rekaman...', 'info');
+                renderPreview(preview, { text: '', state: 'Mentranskripsi...' });
 
                 try {
                     const response = await fetch('/api/ai/transcribe', {
@@ -159,27 +175,58 @@
                     const payload = await response.json().catch(() => ({}));
 
                     if (!response.ok) {
-                        setStatus(button, payload.message || 'Transkripsi gagal. Silakan ketik manual.', 'error');
+                        renderPreview(preview, { error: payload.message || 'Transkripsi gagal. Silakan ketik manual.', state: 'Gagal' });
                         return;
                     }
 
-                    appendTranscript(textarea, payload.transcript);
-                    setStatus(button, 'Teks rekaman sudah ditambahkan ke deskripsi.', 'info');
+                    const transcript = (payload.transcript || '').trim();
+                    if (transcript === '') {
+                        renderPreview(preview, { error: 'Tidak ada teks yang terdeteksi. Coba lagi.', state: 'Gagal' });
+                        return;
+                    }
+
+                    pendingTranscripts.set(targetId, transcript);
+                    renderPreview(preview, { text: transcript, state: 'Selesai', showActions: true });
                 } catch (error) {
-                    setStatus(button, 'Tidak bisa terhubung ke server. Periksa koneksi lalu coba lagi.', 'error');
+                    renderPreview(preview, { error: 'Tidak bisa terhubung ke server. Periksa koneksi lalu coba lagi.', state: 'Gagal' });
                 } finally {
                     setButtonState(button, 'idle');
                 }
             }
 
+            const pendingTranscripts = new Map();
+
             document.addEventListener('click', async (event) => {
+                const applyButton = event.target.closest('[data-voice-apply]');
+                if (applyButton) {
+                    const preview = applyButton.closest('[id^="voice-preview-"]');
+                    const targetId = preview.id.replace('voice-preview-', '');
+                    const textarea = document.getElementById(targetId);
+                    if (textarea) {
+                        textarea.value = joinText(textarea.value, pendingTranscripts.get(targetId) || '');
+                        textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                    pendingTranscripts.delete(targetId);
+                    hidePreview(preview);
+                    return;
+                }
+
+                const discardButton = event.target.closest('[data-voice-discard]');
+                if (discardButton) {
+                    const preview = discardButton.closest('[id^="voice-preview-"]');
+                    pendingTranscripts.delete(preview.id.replace('voice-preview-', ''));
+                    hidePreview(preview);
+                    return;
+                }
+
                 const button = event.target.closest('[data-voice-toggle]');
                 if (!button) {
                     return;
                 }
 
-                const textarea = document.getElementById(button.dataset.target);
-                if (!textarea) {
+                const targetId = button.dataset.target;
+                const preview = getPreview(targetId);
+                if (!preview) {
                     return;
                 }
 
@@ -189,23 +236,23 @@
                     return;
                 }
 
-                clearStatus(button);
+                pendingTranscripts.delete(targetId);
 
                 if (SpeechRecognitionApi) {
-                    startSpeechRecognition(button, textarea);
+                    startSpeechRecognition(button, targetId, preview);
                     return;
                 }
 
                 if (canRecordAudio) {
                     try {
-                        await startAudioRecording(button, textarea);
+                        await startAudioRecording(button, targetId, preview);
                     } catch (error) {
-                        setStatus(button, 'Mikrofon tidak bisa diakses. Izinkan mikrofon atau ketik manual.', 'error');
+                        renderPreview(preview, { error: 'Mikrofon tidak bisa diakses. Izinkan mikrofon atau ketik manual.', state: 'Gagal' });
                     }
                     return;
                 }
 
-                setStatus(button, 'Browser ini tidak mendukung rekam suara. Silakan ketik manual.', 'error');
+                renderPreview(preview, { error: 'Browser ini tidak mendukung rekam suara. Silakan ketik manual.', state: 'Gagal' });
             });
         })();
     </script>

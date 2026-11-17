@@ -241,6 +241,8 @@
                         <span class="bg-white/80 text-[#0C4A6E] text-[9px] font-bold px-2 py-0.5 rounded-full">Fitur</span>
                     </button>
                 </div>
+
+                <x-logbook.voice-preview target="input-raw" />
             </section>
 
             <!-- Output, Obstacles & Photo Upload -->
