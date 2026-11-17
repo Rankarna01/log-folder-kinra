@@ -237,29 +237,30 @@
                           placeholder="Tuliskan rincian kegiatan harian yang kamu kerjakan hari ini..."
                           class="w-full rounded-[18px] bg-white border-0 p-3.5 text-xs text-[#111827] leading-relaxed focus:ring-2 focus:ring-[#FDE9B4]">{{ old('raw_description') }}</textarea>
 
-                <!-- AI & Voice Action Buttons (Font Awesome Icons) -->
-                <div class="flex flex-wrap items-center gap-2">
+                <!-- AI, Voice & Photo Action Pills (Slider Carousel with uniform height & styling) -->
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 pt-0.5 -mx-1 px-1">
                     <button type="button"
                             onclick="openAdvancedFeatureModal('ai')"
-                            class="bg-[#18181B] text-white text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-xs hover:opacity-90 transition">
-                        <i class="fa-solid fa-wand-magic-sparkles text-[#FDE9B4]"></i>
-                        <span>Rapikan AI</span>
-                        <span class="bg-[#C8EBE5] text-[#074745] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Segera</span>
+                            class="shrink-0 h-9 bg-[#18181B] hover:bg-[#27272A] text-white text-xs font-semibold px-4 rounded-full flex items-center gap-2 shadow-xs transition">
+                        <i class="fa-solid fa-wand-magic-sparkles text-[#FDE9B4] text-xs"></i>
+                        <span class="whitespace-nowrap">Rapikan AI</span>
+                        <span class="bg-[#C8EBE5] text-[#074745] text-[9px] font-bold px-2 py-0.5 rounded-full">Segera</span>
                     </button>
 
                     <button type="button"
                             onclick="openAdvancedFeatureModal('voice')"
-                            class="bg-white text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-2xs hover:bg-[#C8EBE5] transition">
-                        <i class="fa-solid fa-microphone-lines text-[#0B6E6C]"></i>
-                        <span>Rekam Suara</span>
-                        <span class="bg-[#FDE9B4] text-[#78350F] text-[9px] font-bold px-1.5 py-0.5 rounded-full">Lanjutan</span>
+                            class="shrink-0 h-9 bg-white hover:bg-[#F4F7F6] text-[#074745] text-xs font-semibold px-4 rounded-full flex items-center gap-2 shadow-xs transition">
+                        <i class="fa-solid fa-microphone-lines text-[#0B6E6C] text-xs"></i>
+                        <span class="whitespace-nowrap">Rekam Suara</span>
+                        <span class="bg-[#FDE9B4] text-[#78350F] text-[9px] font-bold px-2 py-0.5 rounded-full">Lanjutan</span>
                     </button>
 
                     <button type="button"
                             onclick="openAdvancedFeatureModal('photo')"
-                            class="bg-white text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-2xs hover:bg-[#D4EEFC] transition">
-                        <i class="fa-solid fa-camera text-[#0B6E6C]"></i>
-                        <span>Ambil Foto</span>
+                            class="shrink-0 h-9 bg-[#D4EEFC] hover:bg-[#BCE3FA] text-[#0C4A6E] text-xs font-semibold px-4 rounded-full flex items-center gap-2 shadow-xs transition">
+                        <i class="fa-solid fa-camera text-[#0C4A6E] text-xs"></i>
+                        <span class="whitespace-nowrap">Ambil Foto</span>
+                        <span class="bg-white/80 text-[#0C4A6E] text-[9px] font-bold px-2 py-0.5 rounded-full">Fitur</span>
                     </button>
                 </div>
             </section>
