@@ -7,7 +7,7 @@
     <header class="flex items-center justify-between gap-2">
         <a href="{{ route('profile.show') }}" class="flex items-center gap-3 group min-w-0">
             <div class="w-11 h-11 rounded-full bg-[#0B6E6C] border-2 border-white shadow-sm flex items-center justify-center text-white shrink-0">
-                <i class="fa-solid fa-user-graduate text-base"></i>
+                <i class="fa-solid fa-user-tie text-base"></i>
             </div>
             <div class="min-w-0">
                 <h1 class="text-[15px] font-semibold text-[#111827] group-hover:underline truncate">{{ $user->name }}</h1>

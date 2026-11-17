@@ -5,14 +5,10 @@
 
     <header class="bg-kinra-grid rounded-[28px] p-5 flex items-center justify-between shadow-2xs text-white">
         <div class="flex items-center gap-3.5 min-w-0">
-            <div class="w-14 h-14 rounded-full bg-white text-[#0B6E6C] border-2 border-emerald-200 flex items-center justify-center text-lg font-bold shrink-0 shadow-xs">
-                {{ $user->initials }}
+            <div class="w-14 h-14 rounded-full bg-white text-[#0B6E6C] border-2 border-emerald-200 flex items-center justify-center text-xl font-bold shrink-0 shadow-xs">
+                <i class="fa-solid fa-user-tie"></i>
             </div>
             <div class="min-w-0">
-                <span class="bg-white/95 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-[#0B6E6C] inline-flex items-center gap-1">
-                    <i class="fa-solid fa-id-badge"></i>
-                    <span>Peserta Magang KINRA</span>
-                </span>
                 <h1 class="text-lg font-bold text-white mt-1 truncate">{{ $user->name }}</h1>
                 <p class="text-xs text-emerald-100 truncate">{{ $internship?->division }} • {{ $internship?->position }}</p>
             </div>

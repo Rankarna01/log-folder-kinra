@@ -18,7 +18,7 @@
     </header>
 
     <!-- AI Summary Preview Banner -> Triggers Advanced Feature Modal -->
-    <section class="bg-white rounded-[28px] p-5 space-y-3 shadow-2xs">
+    <!-- <section class="bg-white rounded-[28px] p-5 space-y-3 shadow-2xs">
         <div class="flex items-center justify-between gap-2">
             <div>
                 <span class="bg-[#C8EBE5] text-[#074745] text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
@@ -35,7 +35,7 @@
                 <span>Lihat Info</span>
             </button>
         </div>
-    </section>
+    </section> -->
 
     <!-- Form Generate PDF -->
     <form action="{{ route('reports.store') }}" method="POST" class="bg-white rounded-[28px] p-5 space-y-3.5 shadow-2xs">
