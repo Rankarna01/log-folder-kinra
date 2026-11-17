@@ -51,7 +51,7 @@
     <section class="bg-kinra-grid rounded-[28px] p-5 relative overflow-hidden shadow-sm text-white">
         <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
-                <h2 class="text-[18px] font-bold text-white leading-[1.3]">
+                <h2 class="text-[14px] font-bold text-white leading-tight">
                     <span class="block whitespace-nowrap">Pencatatan Logbook</span>
                     <span class="block whitespace-nowrap">Kegiatan Harian</span>
                 </h2>
