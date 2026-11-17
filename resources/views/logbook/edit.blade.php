@@ -26,29 +26,24 @@
         <input type="hidden" name="category" value="tugas">
 
         <div class="grid grid-cols-2 gap-3">
-            <div class="bg-white rounded-[24px] p-4 shadow-2xs flex flex-col justify-between">
+            <div class="bg-white rounded-[24px] p-4 shadow-2xs">
                 <label for="input-date" class="block text-[11px] font-semibold text-zinc-400">Tanggal Kegiatan</label>
-                <div class="mt-2 flex items-center justify-between gap-1.5 cursor-pointer">
+                <div class="mt-1 relative flex items-center justify-between">
                     <input type="date" name="date" id="input-date" value="{{ $logbook->date->format('Y-m-d') }}" required
                            class="w-full border-0 p-0 text-sm font-bold text-[#111827] focus:ring-0 bg-transparent cursor-pointer tracking-tight">
-                    <i class="fa-regular fa-calendar text-zinc-400 text-xs pointer-events-none shrink-0"></i>
+                    <i class="fa-regular fa-calendar text-zinc-400 text-xs shrink-0 pointer-events-none"></i>
                 </div>
             </div>
 
-            <div class="bg-white rounded-[24px] p-4 shadow-2xs flex flex-col justify-between">
+            <div class="bg-white rounded-[24px] p-4 shadow-2xs">
                 <label class="block text-[11px] font-semibold text-zinc-400">Jam Mulai & Selesai</label>
-                <div class="mt-2 flex items-center justify-between gap-1 text-[#111827]">
-                    <div class="flex items-center gap-1 min-w-0 flex-1">
-                        <input type="time" name="start_time" value="{{ substr($logbook->start_time, 0, 5) }}" required
-                               class="w-full border-0 p-0 text-xs font-bold text-[#111827] focus:ring-0 bg-transparent text-center cursor-pointer">
-                        <i class="fa-regular fa-clock text-zinc-400 text-[10px] pointer-events-none shrink-0"></i>
-                    </div>
+                <div class="mt-1 flex items-center justify-between gap-1 text-[#111827]">
+                    <input type="time" name="start_time" value="{{ substr($logbook->start_time, 0, 5) }}" required
+                           class="w-full border-0 p-0 text-sm font-bold text-[#111827] focus:ring-0 bg-transparent cursor-pointer">
                     <span class="text-zinc-300 font-bold px-0.5 text-xs">–</span>
-                    <div class="flex items-center gap-1 min-w-0 flex-1">
-                        <input type="time" name="end_time" value="{{ substr($logbook->end_time, 0, 5) }}" required
-                               class="w-full border-0 p-0 text-xs font-bold text-[#111827] focus:ring-0 bg-transparent text-center cursor-pointer">
-                        <i class="fa-regular fa-clock text-zinc-400 text-[10px] pointer-events-none shrink-0"></i>
-                    </div>
+                    <input type="time" name="end_time" value="{{ substr($logbook->end_time, 0, 5) }}" required
+                           class="w-full border-0 p-0 text-sm font-bold text-[#111827] focus:ring-0 bg-transparent cursor-pointer">
+                    <i class="fa-regular fa-clock text-zinc-400 text-xs shrink-0 pointer-events-none ml-1"></i>
                 </div>
             </div>
         </div>
