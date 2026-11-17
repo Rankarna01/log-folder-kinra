@@ -255,7 +255,7 @@
                             onclick="openAdvancedFeatureModal('photo')"
                             class="bg-white text-[#074745] text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5 shadow-2xs hover:bg-[#D4EEFC] transition">
                         <i class="fa-solid fa-camera text-[#0B6E6C]"></i>
-                        <span>Saran Foto</span>
+                        <span>Ambil Foto</span>
                     </button>
                 </div>
             </section>

@@ -50,12 +50,13 @@
     <!-- Hero KINRA Deep Green Grid Card: Rekap Pencatatan Logbook Harian -->
     <section class="bg-kinra-grid rounded-[28px] p-5 relative overflow-hidden shadow-sm text-white">
         <div class="flex items-start justify-between gap-2">
-            <div>
-                <h2 class="text-[20px] font-semibold text-white leading-[1.3] max-w-[240px]">
-                    Pencatatan Logbook Kegiatan Harian
+            <div class="min-w-0">
+                <h2 class="text-[18px] font-bold text-white leading-[1.3]">
+                    <span class="block whitespace-nowrap">Pencatatan Logbook</span>
+                    <span class="block whitespace-nowrap">Kegiatan Harian</span>
                 </h2>
-                <p class="text-xs text-emerald-100 mt-1 font-medium">
-                    Mentor Pembimbing: {{ $internship?->mentor?->name ?? '-' }}
+                <p class="text-xs text-emerald-100 mt-1.5 font-medium truncate">
+                    Mentor: {{ $internship?->mentor?->name ?? '-' }}
                 </p>
             </div>
             @if (! $todayLogbook)
