@@ -200,6 +200,8 @@ class LogbookController extends Controller
             'obstacles' => ['nullable', 'string'],
             'work_location' => ['nullable', 'string'],
             'status' => ['nullable', 'string'],
+            'photo' => ['nullable', 'image', 'max:5120'],
+            'photo_caption' => ['nullable', 'string', 'max:200'],
         ]);
 
         $validated['category'] = $validated['category'] ?? 'tugas';
@@ -210,6 +212,14 @@ class LogbookController extends Controller
         }
 
         $this->logbookService->update($logbook, $validated);
+
+        if ($request->hasFile('photo')) {
+            $this->attachmentService->storeUploadedPhoto(
+                $logbook,
+                $request->file('photo'),
+                $validated['photo_caption'] ?? $logbook->title
+            );
+        }
 
         return redirect()
             ->route('logbook.show', $logbook)

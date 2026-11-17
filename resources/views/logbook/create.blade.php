@@ -97,22 +97,39 @@
                 </p>
             </div>
 
-            @if ($existingTodayLog->output)
-                <div class="pt-2.5 border-t border-zinc-100">
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Hasil / Output</p>
-                    @php
-                        $outTrim = trim($existingTodayLog->output);
-                        $isLink = preg_match('~^(https?://|www\.)~i', $outTrim);
-                        $linkUrl = $isLink ? (str_starts_with($outTrim, 'http') ? $outTrim : 'https://' . $outTrim) : null;
-                    @endphp
-                    @if ($linkUrl)
-                        <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B6E6C] hover:underline mt-1 bg-[#C8EBE5] px-3 py-1 rounded-full">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                            <span class="truncate max-w-[280px]">Buka Link: {{ $existingTodayLog->output }}</span>
-                        </a>
-                    @else
-                        <p class="text-xs font-semibold text-[#0B6E6C] mt-1">{{ $existingTodayLog->output }}</p>
+            @if ($existingTodayLog->output || $existingTodayLog->attachments->isNotEmpty())
+                <div class="pt-2.5 border-t border-zinc-100 space-y-1.5">
+                    <p class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Hasil / Output & Bukti Foto</p>
+                    @if ($existingTodayLog->output)
+                        @php
+                            $outTrim = trim($existingTodayLog->output);
+                            $isLink = preg_match('~^(https?://|www\.)~i', $outTrim);
+                            $linkUrl = $isLink ? (str_starts_with($outTrim, 'http') ? $outTrim : 'https://' . $outTrim) : null;
+                        @endphp
+                        @if ($linkUrl)
+                            <div>
+                                <a href="{{ $linkUrl }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B6E6C] hover:underline bg-[#C8EBE5] px-3 py-1 rounded-full">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    <span class="truncate max-w-[280px]">Buka Link: {{ $existingTodayLog->output }}</span>
+                                </a>
+                            </div>
+                        @else
+                            <p class="text-xs font-semibold text-[#0B6E6C]">{{ $existingTodayLog->output }}</p>
+                        @endif
+                    @endif
+
+                    @if ($existingTodayLog->attachments->isNotEmpty())
+                        <div class="flex flex-wrap items-center gap-2 pt-1">
+                            @foreach ($existingTodayLog->attachments as $att)
+                                <a href="{{ $att->url }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center gap-1.5 bg-[#D4EEFC] text-[#0C4A6E] text-xs font-bold px-3 py-1 rounded-full shadow-2xs hover:bg-[#BCE3FA] transition">
+                                    <i class="fa-solid fa-image text-[10px]"></i>
+                                    <span>Lihat Foto Dokumentasi</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-70"></i>
+                                </a>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
             @endif

@@ -19,7 +19,7 @@
         </form>
     </header>
 
-    <form action="{{ route('logbook.update', $logbook) }}" method="POST" class="space-y-4">
+    <form action="{{ route('logbook.update', $logbook) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
         @csrf
         @method('PUT')
         <input type="hidden" name="status" value="approved">
@@ -82,6 +82,22 @@
                 <label class="block text-xs font-semibold text-[#111827]">Kendala</label>
                 <input type="text" name="obstacles" value="{{ $logbook->obstacles }}"
                        class="mt-1.5 w-full rounded-[14px] bg-[#F4F7F6] border-0 px-3.5 py-2.5 text-xs text-[#111827]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-[#111827]">Unggah Foto Dokumentasi Baru</label>
+                @if ($logbook->attachments->isNotEmpty())
+                    <div class="mt-1.5 mb-2 flex items-center gap-2">
+                        @foreach ($logbook->attachments as $att)
+                            <a href="{{ $att->url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-[#C8EBE5] text-[#074745] text-[11px] font-bold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-image"></i>
+                                <span>Lihat Foto Tersimpan</span>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+                <input type="file" name="photo" accept="image/*"
+                       class="mt-1 block w-full text-xs text-zinc-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#C8EBE5] file:text-[#074745]">
             </div>
         </div>
 

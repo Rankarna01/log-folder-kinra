@@ -31,4 +31,9 @@ class Attachment extends Model
     {
         return $this->belongsTo(Logbook::class);
     }
+
+    public function getUrlAttribute(): string
+    {
+        return asset('storage/' . $this->path);
+    }
 }

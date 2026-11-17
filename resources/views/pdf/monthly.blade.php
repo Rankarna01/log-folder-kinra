@@ -185,20 +185,36 @@
                         </td>
                         <td>{{ $entry->final_description }}</td>
                         <td>
-                            @if (!empty($entry->output))
+                            @php
+                                $outputVal = trim((string) $entry->output);
+                                $hasAttachment = $entry->attachments->isNotEmpty();
+                            @endphp
+
+                            @if ($outputVal !== '')
                                 @php
-                                    $outputTrimmed = trim($entry->output);
-                                    $isUrl = preg_match('~^(https?://|www\.)~i', $outputTrimmed);
-                                    $href = $isUrl ? (str_starts_with($outputTrimmed, 'http') ? $outputTrimmed : 'https://' . $outputTrimmed) : null;
+                                    $isUrl = preg_match('~^(https?://|www\.)~i', $outputVal);
+                                    $href = $isUrl ? (str_starts_with($outputVal, 'http') ? $outputVal : 'https://' . $outputVal) : null;
                                 @endphp
                                 @if ($href)
-                                    <a href="{{ $href }}" target="_blank" rel="noopener noreferrer" style="color: #0B6E6C; font-weight: bold; text-decoration: underline; word-break: break-all;">
-                                        🔗 Buka Tautan Output
-                                    </a>
+                                    <div>
+                                        <a href="{{ $href }}" target="_blank" rel="noopener noreferrer" style="color: #0B6E6C; font-weight: bold; text-decoration: underline; word-break: break-all;">
+                                            🔗 Tautan Berkas
+                                        </a>
+                                    </div>
                                 @else
-                                    {{ $entry->output }}
+                                    <div>{{ $outputVal }}</div>
                                 @endif
-                            @else
+                            @endif
+
+                            @if ($hasAttachment)
+                                <div style="margin-top: {{ $outputVal !== '' ? '5px' : '0' }};">
+                                    @foreach ($entry->attachments as $attIdx => $att)
+                                        <a href="{{ $att->url }}" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: #C8EBE5; color: #074745; text-decoration: none; padding: 2px 7px; border-radius: 999px; font-size: 10px; font-weight: 700; margin-bottom: 2px;">
+                                            🖼️ Lihat Foto Bukti {{ $entry->attachments->count() > 1 ? '#' . ($attIdx + 1) : '' }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @elseif ($outputVal === '')
                                 -
                             @endif
                         </td>
