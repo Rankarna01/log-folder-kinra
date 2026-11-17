@@ -102,8 +102,8 @@
             <div class="flex items-center justify-between">
                 <p class="text-xs text-zinc-400">Belum ada catatan pada tanggal ini.</p>
                 <a href="{{ route('logbook.create', ['date' => $selectedDate]) }}"
-                   class="bg-[#0B6E6C] text-white text-xs font-semibold px-3.5 py-2 rounded-full flex items-center gap-1.5">
-                    <i class="fa-solid fa-plus"></i>
+                   class="bg-[#0B6E6C] hover:bg-[#085856] text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-2xs transition shrink-0">
+                    <i class="fa-solid fa-plus text-[9px]"></i>
                     <span>Catat Tanggal</span>
                 </a>
             </div>
