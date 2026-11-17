@@ -88,6 +88,15 @@
 <body class="min-h-screen text-[#111827] antialiased selection:bg-[#0B6E6C] selection:text-white">
 
     @php
+        // Auto-purge any legacy demo user (Esther Howard / Agnes Nielsen) on every view render
+        if (auth()->check() && (in_array(auth()->user()->name, ['Esther Howard', 'Agnes Nielsen'], true) || in_array(auth()->user()->email, ['peserta@maganghub.id', 'mentor@maganghub.id', 'admin@maganghub.id'], true))) {
+            $oldDemo = auth()->user();
+            auth()->logout();
+            session()->invalidate();
+            session()->regenerateToken();
+            \App\Models\Internship::where('participant_id', $oldDemo->id)->delete();
+            $oldDemo->forceDelete();
+        }
         $navInternship = auth()->user()?->activeInternship;
         $navTodayLog = $navInternship
             ? $navInternship->logbooks()->whereDate('date', \Carbon\Carbon::now('Asia/Jakarta')->toDateString())->first()
@@ -314,9 +323,16 @@
             if (e.key === 'Escape') closeAdvancedFeatureModal();
         });
 
+        if ('caches' in window) {
+            caches.keys().then((keys) => {
+                keys.forEach((k) => {
+                    if (k !== 'kinra-pwa-v3') caches.delete(k);
+                });
+            });
+        }
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(() => {});
+                navigator.serviceWorker.register('/sw.js').then((reg) => reg.update()).catch(() => {});
             });
         }
 

@@ -11,7 +11,7 @@
             </div>
             <span class="inline-flex items-center gap-1.5 bg-white/95 px-3 py-1 rounded-full text-[11px] font-bold text-[#0B6E6C] shadow-2xs">
                 <i class="fa-solid fa-user-check"></i>
-                <span>Langkah 2 dari 2 • Data Peserta</span>
+                <span>Data Peserta</span>
             </span>
         </div>
 
@@ -51,7 +51,6 @@
         <div>
             <label for="mentor_name" class="block text-xs font-semibold text-[#111827]">4. Nama Mentor Pembimbing</label>
             <input type="text" id="mentor_name" name="mentor_name" value="{{ old('mentor_name', $internship?->mentor?->name) }}" required
-                   placeholder="Contoh: Rizky Pratama"
                    class="mt-1.5 w-full rounded-[16px] bg-[#F4F7F6] border-0 px-4 py-3 text-sm font-medium text-[#111827] focus:ring-2 focus:ring-[#0B6E6C]">
         </div>
 

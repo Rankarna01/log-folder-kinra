@@ -10,6 +10,15 @@ use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (auth()->check() && (in_array(auth()->user()->name, ['Esther Howard', 'Agnes Nielsen'], true) || in_array(auth()->user()->email, ['peserta@maganghub.id', 'mentor@maganghub.id', 'admin@maganghub.id', 'peserta@kinra.id', 'mentor@kinra.id'], true))) {
+        $oldDemo = auth()->user();
+        auth()->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        \App\Models\Internship::where('participant_id', $oldDemo->id)->delete();
+        $oldDemo->forceDelete();
+    }
+
     if (! auth()->check()) {
         return redirect()->route('login');
     }

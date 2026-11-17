@@ -15,14 +15,14 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function showLogin(): View
+    public function showLogin(Request $request): View
     {
-        $this->purgeLegacyDemoData();
+        $this->purgeLegacyDemoData($request);
 
         return view('auth.login');
     }
 
-    protected function purgeLegacyDemoData(): void
+    protected function purgeLegacyDemoData(?Request $request = null): void
     {
         $demoEmails = [
             'peserta@maganghub.id',
@@ -32,10 +32,26 @@ class AuthController extends Controller
             'mentor@kinra.id',
         ];
 
-        User::withTrashed()
+        if (auth()->check()) {
+            $u = auth()->user();
+            if (in_array($u->email, $demoEmails, true) || in_array($u->name, ['Esther Howard', 'Agnes Nielsen'], true)) {
+                Auth::logout();
+                $request?->session()->invalidate();
+                $request?->session()->regenerateToken();
+            }
+        }
+
+        $demoUsers = User::withTrashed()
             ->whereIn('email', $demoEmails)
             ->orWhereIn('name', ['Esther Howard', 'Agnes Nielsen'])
-            ->forceDelete();
+            ->get();
+
+        foreach ($demoUsers as $demoUser) {
+            Internship::where('participant_id', $demoUser->id)
+                ->orWhere('mentor_id', $demoUser->id)
+                ->delete();
+            $demoUser->forceDelete();
+        }
     }
 
     public function login(Request $request): RedirectResponse
@@ -69,8 +85,10 @@ class AuthController extends Controller
             ->onlyInput('email');
     }
 
-    public function showRegister(): View
+    public function showRegister(Request $request): View
     {
+        $this->purgeLegacyDemoData($request);
+
         return view('auth.register');
     }
 
