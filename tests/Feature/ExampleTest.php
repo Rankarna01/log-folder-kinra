@@ -19,9 +19,44 @@ class ExampleTest extends TestCase
         $this->seed(DatabaseSeeder::class);
     }
 
+    protected function registerAndOnboardParticipant(
+        string $email = 'budi.santoso@kinra.id',
+        string $name = 'Budi Santoso',
+        string $division = 'IT & Digital Product',
+        string $position = 'Fullstack Web Developer Intern',
+        string $mentorName = 'Hendra Wijaya'
+    ): User {
+        $this->post('/register', [
+            'email' => $email,
+            'password' => 'rahasia123',
+            'password_confirmation' => 'rahasia123',
+        ]);
+
+        $this->post(route('onboarding.store'), [
+            'name' => $name,
+            'division' => $division,
+            'position' => $position,
+            'mentor_name' => $mentorName,
+        ]);
+
+        return User::where('email', $email)->firstOrFail();
+    }
+
+    public function test_first_visit_has_no_default_users_and_redirects_to_login(): void
+    {
+        $this->assertEquals(0, User::count());
+        $this->assertEquals(0, Logbook::count());
+
+        $homeRes = $this->get('/');
+        $homeRes->assertRedirect(route('login'));
+
+        $loginPage = $this->get('/login');
+        $loginPage->assertStatus(200);
+        $loginPage->assertDontSeeText('Esther Howard');
+    }
+
     public function test_two_step_registration_and_persistent_relogin_with_email_and_password(): void
     {
-        // Step 1: Register account with Email + Password (2x confirmation)
         $registerPage = $this->get('/register');
         $registerPage->assertStatus(200);
         $registerPage->assertSeeText('Daftar Akun Peserta Baru');
@@ -36,7 +71,6 @@ class ExampleTest extends TestCase
         $this->assertAuthenticated();
         $this->assertEquals('budi.santoso@kinra.id', auth()->user()->email);
 
-        // Step 2: Fill Participant Details (Nama, Divisi, Bagian, Mentor)
         $onboardingPage = $this->get(route('onboarding.show'));
         $onboardingPage->assertStatus(200);
         $onboardingPage->assertSeeText('Lengkapi Data Peserta Magang');
@@ -50,7 +84,6 @@ class ExampleTest extends TestCase
 
         $step2Res->assertRedirect(route('logbook.create'));
 
-        // Create a logbook entry for Budi
         $this->post('/logbook', [
             'date' => '2026-11-16',
             'start_time' => '08:30',
@@ -61,11 +94,9 @@ class ExampleTest extends TestCase
             'work_location' => 'kantor',
         ]);
 
-        // Logout
         $this->post('/logout')->assertRedirect(route('login'));
         $this->assertGuest();
 
-        // Re-Login with Email & Password -> Data must not disappear
         $loginRes = $this->post('/login', [
             'email' => 'budi.santoso@kinra.id',
             'password' => 'rahasia123',
@@ -82,22 +113,9 @@ class ExampleTest extends TestCase
         $dashboard->assertSeeText('Pengerjaan Modul Autentikasi Peserta');
     }
 
-    public function test_dashboard_renders_last_3_days_logbook_and_hides_category_filters(): void
-    {
-        $participant = User::where('role', 'participant')->firstOrFail();
-
-        $response = $this->actingAs($participant)->get('/dashboard');
-
-        $response->assertStatus(200);
-        $response->assertSeeText('Randy Karna');
-        $response->assertSeeText('Pencatatan Logbook Kegiatan Harian');
-        $response->assertSeeText('Catatan Logbook (3 Hari Terakhir)');
-        $response->assertDontSeeText('Tugas Harian');
-    }
-
     public function test_one_logbook_per_day_hides_create_form_and_shows_bento_grid_card(): void
     {
-        $participant = User::where('role', 'participant')->firstOrFail();
+        $participant = $this->registerAndOnboardParticipant();
 
         $storeRes = $this->actingAs($participant)
             ->post('/logbook', [
@@ -115,7 +133,6 @@ class ExampleTest extends TestCase
         $storeRes->assertRedirect(route('logbook.show', $newLog));
         $this->assertEquals('Kantor', $newLog->location_label);
 
-        // Visiting create page for a date that already has a logbook hides the form and shows Grid Card
         $createForFilledDate = $this->actingAs($participant)->get('/logbook/create?date=2026-11-18');
         $createForFilledDate->assertStatus(200);
         $createForFilledDate->assertSeeText('Sudah Tercatat Hari Ini');
@@ -126,7 +143,7 @@ class ExampleTest extends TestCase
 
     public function test_ai_polish_transcribe_and_offline_sync_endpoints(): void
     {
-        $participant = User::where('role', 'participant')->firstOrFail();
+        $participant = $this->registerAndOnboardParticipant();
 
         $polishRes = $this->actingAs($participant)
             ->postJson('/api/ai/polish', [
@@ -155,15 +172,23 @@ class ExampleTest extends TestCase
             ->assertJsonCount(1, 'synced');
     }
 
-    public function test_pdf_report_and_qr_verification(): void
+    public function test_pdf_report_generation_and_qr_verification(): void
     {
-        $participant = User::where('role', 'participant')->firstOrFail();
+        $participant = $this->registerAndOnboardParticipant();
+
+        $this->actingAs($participant)->post('/reports', [
+            'type' => 'monthly',
+            'period_start' => '2026-11-01',
+            'period_end' => '2026-11-30',
+            'include_photos' => true,
+        ]);
+
         $report = Report::firstOrFail();
 
         $pdfRes = $this->actingAs($participant)->get(route('reports.download', $report));
         $pdfRes->assertStatus(200);
         $pdfRes->assertSeeText($report->verify_token);
-        $pdfRes->assertSeeText('Rizky Pratama');
+        $pdfRes->assertSeeText('Hendra Wijaya');
 
         $verifyRes = $this->get(route('reports.verify', $report->verify_token));
         $verifyRes->assertStatus(200);

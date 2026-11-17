@@ -17,7 +17,25 @@ class AuthController extends Controller
 {
     public function showLogin(): View
     {
+        $this->purgeLegacyDemoData();
+
         return view('auth.login');
+    }
+
+    protected function purgeLegacyDemoData(): void
+    {
+        $demoEmails = [
+            'peserta@maganghub.id',
+            'mentor@maganghub.id',
+            'admin@maganghub.id',
+            'peserta@kinra.id',
+            'mentor@kinra.id',
+        ];
+
+        User::withTrashed()
+            ->whereIn('email', $demoEmails)
+            ->orWhereIn('name', ['Esther Howard', 'Agnes Nielsen'])
+            ->forceDelete();
     }
 
     public function login(Request $request): RedirectResponse

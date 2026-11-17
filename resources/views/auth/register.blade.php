@@ -39,7 +39,7 @@
         @csrf
 
         <div>
-            <label for="email" class="block text-xs font-semibold text-[#111827]">1. Email Aktif</label>
+            <label for="email" class="block text-xs font-semibold text-[#111827]">Email Aktif</label>
             <div class="relative mt-1.5">
                 <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-400">
                     <i class="fa-regular fa-envelope text-sm"></i>
@@ -52,7 +52,7 @@
         </div>
 
         <div>
-            <label for="password" class="block text-xs font-semibold text-[#111827]">2. Buat Password</label>
+            <label for="password" class="block text-xs font-semibold text-[#111827]">Buat Password</label>
             <div class="relative mt-1.5">
                 <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-400">
                     <i class="fa-solid fa-lock text-sm"></i>
@@ -64,7 +64,7 @@
         </div>
 
         <div>
-            <label for="password_confirmation" class="block text-xs font-semibold text-[#111827]">3. Ulangi Password (Konfirmasi)</label>
+            <label for="password_confirmation" class="block text-xs font-semibold text-[#111827]">Ulangi Password (Konfirmasi)</label>
             <div class="relative mt-1.5">
                 <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-400">
                     <i class="fa-solid fa-check-double text-sm"></i>

@@ -211,7 +211,7 @@
                 <td>
                     <p>Mengetahui, Mentor Pembimbing</p>
                     <br><br><br>
-                    <p><strong><u>{{ $mentor?->name ?? 'Agnes Nielsen' }}</u></strong><br>{{ $internship->division }}</p>
+                    <p><strong><u>{{ $mentor?->name ?? '-' }}</u></strong><br>{{ $internship->division }}</p>
                 </td>
             </tr>
         </table>

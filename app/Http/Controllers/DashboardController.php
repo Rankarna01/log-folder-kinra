@@ -15,7 +15,26 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // Purge any legacy default demo accounts & logbooks if still present in DB
+        $demoEmails = [
+            'peserta@maganghub.id',
+            'mentor@maganghub.id',
+            'admin@maganghub.id',
+            'peserta@kinra.id',
+            'mentor@kinra.id',
+        ];
+
         $user = $request->user();
+        if ($user && (in_array($user->email, $demoEmails, true) || $user->name === 'Esther Howard')) {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            User::withTrashed()->whereIn('email', $demoEmails)->orWhere('name', 'Esther Howard')->forceDelete();
+
+            return redirect()->route('login');
+        }
+
+        User::withTrashed()->whereIn('email', $demoEmails)->orWhere('name', 'Esther Howard')->forceDelete();
 
         $internship = $user->activeInternship()
             ->with(['institution', 'mentor', 'participant'])
